@@ -1,23 +1,23 @@
-package webpizza.com.vn.webapp.controller.client;
+package webpizza.com.vn.webapp.controller.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserCreateRequestDTO_CL;
-import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserUpdateRequestDTO_CL;
-import webpizza.com.vn.webapp.service.client.UserServiceCL;
+
+import webpizza.com.vn.webapp.DTO.admin.UserDTO_AD.UserCreateRequestDTO_AD;
+import webpizza.com.vn.webapp.DTO.admin.UserDTO_AD.UserUpdateRequestDTO_AD;
+import webpizza.com.vn.webapp.service.admin.UserServiceAD;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/client/users")
-public class UserControllerCL {
+@RequestMapping("api/admin/users")
+public class UserControllerAD {
     //tiem phu thuoc autowired UserService vao
     @Autowired
-    private UserServiceCL userServiceCL;
+    private UserServiceAD userServiceAD;
 
     /*************1- getall**********************/
     /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
@@ -29,20 +29,27 @@ public class UserControllerCL {
                                                      @RequestParam(defaultValue = "3") Integer pageSize,
                                                      @RequestParam(defaultValue = "id") String sortBy){
         // goi service thuc hien truy van hien thi tat ca thong tin cua table user co phan trang
-        return userServiceCL.getAllUserPagination(pageNumber, pageSize, sortBy);
+        return userServiceAD.getAllUserPagination(pageNumber, pageSize, sortBy);
     }
 
     /*****************-2 create**************************/
     @CrossOrigin(origins = "http://localhost:3000") 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> create(@Valid @RequestBody UserCreateRequestDTO_CL objDTO){
-        /* * Giải thích: 
-        * 1. @RequestBody: Tự động chuyển JSON từ Client gửi lên thành object UserCreateRequestDTO_CL.
-        * 2. @Valid: Kích hoạt việc kiểm tra các annotation @NotBlank, @Length trong DTO của bạn.
-        * 3. Không còn MultipartFile vì bạn đã lược bỏ phần upload ảnh cho Client.
-        */
-    
-        return userServiceCL.createUser(objDTO);
+    public ResponseEntity<Map<String, Object>> create(@RequestParam("file") MultipartFile file,
+                                                      @RequestParam("data") String jsonData){
+        //goij class ObjeMapper de mapp json(param:data) -> parse(chuyen) json thanh valu trong dto -> day len entity user
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //goi khoi  tao lop dto userDTO
+        UserCreateRequestDTO_AD objDTO = null;
+
+        //tien hanh cho dto doc vaf ghi nhan data tu json dui len map thong qua lop ObjectMapper
+        try{
+            objDTO = objectMapper.readValue(jsonData, UserCreateRequestDTO_AD.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return userServiceAD.createUser(objDTO, file);
     }
 
 
@@ -51,8 +58,9 @@ public class UserControllerCL {
    @CrossOrigin(origins = "http://localhost:3000") 
    @DeleteMapping("/delete/{id}")
    public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer id){
-       return userServiceCL.deleteUsre(id);
+       return userServiceAD.deleteUsre(id);
    }
+
 
    /*********************4- update**************************************/
    @CrossOrigin(origins = "http://localhost:3000") 
@@ -64,15 +72,15 @@ public class UserControllerCL {
        ObjectMapper objectMapper = new ObjectMapper();
 
        //goi khoi tao lop dto cua UserDTO
-       UserUpdateRequestDTO_CL objDTO = null;
+       UserUpdateRequestDTO_AD objDTO = null;
 
        //tien hanh cho dto doc vaf ghi nhan valuetu json gui len da dc map thong qua lop chuyen ObjectMapper
        try{
-           objDTO = objectMapper.readValue(jsonData, UserUpdateRequestDTO_CL.class);
+           objDTO = objectMapper.readValue(jsonData, UserUpdateRequestDTO_AD.class);
        } catch (Exception e) {
            throw new RuntimeException(e);
        }
 
-       return userServiceCL.updateUser(id, objDTO, file);
+       return userServiceAD.updateUser(id, objDTO, file);
    }
 }

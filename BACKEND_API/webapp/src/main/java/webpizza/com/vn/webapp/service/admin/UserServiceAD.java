@@ -1,7 +1,5 @@
-package webpizza.com.vn.webapp.service.client;
+package webpizza.com.vn.webapp.service.admin;
 
-
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -13,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserCreateRequestDTO_CL;
-import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserUpdateRequestDTO_CL;
+
+import webpizza.com.vn.webapp.DTO.admin.UserDTO_AD.UserCreateRequestDTO_AD;
+import webpizza.com.vn.webapp.DTO.admin.UserDTO_AD.UserUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.entity.User;
 import webpizza.com.vn.webapp.exceptions.ValidationErrorResponse;
 import webpizza.com.vn.webapp.exceptions.Violations;
@@ -35,7 +34,7 @@ import java.util.regex.Pattern;
 /*lop luan ly logic code*/
 
 @Service
-public class UserServiceCL {
+public class UserServiceAD {
 
     @Autowired
     private webpizza.com.vn.webapp.repository.UserRepository userRepo;
@@ -91,9 +90,53 @@ public class UserServiceCL {
 
     /*II - Post(create)*/
     //MultipartFile: la mot interface trong spring, dc su dung de xu ly cac tep files -> dc upload thog qua giao thuc HTTP request
-    public ResponseEntity<Map<String, Object>> createUser(UserCreateRequestDTO_CL objCreate){
+    public ResponseEntity<Map<String, Object>> createUser(UserCreateRequestDTO_AD objCreate, MultipartFile file){
         //a - khoi tao bien response de luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
+
+        String newFile = null;
+
+        //thuc hien kiem tra dieu kien chap nhan ruot img rong
+        if(file != null && !file.isEmpty()){
+            /*******xu ly luu ruot img khi create Use******/
+            //tao chuoi randomString  rong ->
+            String randomString = "";
+
+            //su dung datetime luu thong tin anh tranh trung ten va thoi gian luu anh
+            DateTimeFormatter iso_8601_formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+            randomString = LocalDateTime.now().format(iso_8601_formatter);
+
+            /*thiet lap file path lay dung ten goc o dia luu folder trong project
+             * => thg thiet lap file chi dinh url lay: D:\\DOWNLOAD\\img\\....
+             * <=> tuy nhien, ntn vd may windown url  D:\\DOWNLOAD\\img\\.... nhung o may mac  D:/DOWNLOAD/img/....
+             * nhu vay neu thiet lap code nay o tren may windown thi qua may mac doan code rootFolder nay khong sai
+             * nhung ma khac he dieu hanh thi no khong hieu.. viet code nt la viet code co dinh viet code ngu
+             * ==-=> lib java.nio.file.Paths;
+             * */
+            String rootFolder = Paths.get("").toAbsolutePath().toString();
+
+            /*tao duong dan xu ly luu file
+             *  + file.getOriginalFilename(); method xu ly ghi nhan lay cai file ruot anh va tien hanh ghi nhan va luu vao trong folder uploads
+             *  + file.separator: co nhiem vu chinh la dung de chi dau phan cach thu muc: // cua windown, hay dau \ cua mac
+             *  + uploadDir: chinh la ten file lien ket voi cau hinh properties ben file application.properties ban nay
+             * */
+            newFile = randomString + "_" + file.getOriginalFilename();
+            String filePath = rootFolder + File.separator + uploadDir + File.separator + newFile;
+
+            //tien hanh xu ly luu file vao thu muc uploads. Đây là hành động lấy ra một chiếc phong bì mới tinh và viết Địa chỉ Nhà (filePath)
+            // lên đó. Chiếc phong bì này chưa chứa bức thư hay ảnh đâu nhé, nó chỉ là tấm bìa ghi địa chỉ thôi!
+            File destinationFile = new File(filePath);
+
+            /*tien hanh tao folder uploads trong projects neu no khong ton tai*/
+            destinationFile.getParentFile().mkdirs();
+
+            //tien hanh lay ruot anh(anh goc, kich co anh(nhieu mb...)) ghi nhan va luu vao file
+            try{
+                file.transferTo(destinationFile);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
 
         //b-1 xu ly service  validation exception kiem tra tinh hop le khi dien thong tin
         ValidationErrorResponse responseError = new ValidationErrorResponse();
@@ -132,31 +175,46 @@ public class UserServiceCL {
         if(responseError.getViolations().size() == 0){
             //c-1 khoi tao UserEntity
             User newEntity = new User();
-            
+            newEntity.setName(objCreate.getName());
             newEntity.setUsername(objCreate.getUsername());
 
             //xử ly ma hoa matkhau theo chuan bcrypt
             BCryptPasswordEncoder endCoder = new BCryptPasswordEncoder();
             newEntity.setPassword(endCoder.encode(objCreate.getPassword()));
 
-            //set mac dinh la 1
-            newEntity.setGender(1);  
+            // Sử dụng intValue() an toàn bằng cách check null - tránh lỗi NullPointerException
+            if (objCreate.getGender() != null) {
+                newEntity.setGender(objCreate.getGender().intValue());
+            }
+
+            //date can them dk de text neu la null mà ep chuyen thanh localdate la loi ngay
+            if (objCreate.getBirthday() != null) {
+                newEntity.setBirthday(objCreate.getBirthday());
+            }
+            newEntity.setEmail(objCreate.getEmail());
+        
+            //xu ly goi repo luu img co ruot
+            newEntity.setAvatar(newFile);
+
+            newEntity.setPhone(objCreate.getPhone());
+            newEntity.setAddress(objCreate.getAddress());
 
             //lk khoa ngoai cua table salary_level
-            newEntity.setLevelId(1);
+            newEntity.setLevelId(objCreate.getLevelId());
 
-            //set mặc định là 1 - kích hoạt
-            newEntity.setIsActive(1);
+            // Sử dụng intValue() an toàn bằng cách check null - tránh lỗi NullPointerException
+            if (objCreate.getIsActive() != null) {
+                newEntity.setIsActive(objCreate.getIsActive().intValue());
+            }
 
            // c-2 yeu cau repository luu lai khoi tao tren
-            // thuc hien
-            // nhan ten dk username va tien hanh kiem tra tranh trung ten username khi dang ky
+            // thuc hien nhan ten dk username va tien hanh kiem tra tranh trung ten username khi dang ky
            User existingUser = userRepo.findByUsername(objCreate.getUsername());
-
            // c-3 thuc hien kiem tra ds data trong mysql co trung ten username nao khong
             if(existingUser != null){
-                //nem loi thong bao de khong cho phep tao trung ten
-                throw new ConstraintViolationException("Ten ban dang ky da ton tai vui long chon ten khac hahaaha", null);
+                response.put("msg", "Tên bạn đăng ký đã tồn tại vui lòng chọn tên khác");
+                response.put("statuscode", 400);
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }else{
                 User createEntity = userRepo.save(newEntity);
 
@@ -177,8 +235,8 @@ public class UserServiceCL {
     }
 
 
-    /*III - Put(Update0*/
-   public ResponseEntity<Map<String, Object>> updateUser(Integer id, UserUpdateRequestDTO_CL objEdit, MultipartFile file) {
+     /*III - Put(Update0*/
+   public ResponseEntity<Map<String, Object>> updateUser(Integer id, UserUpdateRequestDTO_AD objEdit, MultipartFile file) {
     Map<String, Object> response = new HashMap<>();
 
     Optional<User> optFound = userRepo.findById(id);

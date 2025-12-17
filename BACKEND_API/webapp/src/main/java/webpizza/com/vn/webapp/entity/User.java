@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,20 +30,17 @@ public class User {
     private String password;
 
     @Column(name = "gender")
-    private Long gender;
+    private Integer gender;
+
+    @Column(name = "birthday")
+    private LocalDateTime birthday;
 
     @Column(name = "email")
     private String email;
 
-    @Column(name = "birthday")
-    private LocalDate birthday;
-
     //avatar
     @Column(name = "avatar")
     private String avatar;
-
-    @Column(name = "level_id")
-    private int levelId;
 
     @Column(name = "phone")
     private String phone;
@@ -52,14 +48,8 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "country")
-    private String country;
-
-    @Column(name = "remember_token")
-    private String rememberToken;
-
-    @Column(name = "is_active")
-    private Long isActive;
+    @Column(name = "salary_level_id")
+    private Integer levelId;
 
     // updatable = false: không cho phép cập nhật sau khi tạo đảm bảo tính truy vết lịch sử
     /*@CreationTimestamp:Tự động gán giá trị thời gian hiện tại (NOW()) cho trường này khi
@@ -73,6 +63,10 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;// Khi INSERT: = NOW()
+
+    @Column(name = "is_active")
+    private Integer isActive;
+
 
     @OneToMany(mappedBy = "user")
     private List<UserHasRoles> userHasRoles;
@@ -97,7 +91,7 @@ public class User {
                        where ....<đk cần truy vấn>...
     * */
     @ManyToMany
-    @JoinTable(name = "user_has_roles",
+    @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> listRoles;

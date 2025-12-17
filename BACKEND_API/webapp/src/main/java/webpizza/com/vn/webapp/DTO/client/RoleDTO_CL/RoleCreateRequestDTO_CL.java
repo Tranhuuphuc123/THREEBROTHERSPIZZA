@@ -5,9 +5,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -26,8 +23,5 @@ public class RoleCreateRequestDTO_CL {
     @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
     private String guardName;
 
-//    private LocalDateTime created_at = LocalDateTime.now();
-//
-//    private LocalDateTime updated_at = LocalDateTime.now();
 
 }

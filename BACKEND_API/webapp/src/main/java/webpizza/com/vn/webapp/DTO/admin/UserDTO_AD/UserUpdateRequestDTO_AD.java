@@ -1,4 +1,4 @@
-package webpizza.com.vn.webapp.DTO.client.UserDTO_CL;
+package webpizza.com.vn.webapp.DTO.admin.UserDTO_AD;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.validator.constraints.Length;
@@ -16,8 +17,9 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserUpdateRequestDTO_CL {
+public class UserUpdateRequestDTO_AD {
 
+   
     @NotBlank(message = "khogn dc de name trong")
     @Length(min = 3, max = 70, message = "ten name phai co it nhat la 3 ky tu")
     private String name;
