@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-//import lib bootstrap và global.css cho toàn dự án
+//import lib bootstrap vao layout tong cuc
 import "bootstrap/dist/css/bootstrap.min.css";
-//import bootstrap.min.js qua BootstrapClient.tsx để tránh lỗi "window is not defined"
-import BootstrapClient from '@/components/BootstrapClient';
+//import BootstrapClient su dung bootstrap.bundle.min.js
+import BootstrapClient from "@/components/BootstrapClient";
+
+//import global.css
 import "./globals.css";
 
-//import fontAwesome Nextjs toàn cục cho dự án
+//import fontAwesome vaof nextjs
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 
+//import modal context dung cho global toan du an
+import ToastProvider from "@/contexts/ToastContext";
+import { ModalProvider } from "@/contexts/ModalContext";
+import BackToTop from "@/components/client/BackToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +42,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <ToastProvider>
+          <ModalProvider>{children}</ModalProvider>
+          <BackToTop></BackToTop>
+        </ToastProvider>
       </body>
     </html>
   );

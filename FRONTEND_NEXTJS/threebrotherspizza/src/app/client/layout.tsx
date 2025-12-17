@@ -1,21 +1,26 @@
-'use client'
+"use client";
 
-//import file css toàn cục cho client page
-import './client.css'
+import "./client.css";
+
+import Header from "@/components/client/header";
+import Footer from "@/components/client/footer";
+import BackToTop from "@/components/client/BackToTop";
 
 export default function RootClientLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode
-}>){
-  return(
+  children: React.ReactNode;
+}>) {
+  return (
     <>
-        {/* phần header */}
+      {/* phan header */}
+      <Header />
 
-        {/* phần body */}
-        {children}
-        
-        {/* phần footer */}
+      {/* phan body */}
+      {children}
+
+      {/* phan footer */}
+      <Footer />
     </>
-  )
+  );
 }

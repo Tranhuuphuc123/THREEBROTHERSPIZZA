@@ -1,3 +1,5 @@
+/*biến css toàn cục cho trang admin page*/
+
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 *,
@@ -52,9 +54,6 @@ li {
   background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
-/* Ví dụ trong admin.css */
-
-
 
 /* tablet */
 

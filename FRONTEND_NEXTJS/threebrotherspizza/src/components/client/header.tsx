@@ -1,0 +1,201 @@
+"use client";
+
+import Link from "next/link";
+import {
+  Image,
+  Container,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Nav,
+  Navbar,
+  NavbarBrand,
+  NavbarCollapse,
+  NavbarToggle,
+  NavLink,
+} from "react-bootstrap";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {} from "@fortawesome/free-solid-svg-icons";
+
+//import lib modal va cac lib lien quan xu ly modal context cho form login
+import Modal from "react-bootstrap/Modal";
+import { useModal } from "@/contexts/ModalContext";
+//import pathName: hook cua next/navigation giup lay duong dan url hien tai
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+//import page giao dien cuar MOdal.body cua form login
+import Login from "@/app/client/login/page";
+
+
+
+export default function Header() {
+
+  //khoi tao cac compoent cuar modal context da khai bao o class modalcontext
+  const { openModal, closeModal, show, modalType } = useModal();
+  // Khai báo state để lưu trạng thái đăng nhập
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //pathname: Lấy đường dẫn hiện tại để biết "người dùng có chuyển trang không?", nếu có → đóng modal.
+   const pathName = usePathname(); 
+
+
+  /**** Hàm xử lý đăng xuất (Nên có) *****/
+  const handleLogout = () => {
+    /*Ý nghĩa của " typeof window !== 'undefined' "
+      #1/ window: Là đối tượng đại diện cho cửa sổ trình duyệt,để hiểu rõ bản 
+      chất của vấn đề: Server vs Client
+        + (Server (Node.js): Khi Next.js đang chuẩn bị trang web ở phía máy 
+        chủ (Server-side rendering), nó chạy code JavaScript nhưng trong môi 
+        trường Node.js. Ở đây không có trình duyệt, vì vậy không tồn tại đối
+        tượng window hay localStorage.
+        
+        + Client (Browser): Khi trang web đã tải xong xuống máy người dùng, 
+        lúc này mới có đối tượng window và localStorage.
+
+        --> Nếu bạn gọi trực tiếp localStorage.getItem("token") mà không kiểm
+        tra, Next.js sẽ báo lỗi ngay lập tức: "localStorage is not defined" hoặc
+        "window is not defined" vì nó cố gắng tìm những thứ này trên Server (nơi
+         chúng không tồn tại).)
+
+      #2/ undefined: Nghĩa là "không xác định" hoặc "không tồn tại".
+    
+      ===> tóm lại Cả cụm code: Có nghĩa là "Nếu đối tượng window đã tồn tại 
+      (tức là code đang chạy trên trình duyệt của người dùng), thì hãy thực thi 
+      đoạn code bên dưới". */
+    if (typeof window !== 'undefined') {
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+    }
+  };
+
+
+
+  /*****Tạo một hàm kiểm tra riêng để tái sử dụng: giúp load lại page khi login thành công
+  có token giao diện update ngay là có token tránh tự phải refresh lại trang thủ công****/
+  const checkAuth = () => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem("token");
+      /* BƯỚC 3: Cập nhật trạng thái đăng nhập
+        # !!token là cách viết tắt: 
+         - Cách viết !!token là một kỹ thuật rất phổ biến trong JavaScript
+          (được gọi là Double Bang). Mục đích của nó là: Chuyển đổi một giá 
+          trị bất kỳ về đúng kiểu dữ liệu Boolean
+         - Nếu token true -> !token là false -> !!token là true
+        (chính xác là token = true => !!token vẫn là true và ngc lại))
+        -> vậy làm chi cho mắc công
+         + hiểu thế này vd string dùng token thì nó trả vễ là chuỗi string
+         + còn nếu là null thì token trả về null 
+         --> vây vấn đề là chỗ này muốn kiểm tra là có token hay không true or
+         false không phải cần qua nhiều bc là xác định kiểu gì rồi xem có giá trị
+         không mới xét true false việc dùng !! sẽ trả về đúng mục đích, nó giúp 
+         dọn dẹp value thô thành value có giá trị boolean chính xác mục đích thui
+         --> tức ở đây kiểm tra token có hay không không cần quan tâm nó trả về
+         cái gì*/
+      setIsLoggedIn(!!token);
+    }
+  }
+
+  /* useEffect lắng nghe thay đổi token */
+  useEffect(() => {
+    checkAuth(); // Kiểm tra khi mới vào trang
+    // Lắng nghe sự kiện để cập nhật giao diện tức thì khi login/logout thành công
+    window.addEventListener("storage", checkAuth);
+    return () => window.removeEventListener("storage", checkAuth);
+  }, []);
+
+
+  /* useEffect để đóng modal khi chuyển trang */
+  useEffect(() => {
+    // Chỉ đóng modal khi người dùng thực sự chuyển sang trang khác
+    if (show) {
+      closeModal();
+    }
+    // KHÔNG bỏ 'show' vào đây, chỉ bỏ 'pathName'
+  }, [pathName]);
+
+  return (
+    <>
+      {/* Navbar React bootstrap */}
+      <Navbar
+        sticky="top"
+        expand="lg"
+        variant="dark"
+        style={{ backgroundColor: "#05422C" }}
+      >
+        <Container>
+          <NavbarBrand as={Link} href="/" className="fw-bold text-warning">
+            👑 THREEBROTHER'S PIZZA
+          </NavbarBrand>
+          <NavbarToggle aria-controls="navbarNav" />
+
+          <NavbarCollapse id="navbarNav">
+            <Nav
+              className="ms-auto"
+              style={{ fontSize: "1.1rem", cursor: "pointer" }}
+            >
+              <NavLink as={Link} href="/">
+                Trang chủ
+              </NavLink>
+              <NavLink as={Link} href="/client/about">
+                Giới Thiệu
+              </NavLink>
+              <NavLink as={Link} href="/client/contact">
+                Liên Hệ
+              </NavLink>
+              <NavLink as={Link} href="/client/products">
+                Sản Phẩm
+              </NavLink>
+
+              {/* xu ly handle event click button dangnhap -> modal context form login 
+               => dùng toán tử 3 ngôi kiểm tra state {!isLoggedIn ? (<button đăng nhập>): (<form giao diện accounts>)
+               <=> nghĩa là kiểm tra token chưa cho là false thì !false = true thỏa đk thì hiện nút đăng nhập
+               còn có token thì !true = false thì thỏa đk toán tử 3 ngôi hiện form giao diện accounts
+               */}
+              {!isLoggedIn ? (
+                <NavLink as={Link} href="#">
+                    <span onClick={() => openModal("loginForm")}>Đăng Nhập</span>
+                </NavLink>
+              ) : (  
+                    <Dropdown
+                      align="end"
+                      className="border rounded text-white p-1"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <DropdownToggle as="div">
+                        <Image
+                          alt="avatar"
+                          src="https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?fit=512%2C512&ssl=1"
+                          roundedCircle
+                          width="30px"
+                          height="30px"
+                        />
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem href="/">Profile</DropdownItem>
+
+                        {/* Nên gọi hàm handleLogout khi người dùng bấm Logout */}
+                        <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+
+                        <DropdownItem href="/adminLogin">Admin Panel</DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                )}              
+            </Nav>
+          </NavbarCollapse>
+        </Container>
+      </Navbar>
+
+      {/* //  modals form login cua  react bootstrap */}
+      <Modal show={show && modalType == "loginForm"} onHide={closeModal}>
+        <Modal.Header>
+          <Modal.Title>Login Form</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Login />
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+}

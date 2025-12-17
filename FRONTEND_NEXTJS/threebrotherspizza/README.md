@@ -34,3 +34,15 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+##--------------------------CÁCH CHẠY VSCODE VỚI SPRING KHI BỊ MẤT KẾT NỐI VỚI SERVER----------------
+ -> nghĩa là vscode có cài extension extension Language Support for Javam
+ -> mà nó chưa khởi động kịp hoặc cache của Java Language Server bị lỗi dẫn 
+ đến là mất run/debug khi mở hàm main làm chạy dự án khong đc 
+ ==> cách khắc phục
+  + hãy nhấn Ctrl + Shift + P gõ "Developer: Reload Window".
+
+                        or
+
+  + Nhấn Ctrl + Shift + P gõ "Java: Clean Java Language Server Workspace", sau đó chọn Reload.                        

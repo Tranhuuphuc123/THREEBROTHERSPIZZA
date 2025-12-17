@@ -1,9 +1,12 @@
 'use client'
-
-export default function HomePage(){
-    return (
+export default function Admin(){
+    return(
         <>
-          <h1>dashboard admin</h1>
+         <h1>oni chan phe qua e suong qua</h1>
         </>
     )
 }
+
+
+
+
