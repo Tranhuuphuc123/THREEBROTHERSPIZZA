@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class User {
     private Integer gender;
 
     @Column(name = "birthday")
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     @Column(name = "email")
     private String email;

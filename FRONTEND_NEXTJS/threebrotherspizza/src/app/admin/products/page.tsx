@@ -1,7 +1,7 @@
 export default function ProductPage() {
   return (
     <>
-      <h1>helo sida cu teo</h1>
+      <h1>Products pages</h1>
     </>
   );
 }

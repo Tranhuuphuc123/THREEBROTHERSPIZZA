@@ -29,6 +29,15 @@ import { useEffect, useState } from "react";
 //import page giao dien cuar MOdal.body cua form login
 import Login from "@/app/client/login/page";
 
+//import ToastContext de hien thi toast
+import { useToast } from '@/contexts/ToastContext';
+
+// Import hàm getRoleFromToken từ lib call api auth axiosAuth để lấy role từ user đăng nhập
+import { getPayloadInfoFromToken } from "@/axios/axiosAuth"; 
+
+// Import URL server ảnh của bạn
+import { UPLOAD_URL } from "@/constants/urls"; 
+
 
 
 export default function Header() {
@@ -37,8 +46,16 @@ export default function Header() {
   const { openModal, closeModal, show, modalType } = useModal();
   // Khai báo state để lưu trạng thái đăng nhập
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+   // Thêm state lưu role của user khi login thàng công(role, username chưa trong payload của token)
+  const [userRole, setUserRole] = useState<string | null>(null);
+  // State lưu avatar ảnh của user account
+  const [avatar, setAvatar] = useState<string | null>(null); 
+
   //pathname: Lấy đường dẫn hiện tại để biết "người dùng có chuyển trang không?", nếu có → đóng modal.
    const pathName = usePathname(); 
+
+   // Khai báo showToast từ ToastContext
+  const {showToast} = useToast()
 
 
   /**** Hàm xử lý đăng xuất (Nên có) *****/
@@ -66,6 +83,11 @@ export default function Header() {
       đoạn code bên dưới". */
     if (typeof window !== 'undefined') {
         localStorage.removeItem("token");
+        localStorage.removeItem("user_avatar"); // <--- Thêm dòng này
+        localStorage.removeItem("permissions");
+        showToast("Đã đăng xuất", 'info');
+        // Ép trình duyệt load lại trang chủ từ Server để xóa sạch State cũ
+        window.location.href = "/";
         setIsLoggedIn(false);
     }
   };
@@ -77,6 +99,8 @@ export default function Header() {
   const checkAuth = () => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem("token");
+      const savedAvatar = localStorage.getItem("user_avatar"); // Lấy cái đã lưu ở bước trên
+
       /* BƯỚC 3: Cập nhật trạng thái đăng nhập
         # !!token là cách viết tắt: 
          - Cách viết !!token là một kỹ thuật rất phổ biến trong JavaScript
@@ -94,6 +118,16 @@ export default function Header() {
          --> tức ở đây kiểm tra token có hay không không cần quan tâm nó trả về
          cái gì*/
       setIsLoggedIn(!!token);
+
+     // Lấy thông tin tổng hợp từ token
+      const roles = getPayloadInfoFromToken();
+      if (roles) {
+        setUserRole(roles);
+        setAvatar(savedAvatar);// Gán avatar từ localStorage vào state
+      } else {
+        setUserRole(null);
+        setAvatar(null);
+      }
     }
   }
 
@@ -105,6 +139,8 @@ export default function Header() {
     return () => window.removeEventListener("storage", checkAuth);
   }, []);
 
+  /***Hàm kiểm tra role là admin/Employee:cashier**/
+  const canAccessAdmin = userRole?.includes("admin") || userRole?.includes("cashier");
 
   /* useEffect để đóng modal khi chuyển trang */
   useEffect(() => {
@@ -166,10 +202,13 @@ export default function Header() {
                       <DropdownToggle as="div">
                         <Image
                           alt="avatar"
-                          src="https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?fit=512%2C512&ssl=1"
+
+                          // Ghép URL server với tên file ảnh lấy từ state
+                          src={avatar ? `${UPLOAD_URL}/${avatar}` : "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png"}
                           roundedCircle
                           width="30px"
                           height="30px"
+                          style={{ objectFit: 'cover', border: '1px solid #ffc107' }} // Thêm style cho đẹp
                         />
                       </DropdownToggle>
                       <DropdownMenu>
@@ -178,7 +217,10 @@ export default function Header() {
                         {/* Nên gọi hàm handleLogout khi người dùng bấm Logout */}
                         <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
 
-                        <DropdownItem href="/adminLogin">Admin Panel</DropdownItem>
+                       {/* ĐIỀU KIỆN QUAN TRỌNG: Chỉ hiện Admin Panel nếu không phải là cashier hay admin */}
+                        {canAccessAdmin && (
+                          <DropdownItem href="/admin">Admin Panel</DropdownItem>
+                        )}
                       </DropdownMenu>
                     </Dropdown>
                 )}              

@@ -18,11 +18,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
+
 
 @Component
 public class JwtTokenProvider {
@@ -87,15 +91,47 @@ public class JwtTokenProvider {
      *  => Nếu bạn đưa Roles vào Payload, khi người dùng bị thay đổi quyền, họ sẽ phải đợi cho đến
      * khi token hết hạn để quyền mới có hiệu lực.
      *
+     *  => Collection<? extends GrantedAuthority> authorities: ý nghĩa à một cấu trúc dữ liệu 
+     * cực kỳ quan trọng dùng để đại diện cho danh sách các quyền (permissions/roles) của người 
+     * dùng sau khi xác thực thành công.
+     *  +  Collection: Đây là giao diện (interface) cha của các loại danh sách như List
+     *  hoặc Set. Nó dùng để chứa một nhóm các đối tượng.
+
+        + <? extends GrantedAuthority>: Đây là kỹ thuật Wildcard trong Java Generics. Nó 
+        có nghĩa là: "Bất kỳ kiểu dữ liệu nào là con (hoặc triển khai) của interface 
+        GrantedAuthority".  Giúp mã nguồn linh hoạt hơn. Bạn có thể truyền vào một
+        List<SimpleGrantedAuthority> hoặc bất kỳ lớp tùy chỉnh nào khác miễn là nó 
+        thực thi GrantedAuthority.
+
+       + GrantedAuthority: Đây là interface cốt lõi của Spring Security. Mỗi đối tượng 
+       này đại diện cho một quyền cụ thể mà người dùng được cấp (ví dụ: ROLE_ADMIN, 
+       OP_DELETE_USER)
      */
-    public String generateToken(String username){
+    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities){
         //1.tao thoi han song cho token - Tạo thời gian hiện tại và thời gian hết hạn (Expiry)
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + 86400000); //1 day ton tai(24*60*60*1000(don vi ms))
+        Date expiry = new Date(now.getTime() + 7200000); //2h ton tai(24*60*60*1000(don vi ms))
 
+        
+        /* >>>giải thích code<<<<<<
+         + authorities.stream(): Chuyển danh sách các đối tượng quyền thành 
+         một "dòng chảy" dữ liệu để xử lý từng cái một.
+         + .map(GrantedAuthority::getAuthority): Đi vào từng đối tượng, chỉ 
+         lấy ra cái tên quyền (ví dụ: lấy ra chữ "ADMIN" hoặc "CUSTOMER").
+         + .collect(Collectors.joining(",")): Gom tất cả các tên quyền vừa 
+         lấy được lại, nối chúng thành một chuỗi duy nhất, cách nhau bởi dấu phẩy 
+         (ví dụ: "ADMIN,EMPLOYEE").
+         ---> Mục đích: Tạo ra một chuỗi String gọn nhẹ để nhét vào Payload của JWT, 
+        giúp Frontend dễ dàng đọc và kiểm tra role phục vụ mục đích xet role 
+        ẩn hiện link url admin page trong account form khi login thành công hiện ra. */
+         String roles = authorities.stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(","));
+    
         /*builder la ham xay dung theo chuan Jwt
          >> giải nghĩa code<<
           + .setSubject(username): claim 1: Đặt chủ đề của token. Giá trị này thường là tên người dùng (username) hoặc ID của người dùng.
+          +  .claim("roles", roles) thêm role vào payload 
           + .setIssuedAt(now): claim 2  thời gian tạo , Đặt thời điểm phát hành (token được tạo ra). Giá trị là thời gian hiện tại (now).
           + .setExpiration(expiry): claim 3 -> thời gian hết hạn, Đặt thời điểm hết hạn của token. Sau thời điểm này (expiry), token sẽ không hợp lệ.
           
@@ -110,6 +146,7 @@ public class JwtTokenProvider {
         // 2. Định nghĩa các Claims (Payload)
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", roles) // Thêm dòng này là xong! Role sẽ nằm trong Payload
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 //.signWith(Keys.hmacShaKeyFor(jwtSecrets.getBytes()), SignatureAlgorithm.HS256) // phàn này chỉ định thuật toán dùng trong jwt token ở header

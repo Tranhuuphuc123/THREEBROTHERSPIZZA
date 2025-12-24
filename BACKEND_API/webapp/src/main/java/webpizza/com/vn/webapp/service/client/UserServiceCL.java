@@ -48,7 +48,7 @@ public class UserServiceCL {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    /*I - GET ->lay va do du lieu co phan trang*/
+    /*I GET ->lay va do du lieu co phan trang*/
     public ResponseEntity<Map<String, Object>> getAllUserPagination(int pageNumber, int pageSize, String sortby){
         //a - khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
@@ -244,7 +244,7 @@ public class UserServiceCL {
         }
 
         // Cập nhật Mức lương
-        if (objEdit.getIsActive() != null && objEdit.getLevelId() > 0) {
+        if (objEdit.getLevelId() != null && objEdit.getLevelId() > 0) {
             entityEdit.setLevelId(objEdit.getLevelId());
         }
         

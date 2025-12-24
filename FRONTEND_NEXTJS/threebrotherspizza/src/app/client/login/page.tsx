@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 //import lib fontawesome
@@ -10,17 +10,16 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import PasswordInput from "@/components/client/passwordInput";
 
 //import lib modal va cac lib lien quan xu ly modal context cho form login
-import Modal from "react-bootstrap/Modal";
 import { useModal } from "@/contexts/ModalContext";
 //import useToast trong ToastContext(viết riêng chuẩn context ấy) 
 import { useToast } from '@/contexts/ToastContext';
 
 //import lib chuyển hướng trang redirect
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-//import axios call api auth login phân quyền
+//import axios call api auth login phân quyền 
 import {login} from "@/axios/axiosAuth"
-import router from "next/router";
+
 
 
 
@@ -29,18 +28,24 @@ export default function Login() {
   const { openModal, closeModal, show, modalType } = useModal();
   //khai báo state tu useToast trong ToastContext truyền vào bien state
   const {showToast} = useToast()
+  const router = useRouter(); // Khởi tạo router
 
   /*state trang thai ghi nhận usernaem và password*/
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  /*Xử lý trạng thái "Đang đăng nhập" (Loading) Để tránh việc người 
+  dùng nhấn nút Login liên tục khi API chưa kịp phản hồi, bạn nên thêm 
+  một state isLoading. */
+  const [isLoading, setIsLoading] = useState(false);
 
 
   /****method xử lý sự kiện onSubmit khi nhấn button login****/
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     //ngăn chặn hành vi mặc định của form(tải lại trang)
     e.preventDefault(); 
+    setIsLoading(true); 
     try{
-      //gọi api login từ axiosAuth.ts
+      /*1. gọi api login từ axiosAuth.ts*/
       const token = await login(username, password)
 
       //goi showToast vao de su dung hien thi TOast trong useEffect
@@ -48,11 +53,19 @@ export default function Login() {
       
       //closemodal khi submit nó đóng form login
       closeModal()
+
+      /* 2. Chuyển hướng người dùng (Ví dụ về trang chủ hoặc admin)*/
+      /* Tùy vào logic của bạn, có thể dùng router.push("/") 
+      -> Làm mới dữ liệu để Interceptor nhận token mới nhất cho các request sau*/
+      router.refresh(); 
+
     }catch(error: any){
       const errorMessage = error.response?.data?.message || 'Có lỗi khi Login!';
       showToast(errorMessage, 'danger');
     }
   }
+
+
 
   return (  
     <>
@@ -134,8 +147,9 @@ export default function Login() {
               type="submit"
               className="btn btn-primary w-100 mb-3"
               style={{ fontWeight: 500 }}
+              disabled={isLoading} // Ngăn nhấn nút khi đang load
             >
-              Log in
+              {isLoading ? "Logging in..." : "Log in"}
             </button>
           </form>
 

@@ -40,7 +40,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    /* Vì bạn không thể kiểm soát việc trình duyệt của người dùng có cài
+      Extension hay không, cách tốt nhất là bảo Next.js hãy lờ đi sự khác 
+      biệt về thuộc tính trên các thẻ cha (html, body).
+      --> bằng cách: thêm thuộc tính suppressHydrationWarning */
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ToastProvider>
           <ModalProvider>{children}</ModalProvider>

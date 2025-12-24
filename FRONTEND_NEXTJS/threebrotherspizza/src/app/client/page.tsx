@@ -1,3 +1,17 @@
+/*'use client' là một chỉ thị (directive) dùng để đánh dấu Component này sẽ 
+chạy ở Trình duyệt (Client) thay vì chạy ở Server.
+ >>>>Tại sao phải dùng?<<<<<<<
+    # Bạn bắt buộc phải ghi nó ở đầu file khi Component có sử dụng:
+        + React Hooks: Như useState, useEffect, useContext.
+        + Tương tác: Như onClick, onChange, onSubmit.
+        + Browser API: Như window, document, localStorage.
+
+    # Cơ chế hoạt động:
+        + Mặc định: Next.js coi mọi Component là Server Component
+         (không có tính tương tác, không có state).
+        + Khi có 'use client': Next.js sẽ tải thêm mã JavaScript 
+        xuống trình duyệt để người dùng có thể click, nhập liệu và
+         xử lý các logic động. */
 "use client";
 
 /* xin chao cac ban minh la body Homepage cua client layout hehehe */
@@ -34,7 +48,7 @@ export default function HomePage() {
         <CarouselItem>
           <img
             className="d-block w-100"
-            src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1400&q=80"
+            src="https://thepizzacompany.vn/images/thumbs/000/0004542_TPC_Digital_LTO_4CHEESExCoconut%20copy_Website_Banner%20Slider_W1200%20x%20H480%20px.png"
             alt="Slide 1"
             style={{ height: "70vh", objectFit: "cover" }}
           />
@@ -47,7 +61,7 @@ export default function HomePage() {
         <CarouselItem>
           <img
             className="d-block w-100"
-            src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1400&q=80"
+            src="https://thepizzacompany.vn/images/thumbs/000/0004335_TPC_WEBSITE_DIGITAL-COMBO-ECOM-AWO-2025_1200x480px.jpeg"
             alt="Slide 2"
             style={{ height: "70vh", objectFit: "cover" }}
           />
@@ -60,7 +74,7 @@ export default function HomePage() {
         <CarouselItem>
           <img
             className="d-block w-100"
-            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80"
+            src="https://thepizzacompany.vn/images/thumbs/000/0004514_TPC_LTO%20PESTO-DISAN_BannerWeb_1200x480px.png"
             alt="Slide 3"
             style={{ height: "70vh", objectFit: "cover" }}
           />
@@ -76,7 +90,7 @@ export default function HomePage() {
         className="text-center text-white py-5"
         style={{
           backgroundImage:
-            'url("https://images.unsplash.com/photo-1517816428104-7970b1e2de10?auto=format&fit=crop&w=1400&q=80")',
+            'url("https://thepizzacompany.vn/images/thumbs/000/0004572_1200x480-(T12)%20(1).png")',
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundBlendMode: "overlay",
@@ -88,7 +102,7 @@ export default function HomePage() {
             ✨ Royal Kingdom of Devs ✨
           </h1>
           <p className="lead mb-4">
-            Nơi Onii-chan và Neko-chan code trong ánh hào quang 💫
+            bánh pizza ngon hết xẩy💫
           </p>
           <a href="/about" className="btn btn-warning fw-semibold">
             Khám phá ngay 💎
@@ -96,7 +110,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* phan body khieu goi cua e: lol va hai cap vu */}
+      {/* phan body  */}
       <main className=" my-5 flex-grow-1 ">
         {/* */}
 
@@ -153,7 +167,7 @@ export default function HomePage() {
         <Container className="text-center my-5 d-flex flex-column align-items-center">
           <h1
             className="text-center fw-bold w-75 mt-5"
-            style={{ fontSize: "60px" }}
+            style={{ fontSize: "40px" }}
           >
             BEST DISPENSARY TO BUY WEED ONLINE IN CANADA
           </h1>
@@ -175,8 +189,8 @@ export default function HomePage() {
                       className="mt-5"
                       variant="top"
                       style={{
-                        width: "180px",
-                        height: "180px",
+                        width: "120px",
+                        height: "120px",
                       }}
                       src="/products/product_1.png"
                     />
@@ -216,7 +230,7 @@ export default function HomePage() {
         <Container className="text-start py-5">
           <h1
             className="text-start fw-bold w-75 py-5"
-            style={{ fontSize: "60px" }}
+            style={{ fontSize: "40px" }}
           >
             CHOOSE YOUR WEED
           </h1>
@@ -262,7 +276,7 @@ export default function HomePage() {
         >
           <h1
             className="text-white fw-bold fs-1 text-center py-5  w-50 mx-auto"
-            style={{ paddingTop: "500px" }}
+            style={{ paddingTop: "300px" }}
           >
             HOW TO ORDER WEED ONLINE FROM TOP SHELF BC - MAIL ORDER MARIJUANA
           </h1>
@@ -297,7 +311,7 @@ export default function HomePage() {
                     1
                   </span>
                 </div>
-                <Image src="/file.svg" width={144} height={144} />
+                <Image src="/file.svg" width={80} height={80} />
                 <h5 className="text-white my-5 fw-semibold ">REGISTER</h5>
                 <p className=" text-center   pb-5" style={{ color: "#9D9EA2" }}>
                   Sign up for an account with us. This is quick and simple. We
@@ -325,7 +339,7 @@ export default function HomePage() {
                     2
                   </span>
                 </div>
-                <Image src="/globe.svg" width={144} height={144} />
+                <Image src="/globe.svg" width={80} height={80} />
                 <h5 className="text-white my-5 fw-semibold ">SHOP</h5>
                 <p
                   className=" text-center m-auto  pb-5"
@@ -355,7 +369,7 @@ export default function HomePage() {
                     3
                   </span>
                 </div>
-                <Image src="/vercel.svg" width={144} height={144} />
+                <Image src="/vercel.svg" width={80} height={80} />
                 <h5 className="text-white my-5 fw-semibold ">MAKE PAYMENT</h5>
                 <p
                   className=" text-center m-auto  pb-5"
@@ -384,7 +398,7 @@ export default function HomePage() {
                     4
                   </span>
                 </div>
-                <Image src="/window.svg" width={144} height={144} />
+                <Image src="/window.svg" width={80} height={80} />
                 <h5 className="text-white my-5 fw-semibold ">RELAX</h5>
                 <p
                   className=" text-center m-auto  pb-5"

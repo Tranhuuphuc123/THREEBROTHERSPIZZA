@@ -3,22 +3,26 @@ package webpizza.com.vn.webapp.controller.Auth;
 import webpizza.com.vn.webapp.DTO.AuthDTO.AuthRequestDTO;
 import webpizza.com.vn.webapp.DTO.AuthDTO.AuthResponseDTO;
 import webpizza.com.vn.webapp.JWT.JwtTokenProvider;
+import webpizza.com.vn.webapp.entity.User;
+import webpizza.com.vn.webapp.repository.UserRepository;
+
+import org.springframework.security.core.Authentication; 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/*controller cuủa xác thực Auth jwt token */
+/*controller cuủa xác thực Authentication làm chức năng login ->  jwt token */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-
-
     /*Trong Spring Security, AuthenticationManager là một giao diện cốt lõi (core interface)
      chịu trách nhiệm về việc xác thực (Authentication) người dùng:
 
@@ -40,8 +44,11 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider jwtUtil;
 
+    @Autowired
+    private UserRepository userRepo; // Tiêm Repo vào để lấy ảnh
 
-    //metod xu ly login -> xác thực -> generaToken khi login thanh cong
+
+    //metod xu ly login -> xác thực AUTHENTICATION -> generaToken khi login thanh cong
     /* giải thích code:
     * + @RequestBody...: Spring sẽ tự động ánh xạ dữ liệu JSON gửi trong thân (body) của yêu cầu
     *  POST thành đối tượng Java AuthRequestDTO (chứa userName và passWord).
@@ -67,10 +74,23 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> Login(@RequestBody AuthRequestDTO request){
         //1. yêu cầu xác thực của spring security -> nho nó xác minh tài khoản -> tra cho user mot token
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.userName, request.passWord));
+        Authentication auth = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassWord())
+        );
 
-        //2. sinh một token
-        String token = jwtUtil.generateToken(request.userName);
-        return ResponseEntity.ok(new AuthResponseDTO(token));
-    };
+       // 2. Lấy UserDetails từ đối tượng auth(username, password ,role)
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+        // 3. Sinh token (truyền cả username và danh sách quyền)
+        // Lưu ý: Phải sửa hàm generateToken ở lớp Provider để nhận thêm authorities
+        String token = jwtUtil.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
+
+        // 4. LẤY AVATAR TỪ DATABASE
+        User userEntity = userRepo.findByUsername(userDetails.getUsername());
+        String avatar = userEntity.getAvatar();
+
+        // 5. Trả về: Token (có payload chuẩn) + Avatar (nằm ngoài token)
+        return ResponseEntity.ok(new AuthResponseDTO(token, avatar, userDetails.getUsername()));
+
+    }
 }

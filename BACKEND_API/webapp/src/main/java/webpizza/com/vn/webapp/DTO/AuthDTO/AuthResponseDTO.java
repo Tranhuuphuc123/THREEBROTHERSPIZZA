@@ -10,5 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponseDTO {
+    //trả token về payload có chứa: token trong đó có thêm (avatar và username)
     public String token;
+    private String avatar;
+    private String username;
 }

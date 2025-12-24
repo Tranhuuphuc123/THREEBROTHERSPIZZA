@@ -8,3 +8,8 @@
                         or
 
   + Nhấn Ctrl + Shift + P gõ "Java: Clean Java Language Server Workspace", sau đó chọn Reload.                        
+
+
+  ##-------------cách reload MAVEN  pom.xml trong vscode---------------
+   + mở ctrl + shift + P: gõ "Maven: Reload All Projects" > chạy reload project cũng đc
+   

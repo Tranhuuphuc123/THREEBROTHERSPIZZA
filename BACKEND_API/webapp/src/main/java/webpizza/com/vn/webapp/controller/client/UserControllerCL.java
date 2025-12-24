@@ -2,6 +2,7 @@ package webpizza.com.vn.webapp.controller.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,13 @@ import webpizza.com.vn.webapp.service.client.UserServiceCL;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/client/users")
+@RequestMapping("/api/client/users")
 public class UserControllerCL {
     //tiem phu thuoc autowired UserService vao
     @Autowired
     private UserServiceCL userServiceCL;
 
-    /*************1- getall**********************/
+    /*************1- getall có phân trang**********************/
     /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
     * */

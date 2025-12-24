@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "permisions")
+@Table(name = "permissions")
 public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

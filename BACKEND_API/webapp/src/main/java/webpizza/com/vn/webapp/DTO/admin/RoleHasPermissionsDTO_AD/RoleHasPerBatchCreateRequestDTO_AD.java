@@ -1,0 +1,19 @@
+package webpizza.com.vn.webapp.DTO.admin.RoleHasPermissionsDTO_AD;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoleHasPerBatchCreateRequestDTO_AD {
+    @NotNull(message = "Khong duoc de trong role id")
+    private Integer roleId;
+
+    @NotNull(message = "Ko duoc de trong permission id")
+    private List<Integer> permissionId;
+}

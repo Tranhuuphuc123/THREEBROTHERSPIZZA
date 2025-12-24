@@ -13,13 +13,13 @@ import webpizza.com.vn.webapp.service.admin.UserServiceAD;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/admin/users")
+@RequestMapping("/api/admin/users")
 public class UserControllerAD {
     //tiem phu thuoc autowired UserService vao
     @Autowired
     private UserServiceAD userServiceAD;
 
-    /*************1- getall**********************/
+    /*************1-1 getall**********************/
     /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
     * */
@@ -31,6 +31,17 @@ public class UserControllerAD {
         // goi service thuc hien truy van hien thi tat ca thong tin cua table user co phan trang
         return userServiceAD.getAllUserPagination(pageNumber, pageSize, sortBy);
     }
+
+    
+    /***************** 1-2: getById *******************/
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
+        //yeu cau service tra  ve id
+        return userServiceAD.getById(id);
+    }
+
+
 
     /*****************-2 create**************************/
     @CrossOrigin(origins = "http://localhost:3000") 

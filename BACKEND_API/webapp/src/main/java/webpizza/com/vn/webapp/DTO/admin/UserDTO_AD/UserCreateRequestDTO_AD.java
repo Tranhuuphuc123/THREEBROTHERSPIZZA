@@ -7,9 +7,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 @Data
 @AllArgsConstructor
@@ -27,13 +32,15 @@ public class UserCreateRequestDTO_AD {
     private String username;
 
     @NotBlank(message = "mat khau khong dc de trong")
-    @Length(min = 6, max = 128, message = "mk it nhat la phai co 6 -128 ky tu")
+    @Length(min = 6, max = 128, message = "mk it nhat la phai co 6 - 128 ky tu")
     private String password;
 
     @NotNull(message = "khong dc de trong")
     private Integer gender;
 
-    private LocalDateTime birthday;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class) // Thêm dòng này vào
+    private LocalDate birthday;
 
     @NotBlank(message = "khong dc de trong email")
     @Email(message = "phai dung cau truc email la <name@gmail.com>")

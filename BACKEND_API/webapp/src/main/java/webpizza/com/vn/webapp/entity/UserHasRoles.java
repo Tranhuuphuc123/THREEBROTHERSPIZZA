@@ -18,11 +18,13 @@ public class UserHasRoles {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore // <--- Thêm Annotation này parrse json
+    @JsonIgnore /* Thêm Annotation này parrse json tránh tránh lỗi Infinite Recursion 
+    (vòng lặp vô tận) ở bản trung gian nó sẽ Ngắt: Khi từ user xem userhasroles, 
+    dừng việc lặp đi ngc lại userhasrole sang user cứ mãi lặp đi lặp lại  */
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    @JsonIgnore // <--- Thêm Annotation này parrse json
+    @JsonIgnore 
     private Role role;
 }

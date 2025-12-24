@@ -14,7 +14,7 @@ export default function SwiperEducation() {
       spaceBetween={30}
       freeMode={true}
     >
-      <SwiperSlide style={{ width: "400px" }}>
+      <SwiperSlide style={{ width: "300px" }}>
         <Card className="text-center h-100 border-0 ">
           <Image
             className="card-img-top object-fit-cover w-100"
@@ -44,7 +44,7 @@ export default function SwiperEducation() {
           </CardBody>
         </Card>
       </SwiperSlide>
-      <SwiperSlide style={{ width: "400px" }}>
+      <SwiperSlide style={{ width: "300px" }}>
         <Card className="text-center h-100 border-0 ">
           <Image
             className="card-img-top object-fit-cover w-100"
@@ -75,7 +75,7 @@ export default function SwiperEducation() {
           </CardBody>
         </Card>
       </SwiperSlide>
-      <SwiperSlide style={{ width: "400px" }}>
+      <SwiperSlide style={{ width: "300px" }}>
         <Card className="text-center h-100 border-0 ">
           <Image
             className="card-img-top object-fit-cover w-100"
@@ -107,7 +107,7 @@ export default function SwiperEducation() {
           </CardBody>
         </Card>
       </SwiperSlide>
-      <SwiperSlide style={{ width: "400px" }}>
+      <SwiperSlide style={{ width: "300px" }}>
         <Card className="text-center h-100 border-0 ">
           <Image
             className="card-img-top object-fit-cover w-100"

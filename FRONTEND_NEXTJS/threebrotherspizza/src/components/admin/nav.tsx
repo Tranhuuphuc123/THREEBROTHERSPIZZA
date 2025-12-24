@@ -11,29 +11,51 @@ import {
 // Import useRouter chuyển hướng trang 
 import { useRouter } from 'next/navigation'; 
 
+// Import các hằng số và hàm tiện ích vể url dãn ảnh upload và axioAuth láy avatar và role
+import { UPLOAD_URL } from "@/constants/urls";
+import { getPayloadInfoFromToken } from "@/axios/axiosAuth";
+
 
 export default function Nav({onToggleSidebar,}: {
   onToggleSidebar: () => void;
 }) {
 
-  // Khai báo state để lưu trạng thái đăng nhập
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   // Khởi tạo router để chuyển hướng trang
   const router = useRouter(); 
+
+  // State lưu thông tin hiển thị
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
 
     /* Hàm xử lý đăng xuất (Nên có)*/
   const handleLogout = () => {
     localStorage.removeItem("token");
-      // Chuyển hướng về trang đăng nhập
-      router.push("/adminLogin");
+    localStorage.removeItem("user_avatar"); // <--- Thêm dòng này
+    localStorage.removeItem("permissions");
+    // Chuyển hướng về trang đăng nhập
+    router.push("/");
   };
 
   /* Kiểm tra trạng thái token khi load component*/
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    // Nếu không có token, có thể tự động đẩy về login nếu đây là trang bảo mật
-    if (!token) router.push("/adminLogin"); 
-  }, []);
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem("token");
+        const savedAvatar = localStorage.getItem("user_avatar");
+
+        // 1. Kiểm tra bảo mật: Nếu không có token, đẩy về trang chủ ngay
+        if (!token) {
+          router.push("/");
+          return;
+        }
+
+        // 2. Lấy Role từ token để hiển thị (nếu cần)
+        const userRole = getPayloadInfoFromToken();
+        setRole(userRole);
+
+        // 3. Lấy Avatar từ localStorage
+        setAvatar(savedAvatar);
+      }
+    }, [router]);
 
   return (
     <>
@@ -59,11 +81,14 @@ export default function Nav({onToggleSidebar,}: {
           >
             <Image
               alt="avatar"
-              src="https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png?fit=512%2C512&ssl=1"
+
+              // Logic hiển thị ảnh giống hệt bên Header
+              src={avatar ? `${UPLOAD_URL}/${avatar}` : "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png"}
               roundedCircle
               width="35px"
               height="35px"
-              className="me-2" // Khoảng cách giữa ảnh và mũi tên
+              className="me-1" // Khoảng cách giữa ảnh và mũi tên
+              style={{ objectFit: 'cover', border: '2px solid #05422C' }}
             />
             {/* Mũi tên sẽ tự xuất hiện khi dùng DropdownToggle chuẩn */}
           </DropdownToggle>

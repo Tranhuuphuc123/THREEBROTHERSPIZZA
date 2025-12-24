@@ -8,9 +8,12 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 @Data
 @AllArgsConstructor
@@ -36,7 +39,10 @@ public class UserUpdateRequestDTO_AD {
     private Integer gender;
 
     @NotNull(message = "khong dc de trong ngay sinh")
-    private LocalDateTime birthday;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    //JsonDeserialize: Chuyển đổi chuỗi JSON thành đối tượng Java.
+    @JsonDeserialize(using = LocalDateDeserializer.class) 
+    private LocalDate birthday;
 
     @NotBlank(message = "khong dc de trong email")
     @Email(message = "phai dung cau truc email la <name@gmail.com>")

@@ -1,8 +1,10 @@
 package webpizza.com.vn.webapp.JWT;
 
 /*JWT II - jwt filter này có tác dụng Xác thực và Ủy quyền
-  => lop tien ich xu ly trong Config/SecurityConfig.java: kiểm tra JWT trong từng request (lọc request mỗi lần).
-  => Bộ lọc này lấy JWT từ Header, giải mã Payload để lấy username, và sau đó dùng username đó để tải lại thông
+  => lop tien ich xu ly trong Config/SecurityConfig.java: kiểm tra JWT trong từng request
+   (lọc request mỗi lần).
+  => Bộ lọc này lấy JWT từ Header, giải mã Payload để lấy username, và sau đó dùng username 
+  đó để tải lại thông
   tin UserDetails (bao gồm cả Roles) từ DB, và thiết lập phiên làm việc trong Spring Security.
   => JwtFilter – Nó làm nhiệm vụ Gác cổng kiểm tra JWT mỗi request
    cụ thể là:
@@ -38,7 +40,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -59,7 +60,8 @@ public class JwtFilter extends OncePerRequestFilter {
                                      HttpServletResponse response,
                                      FilterChain filterChain) throws ServletException, IOException {
 
-        //xử lý cho phép các lớp sao đc phép thực thi mà không cần kiểm tra token gì cả, không có Authrization trng header
+        //2 xử lý cho phép các lớp sao đc phép thực thi mà không cần kiểm tra token gì cả, không có
+        //  Authrization trng header
         /*Ý nghĩa của việc lặp lại loại trừ:
             + Tối ưu hóa hiệu suất: Mặc dù SecurityConfig cho phép các request này đi qua (vì .permitAll()),
             nhưng nếu bạn không có đoạn loại trừ này trong JwtFilter, mỗi request đến các đường dẫn công khai
@@ -68,19 +70,18 @@ public class JwtFilter extends OncePerRequestFilter {
              ngay cả khi không có token).
 
             + Việc thêm đoạn if này vào đầu JwtFilter đảm bảo rằng, ngay khi nhận thấy đó là một đường dẫn
-             công khai từ securityconfig thi Filter hiểu và sẽ ngay lập tức chuyển request cho Filter tiếp theo (filterChain.doFilter(...))
-             mà không cần thực hiện logic giải mã JWT phức tạp, từ đó giảm thiểu chi phí xử lý không cần thiết.
+             công khai từ securityconfig thi Filter hiểu và sẽ ngay lập tức chuyển request cho Filter tiếp 
+             theo (filterChain.doFilter(...)) mà không cần thực hiện logic giải mã JWT phức tạp, từ đó giảm 
+             thiểu chi phí xử lý không cần thiết.
 
-           ==> Việc loại trừ trong SecurityConfig là để đảm bảo quyền truy cập cuối cùng (Authorization). Việc loại
-           trừ trong JwtFilter là để tối ưu hóa sớm (Optimization), tránh chạy logic xác thực JWT không cần thiết
-           cho các request đã được biết là công khai.  */
+           ==> Việc loại trừ trong SecurityConfig là để đảm bảo quyền truy cập cuối cùng (Authorization). 
+           Việc loại trừ trong JwtFilter là để tối ưu hóa sớm (Optimization), tránh chạy logic xác thực 
+           JWT không cần thiết cho các request đã được biết là công khai.  */
         String path = request.getRequestURI();
         if(path.startsWith("/api/auth/login") 
             || path.startsWith("/swagger-ui/")
             || path.startsWith("/v3/api-docs")
-            || path.startsWith("/api/client/users")
-            || path.startsWith("/api/client/users/create")
-            || path.startsWith("/api/client/users/update/{id}")
+            || path.startsWith("/uploads/")
         ){
             filterChain.doFilter(request, response);
             return;
