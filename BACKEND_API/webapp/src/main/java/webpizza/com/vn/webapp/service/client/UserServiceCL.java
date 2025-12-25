@@ -48,7 +48,7 @@ public class UserServiceCL {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    /*I GET ->lay va do du lieu co phan trang*/
+    /*I_1 GET ->lay va do du lieu co phan trang*/
     public ResponseEntity<Map<String, Object>> getAllUserPagination(int pageNumber, int pageSize, String sortby){
         //a - khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
@@ -84,6 +84,40 @@ public class UserServiceCL {
            response.put("msg", " la du lieu khong co hu hu hu hu");
 
            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    
+     /**I_2: Get xậy dựng mehod tra ve ket qua theo id******/
+    /*nhu cach thuc cua getAllPagination no cung tra ve ket qua tuy nhien getallPaginattion
+     * la method tra ve ket qua theo recored value hien thi ra tat ca value can co trng csdl
+     * -> gio trong method nay ta can tra la tra ve ket qua la id cua record tuong ung thui
+     * ==> trong bai nay ta phuc vu chuc nang update tuy nhien trc khi thuc thi method update
+     * ta can tra ve ket qua la cac id tuong ung cac record tren csdl */
+    public ResponseEntity<Map<String, Object>> getById (Integer id){
+        //khoi tao bien luu ket qua tra ve
+        Map<String, Object> response = new HashMap<>();
+
+        //nho repo thuc thi tra ve ket qua id => luu trong bien Optional(chap nhan gia tri null)
+        Optional<User> optFoundById = userRepo.findById(id);
+        //neu no co ton tai
+        if(optFoundById.isPresent()){
+            //nhan id vau tim kiem dc
+            User accountEntity = optFoundById.get();
+
+            //tra ve thong bao thanh cong
+            response.put("data", accountEntity);
+            response.put("statuscode", 201);
+            response.put("msg", "ket qua tra ve ton tai id vua tim kiem");
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            //tra ve ket qua nguoi dung
+            response.put("data", null);
+            response.put("statuscode", 404);
+            response.put("msg", "vui long xem lai khong ton tai id vua tim kiem");
+
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -176,6 +210,8 @@ public class UserServiceCL {
         }
     }
 
+    
+
 
     /*III - Put(Update0*/
    public ResponseEntity<Map<String, Object>> updateUser(Integer id, UserUpdateRequestDTO_CL objEdit, MultipartFile file) {
@@ -244,13 +280,13 @@ public class UserServiceCL {
         }
 
         // Cập nhật Mức lương
-        if (objEdit.getLevelId() != null && objEdit.getLevelId() > 0) {
-            entityEdit.setLevelId(objEdit.getLevelId());
-        }
+        // if (objEdit.getLevelId() != null && objEdit.getLevelId() > 0) {
+        //     entityEdit.setLevelId(objEdit.getLevelId());
+        // }
         
-        if (objEdit.getIsActive() != null) {
-            entityEdit.setIsActive(objEdit.getIsActive());
-        }
+        // if (objEdit.getIsActive() != null) {
+        //     entityEdit.setIsActive(objEdit.getIsActive());
+        // }
 
         // Lưu vào DB
         userRepo.save(entityEdit);

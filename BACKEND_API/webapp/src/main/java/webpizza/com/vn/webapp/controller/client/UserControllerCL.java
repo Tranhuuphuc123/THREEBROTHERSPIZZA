@@ -20,7 +20,7 @@ public class UserControllerCL {
     @Autowired
     private UserServiceCL userServiceCL;
 
-    /*************1- getall có phân trang**********************/
+    /*************1-1: getall có phân trang**********************/
     /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
     * */
@@ -32,6 +32,17 @@ public class UserControllerCL {
         // goi service thuc hien truy van hien thi tat ca thong tin cua table user co phan trang
         return userServiceCL.getAllUserPagination(pageNumber, pageSize, sortBy);
     }
+
+     
+    /***************** 1-2: getById *******************/
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
+        //yeu cau service tra  ve id
+        return userServiceCL.getById(id);
+    }
+
+
 
     /*****************-2 create**************************/
     @CrossOrigin(origins = "http://localhost:3000") 

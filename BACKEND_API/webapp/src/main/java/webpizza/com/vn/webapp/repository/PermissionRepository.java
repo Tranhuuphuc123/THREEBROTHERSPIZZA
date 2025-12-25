@@ -14,6 +14,16 @@ public interface PermissionRepository extends CrudRepository<Permission, Integer
         PagingAndSortingRepository<Permission, Integer> {
 
         /* #####tạo hàm trả về danh sách các quyền thật có của username cụ thể #####
+        -> :username: :username được gọi là Named Parameter (Tham số được đặt tên)
+        Thay vì bạn viết "chết" (hardcode) một cái tên cụ thể vào câu lệnh SQL, bạn
+         dùng dấu : kèm theo một cái tên để tạo ra một vị trí chờ sẵn (placeholder)
+          ## Cơ chế hoạt động:
+             # Khi ứng dụng của bạn chạy, Spring Data JPA sẽ thực hiện hai bước:
+                + Bước 1: Quét câu lệnh SQL và tìm ký tự :username.
+                + Bước 2: Lấy giá trị của biến username truyền vào trong hàm 
+                findPermissionsRawByUsername(String username) và "đổ" nó vào đúng 
+                vị trí đó trước khi gửi câu lệnh tới Database.
+                
         -> nativeQuery = true: là chấp nhận sử dụng câu lệnh thuần sql
         -> @Param("username") thêm tham số này để lk biến username trong
         method lên biến :username trong câu lệnh sql

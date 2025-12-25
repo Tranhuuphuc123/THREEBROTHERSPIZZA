@@ -31,6 +31,9 @@ public class Permission {
     @Column(name = "guard_name")
     private String guardName;
 
+    @Column(name = "module_name")
+    private String moduleName;
+
     // updatable = false: không cho phép cập nhật sau khi tạo đảm bảo tính truy vết lịch sử
     /*@CreationTimestamp:Tự động gán giá trị thời gian hiện tại (NOW()) cho trường này khi
      bản ghi được chèn (INSERT) vào CSDL.*/

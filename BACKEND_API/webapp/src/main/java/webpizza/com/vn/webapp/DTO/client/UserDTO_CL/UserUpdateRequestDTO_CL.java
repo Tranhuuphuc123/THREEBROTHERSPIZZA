@@ -53,10 +53,10 @@ public class UserUpdateRequestDTO_CL {
     @Length(max = 500)
     private String address;
 
-    @NotNull(message = "Mức lương không được để trống")
-    @Min(value = 1, message = "Mức lương thấp nhất là 1")
-    private Integer levelId; //value = 1 là chấp nhận số từ 1 trở lên
+    // @NotNull(message = "Mức lương không được để trống")
+    // @Min(value = 1, message = "Mức lương thấp nhất là 1")
+    // private Integer levelId; //value = 1 là chấp nhận số từ 1 trở lên
 
-    @NotNull(message = "khong dc de trong")
-    private Integer isActive;
+    // @NotNull(message = "khong dc de trong")
+    // private Integer isActive;
 }

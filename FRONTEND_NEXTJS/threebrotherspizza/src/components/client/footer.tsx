@@ -16,68 +16,49 @@ export default function Footer() {
           <Row>
             {/* TOP SHELF */}
             <Col lg={4}>
-              <h1 className="mb-4">TOP SHELF</h1>
+              <h1 className="mb-4">THREE BROTHER PIZZA</h1>
               <p className="w-75 lh-lg" style={{ color: "#9D9EA2" }}>
-                #1 Canadian top rated online dispensary that meets the customers
-                needs in every single medical marijuana aspect. The team here at
-                TopShelfBC is heavily involved in the Canadian cannabis industry
-                for over 15 years. We strive to provide the top quality
-                products, service and care at the lowest prices you’ll ever
-                find.
+                <Image src= "/assets/admin/img/threebrotherpizzalogo.jpg" width={300} height={300} />
               </p>
             </Col>
             {/* QUICK LINK, CONTACT US, MORE */}
             <Col lg={8}>
-              <h2 className="mb-4">QUICK LINK</h2>
+              <h2 className="mb-4">ABOUT</h2>
               <Row style={{ color: "#9D9EA2" }}>
                 <Col lg={6} className="d-flex flex-column gap-3">
-                  <span>Track Your Order</span>
-                  <span>Shop All</span>
-                  <span>Flower</span>
-                  <span>Edibles</span>
-                  <span>Concentrates</span>
-                  <span>Refunds</span>
+                  <span>Hệ thống cửa hàng</span>
+                  <span>Câu chuyện thương hiệu</span>
                 </Col>
                 <Col lg={6} className="d-flex flex-column gap-3">
-                  <span>Mushrooms</span>
-                  <span>Promotions / Bundles</span>
-                  <span>Support</span>
-                  <span>Reward</span>
-                  <span>Blog</span>
-                  <span>Shipping Faq</span>
+                   <span>Tin tức và sự kiện</span>
+                  <span>Tuyển dụng</span>
                 </Col>
               </Row>
               <h2 className="my-4">CONTACT US</h2>
               <Row style={{ color: "#9D9EA2" }}>
                 <Col lg={6} className="d-flex flex-column gap-3">
-                  <span>info@topshelfbc.cc</span>
+                  <span>Hướng dẫn mua hàng</span>
+                  <span>Chính sách giao hàng</span>
+                </Col>
+                <Col lg={6} className="d-flex flex-column gap-3">
+                  <span>Chính sách bảo mật</span>
+                  <span>Điều khiển và điều kiện</span>
                 </Col>
               </Row>
-              <h2 className="my-4">MORE</h2>
+              <h2 className="my-4">ADDRESS STORE</h2>
               <Row style={{ color: "#9D9EA2" }}>
-                <Col lg={6} className="d-flex flex-column gap-3">
+                <Col className="d-flex flex-column gap-3">
                   <span>Buy weed online in Canada</span>
-                  <span>Buy weed online in New Brunswick</span>
-                  <span>Buy weed online in Prince Edward Island</span>
-                  <span>Buy weed online in Northwest Territories</span>
-                  <span>Buy weed online in Saskatchewan</span>
-                </Col>
-                <Col lg={6} className="d-flex flex-column gap-3">
-                  <span>Buy weed online in Manitoba</span>
-                  <span>Buy weed online in Quitebec</span>
-                  <span>Buy weed online in British Columbia</span>
-                  <span>Buy weed online in Ontario</span>
-                  <span>Buy weed online in Alberta</span>
                 </Col>
               </Row>
-
-              {/* visa icon */}
-              <div className=" my-5 d-flex gap-4">
-                <Image src="/file.svg" width={40} height={40}></Image>
-                <Image src="/globe.svg" width={40} height={40}></Image>
-                <Image src="/vercel.svg" width={40} height={40}></Image>
-                <Image src="/window.svg" width={40} height={40}></Image>
-              </div>
+              <h2 className="my-4">TỔNG ĐÀI HỖ TRỢ</h2>
+              <Row style={{ color: "#9D9EA2" }}>
+                <Col className="d-flex flex-column gap-3">
+                  <span>Đặt hàng: 19001577(9:30 - 21:00)</span>
+                  <span>CSKH: 1900(9:30 - 21:00)</span>
+                </Col>
+              </Row>
+              
             </Col>
           </Row>
 
@@ -88,14 +69,7 @@ export default function Footer() {
             className="d-flex justify-content-between"
           >
             {/* Nội dung bên trái */}
-            <p className="pt-3">© 2025 Top Shelf BC. All Rights Reserved.</p>
-
-            {/* Nội dung bên phải */}
-            <div className="d-flex gap-3 pt-3">
-              <Link href="#">Out Of Stock</Link>
-              <Link href="#">Privacy Policy</Link>
-              <Link href="#">Terms & Conditions</Link>
-            </div>
+            <p className="pt-3">Bản quyền © 2025 The Threebrotherpizza. Đã đăng ký bản quyền.</p>
           </Container>
         </Container>
       </footer>

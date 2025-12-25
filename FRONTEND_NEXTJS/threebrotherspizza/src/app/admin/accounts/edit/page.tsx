@@ -233,7 +233,7 @@ const EditModal: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
 
                 <button type="submit" className="btn btn-primary w-100 mt-3">
                     <FontAwesomeIcon icon={faSave} className="me-2" />
-                    Cập nhật tài khoản
+                    SAVE CHANGE
                 </button>
             </form>
         </>

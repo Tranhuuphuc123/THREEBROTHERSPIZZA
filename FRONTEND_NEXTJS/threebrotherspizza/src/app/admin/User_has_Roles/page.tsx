@@ -32,7 +32,7 @@ export default function UserRolesManager() {
           « Trở về
         </button>
         <button className="btn btn-outline-primary btn-sm fw-bold px-3 shadow-sm bg-white">
-          Thêm chức năng
+          Thêm vai trò
         </button>
         <button className="btn btn-secondary btn-sm fw-bold px-3 shadow-sm" disabled>
           Lưu các vai trò cho user

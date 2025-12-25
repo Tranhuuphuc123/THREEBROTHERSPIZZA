@@ -85,12 +85,13 @@ public class AuthController {
         // Lưu ý: Phải sửa hàm generateToken ở lớp Provider để nhận thêm authorities
         String token = jwtUtil.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
 
-        // 4. LẤY AVATAR TỪ DATABASE
+        // 4. LẤY AVATAR và ID TỪ DATABASE
         User userEntity = userRepo.findByUsername(userDetails.getUsername());
         String avatar = userEntity.getAvatar();
+        Integer userId = userEntity.getId(); // LẤY ID TẠI ĐÂY
 
         // 5. Trả về: Token (có payload chuẩn) + Avatar (nằm ngoài token)
-        return ResponseEntity.ok(new AuthResponseDTO(token, avatar, userDetails.getUsername()));
+        return ResponseEntity.ok(new AuthResponseDTO(token, avatar, userDetails.getUsername(), userId));
 
     }
 }

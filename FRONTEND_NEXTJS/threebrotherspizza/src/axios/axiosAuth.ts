@@ -72,6 +72,9 @@ export async function login(username:string, password:string) {
     localStorage.setItem("token", data.token);
     // 2. Lưu avatar (để hiển thị Header - CỰC KỲ QUAN TRỌNG)
     localStorage.setItem("user_avatar", data.avatar || "");
+    // 3. LƯU ID NGƯỜI DÙNG (Dòng mới thêm vào)
+    // data.id phải khớp với tên trường bạn đặt trong AuthResponseDTO ở Backend
+    localStorage.setItem("user_id", data.id || "");
 
     /*PHÁT TÍN HIỆU: Tự kích hoạt sự kiện storage để các component khác cập nhật
     giúp việc sau khi login thành công sinh ra token thì storage update để mọi người 

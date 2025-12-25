@@ -38,6 +38,9 @@ import { getPayloadInfoFromToken } from "@/axios/axiosAuth";
 // Import URL server ảnh của bạn
 import { UPLOAD_URL } from "@/constants/urls"; 
 
+//import page edit profile
+import EditProfile from "@/app/client/profile/page";
+
 
 
 export default function Header() {
@@ -50,6 +53,8 @@ export default function Header() {
   const [userRole, setUserRole] = useState<string | null>(null);
   // State lưu avatar ảnh của user account
   const [avatar, setAvatar] = useState<string | null>(null); 
+  // Thêm State lưu id của user từ localstorage
+  const [userId, setUserId] = useState<string | null>(null);
 
   //pathname: Lấy đường dẫn hiện tại để biết "người dùng có chuyển trang không?", nếu có → đóng modal.
    const pathName = usePathname(); 
@@ -85,6 +90,8 @@ export default function Header() {
         localStorage.removeItem("token");
         localStorage.removeItem("user_avatar"); // <--- Thêm dòng này
         localStorage.removeItem("permissions");
+        localStorage.removeItem("user_id"); // <--- THÊM DÒNG NÀY: Xóa ID khi logout
+
         showToast("Đã đăng xuất", 'info');
         // Ép trình duyệt load lại trang chủ từ Server để xóa sạch State cũ
         window.location.href = "/";
@@ -100,6 +107,7 @@ export default function Header() {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem("token");
       const savedAvatar = localStorage.getItem("user_avatar"); // Lấy cái đã lưu ở bước trên
+      const savedId = localStorage.getItem("user_id"); // Lấy ID từ storage
 
       /* BƯỚC 3: Cập nhật trạng thái đăng nhập
         # !!token là cách viết tắt: 
@@ -124,9 +132,11 @@ export default function Header() {
       if (roles) {
         setUserRole(roles);
         setAvatar(savedAvatar);// Gán avatar từ localStorage vào state
+        setUserId(savedId); // Lưu ID vào state để dùng nếu cần
       } else {
         setUserRole(null);
         setAvatar(null);
+        setUserId(null);
       }
     }
   }
@@ -172,16 +182,16 @@ export default function Header() {
               style={{ fontSize: "1.1rem", cursor: "pointer" }}
             >
               <NavLink as={Link} href="/">
-                Trang chủ
+                Homepage
               </NavLink>
               <NavLink as={Link} href="/client/about">
-                Giới Thiệu
+                About
               </NavLink>
               <NavLink as={Link} href="/client/contact">
-                Liên Hệ
+                Contact
               </NavLink>
               <NavLink as={Link} href="/client/products">
-                Sản Phẩm
+                Product
               </NavLink>
 
               {/* xu ly handle event click button dangnhap -> modal context form login 
@@ -191,7 +201,7 @@ export default function Header() {
                */}
               {!isLoggedIn ? (
                 <NavLink as={Link} href="#">
-                    <span onClick={() => openModal("loginForm")}>Đăng Nhập</span>
+                    <span onClick={() => openModal("loginForm")}>Sign In</span>
                 </NavLink>
               ) : (  
                     <Dropdown
@@ -212,7 +222,7 @@ export default function Header() {
                         />
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem href="/">Profile</DropdownItem>
+                        <DropdownItem  href="/client/profile">Profile</DropdownItem>
 
                         {/* Nên gọi hàm handleLogout khi người dùng bấm Logout */}
                         <DropdownItem onClick={handleLogout}>Logout</DropdownItem>

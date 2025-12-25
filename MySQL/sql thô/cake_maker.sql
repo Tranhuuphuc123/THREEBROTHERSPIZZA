@@ -316,10 +316,10 @@ CREATE TABLE timesheets (
 -- (10,10,'60g',28,NOW());
 
 
-INSERT INTO salary_levels (level_name, hourly_wage, description) VALUES
-('customer',0,'Customer No salary level'),
-('employees',25000,'employees'),
-('manager',60000,'manager stores');
+-- INSERT INTO salary_levels (level_name, hourly_wage, description) VALUES
+-- ('customer',0,'Customer No salary level'),
+-- ('employees',25000,'employees'),
+-- ('manager',60000,'manager stores');
 
 
 -- INSERT INTO users
@@ -354,39 +354,33 @@ INSERT INTO salary_levels (level_name, hourly_wage, description) VALUES
 -- ('Night Shift','2025-01-01 17:00','2025-01-01 22:00',1.1,20000);
 
 -- INSERT INTO roles (name, display_name, guard_name, created_at, updated_at)
-INSERT INTO roles
-(name, display_name, guard_name, created_at, updated_at) VALUES
-('admin','Administrator','web',NOW(),NOW()),
-('chef','Pizza Chef','web',NOW(),NOW()),
-('cashier','Cashier','web',NOW(),NOW()),
-('customer','Customer','web',NOW(),NOW());
+-- INSERT INTO roles
+-- (name, display_name, guard_name, created_at, updated_at) VALUES
+-- ('admin','Administrator','web',NOW(),NOW()),
+-- ('chef','Pizza Chef','web',NOW(),NOW()),
+-- ('cashier','Cashier','web',NOW(),NOW()),
+-- ('customer','Customer','web',NOW(),NOW());
 
 -- INSERT INTO permissions (name, display_name, guard_name,created_at, updated_at)
-INSERT INTO permissions
-(name, display_name, guard_name,created_at,updated_at)
-VALUES
-('user_view','user manage can view','web',NOW(),NOW()),
-('user_create','user manage can create','web',NOW(),NOW()),
-('user_update','user manage can update','web',NOW(),NOW()),
-('user_delete','user manage can delete','web',NOW(),NOW()),
-('role_view','role manage can view','web',NOW(),NOW()),
-('role_create','role manage can create','web',NOW(),NOW()),
-('role_update','role manage can update','web',NOW(),NOW()),
-('role_delete','role manage can delete','web',NOW(),NOW()),
-('permission_view','permission manage can view','web',NOW(),NOW()),
-('permission_create','permission manage can create','web',NOW(),NOW()),
-('permission_update','permission manage can update','web',NOW(),NOW()),
-('permission_delete','permission manage can delete','web',NOW(),NOW()),
-('product_view','product manage can view','web',NOW(),NOW()),
-('product_create','product manage can create','web',NOW(),NOW()),
-('product_update','product manage can update','web',NOW(),NOW()),
-('product_delete','product manage can delete','web',NOW(),NOW());
-
-select * from users;
-select * from roles;
-select * from permissions;
-select * from users_roles;
-select * from roles_permissions;
+-- INSERT INTO permissions
+-- (name, display_name, guard_name,created_at,updated_at)
+-- VALUES
+-- ('user_view','user manage can view','web',NOW(),NOW()),
+-- ('user_create','user manage can create','web',NOW(),NOW()),
+-- ('user_update','user manage can update','web',NOW(),NOW()),
+-- ('user_delete','user manage can delete','web',NOW(),NOW()),
+-- ('role_view','role manage can view','web',NOW(),NOW()),
+-- ('role_create','role manage can create','web',NOW(),NOW()),
+-- ('role_update','role manage can update','web',NOW(),NOW()),
+-- ('role_delete','role manage can delete','web',NOW(),NOW()),
+-- ('permission_view','permission manage can view','web',NOW(),NOW()),
+-- ('permission_create','permission manage can create','web',NOW(),NOW()),
+-- ('permission_update','permission manage can update','web',NOW(),NOW()),
+-- ('permission_delete','permission manage can delete','web',NOW(),NOW()),
+-- ('product_view','product manage can view','web',NOW(),NOW()),
+-- ('product_create','product manage can create','web',NOW(),NOW()),
+-- ('product_update','product manage can update','web',NOW(),NOW()),
+-- ('product_delete','product manage can delete','web',NOW(),NOW());
 
 
 -- INSERT INTO users_roles (user_id, role_id)

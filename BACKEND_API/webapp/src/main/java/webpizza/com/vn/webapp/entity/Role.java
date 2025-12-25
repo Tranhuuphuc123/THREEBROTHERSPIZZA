@@ -30,6 +30,7 @@ public class Role {
 
     @Column(name = "guard_name")
     private String guardName;
+    
 
     // updatable = false: không cho phép cập nhật sau khi tạo đảm bảo tính truy vết lịch sử
     /*@CreationTimestamp:Tự động gán giá trị thời gian hiện tại (NOW()) cho trường này khi
