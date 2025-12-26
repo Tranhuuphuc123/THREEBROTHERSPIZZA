@@ -71,68 +71,61 @@ public class SupplierServiceAD {
 
 
     /*II - create */
-    public ResponseEntity<Map<String, Object>> createSupplier(SupplierCreateRequestDTO_AD objCreate, MultipartFile file ){
-        //1. khoi tao bien response de luu tru ket qua
+    public ResponseEntity<Map<String, Object>> createSupplier(SupplierCreateRequestDTO_AD objCreate, MultipartFile file) {
         Map<String, Object> response = new HashMap<>();
-
-        //phu_ tien hanh xu ly luu ruot anh 
         String newFile = null;
 
-        /*thuc hien kimer tra dieu kien chap nhan luu img co ruot anh*/
-        if(file != null && !file.isEmpty()){
-            //xu ly luu ruot anh - randomString rong
-            String randomString = "";
+        if (file != null && !file.isEmpty()) {
+            try {
+                // 1. Lấy tên file an toàn
+                String iso_8601 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+                newFile = iso_8601 + "_" + file.getOriginalFilename();
 
-            //su dung datetime luu ten anh theo gio phut giay + ten img: tranh bi trung lap
-            DateTimeFormatter iso_8601_formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-            randomString = LocalDateTime.now().format(iso_8601_formatter);
+                // 2. Thiết lập đường dẫn lưu trữ (Dùng Path cho hiện đại và chính xác)
+                String rootFolder = System.getProperty("user.dir"); // Lấy thư mục gốc project
+                Path uploadPath = Paths.get(rootFolder, uploadDir); // Nối với biến uploadDir (ví dụ: "uploads")
 
-            //tiet lap file path lay dung ten goc o dia luu folder trong project
-            String rootFolder = Paths.get("null").toAbsolutePath().toString();
+                // 3. Tạo thư mục nếu chưa tồn tại
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
 
-            //tao duong dan xu ly luu file
-            newFile = randomString + "_" + file.getOriginalFilename();
-            String filePath = rootFolder + File.separator + uploadDir + File.separator + newFile;
+                // 4. Đường dẫn đầy đủ của file ảnh
+                Path filePath = uploadPath.resolve(newFile);
 
-            //tien hanh lay ruot anh
-            File destinatinFile = new File(filePath);
+                // 5. Ghi "ruột ảnh" xuống ổ đĩa
+                file.transferTo(filePath.toFile());
 
-            //tien hanh tao folder uploads trong project neu no khong ton tai
-            destinatinFile.getParentFile().mkdirs();
-
-            //tien hanh lay  ruot anh
-            try{
-                file.transferTo(destinatinFile);
-            }catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
+                response.put("msg", "Lỗi khi lưu file: " + e.getMessage());
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
-        /*3. tien hanh goi repository create khoi tao */
-        //a. khoi tao entity supplier
-        Supplier sup = new Supplier();
-        sup.setCode(objCreate.getCode());
-        sup.setName(objCreate.getName());
-        sup.setImg(newFile);
-        sup.setPhone(objCreate.getPhone());
-        sup.setAddress(objCreate.getAddress());
-        sup.setDescription(objCreate.getDescription());
+        try {
+            // Khởi tạo và gán giá trị Entity
+            Supplier sup = new Supplier();
+            sup.setCode(objCreate.getCode());
+            sup.setName(objCreate.getName());
+            sup.setImg(newFile);
+            sup.setPhone(objCreate.getPhone());
+            sup.setAddress(objCreate.getAddress());
+            sup.setDescription(objCreate.getDescription());
 
-        //b. tien hanh goi repo create cac gia tri khoi tao tren
-        Supplier createSupEntity = supplierRepo.save(sup);
+            // Lưu vào DB
+            Supplier createSupEntity = supplierRepo.save(sup);
 
-        if (createSupEntity != null) {
-            response.put("data",createSupEntity );
+            response.put("data", createSupEntity);
             response.put("statuscode", 200);
-            response.put("msg", "create thanh cong");
-
+            response.put("msg", "Create thành công");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        }else{
-            response.put("data",null );
-            response.put("statuscode", 404);
-            response.put("msg", "create that bai coi lai");
 
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("data", null);
+            response.put("statuscode", 500);
+            response.put("msg", "Lỗi database: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
