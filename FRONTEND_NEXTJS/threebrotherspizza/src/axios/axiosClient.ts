@@ -62,7 +62,7 @@ axiosClient.interceptors.request.use(
 // ================== 2. XỬ LÝ KẾT QUẢ TRẢ VỀ (RESPONSE) ==================
 axiosClient.interceptors.response.use(
     (response) => {
-        // Nếu API trả về thành công, cứ để nó đi tiếp
+        // Nếu API trả về thành công, cứ để nó đi tiếp`
         return response;
     },
     (error) => {

@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.hibernate.validator.constraints.Length;
 
