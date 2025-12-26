@@ -11,6 +11,7 @@ select * from users;
 select * from permissions;
 select * from users_roles;
 select * from roles_permissions;
+select * from supplíe;
 
 CREATE TABLE suppliers (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,

@@ -11,17 +11,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SupplierUpdateRequestDTO_AD {
-      @NotBlank(message = "khong dc de ma code trong")
-    @Column(name = "supplier_code")
-    private String supplierCode;
+    @NotBlank(message = "khong dc de ma code trong")
+    @Column(name = "code")
+    private String code;
 
     @NotBlank(message = "khong dc de supplierName trong")
-    @Column(name = "supplier_name")
-    private String supplierName;
+    @Column(name = "name")
+    private String name;
 
+    @Column(name = "img")
+    private String img;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "address")
+    private String address;
+    
     @Column(name = "description")
     private String description;
-
-    @Column(name = "image")
-    private String img;
 }

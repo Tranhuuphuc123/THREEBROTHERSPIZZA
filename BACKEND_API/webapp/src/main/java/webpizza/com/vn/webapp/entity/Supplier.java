@@ -5,45 +5,43 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
+@Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "suppliers")
 public class Supplier{
   
+    //tu tang auto_increment ben sql
     @Id
-    @GeneratedValue(stategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "supplier_code")
-    private String supplierCode;
+    @Column(name = "code")
+    private String code;
 
-    @Column(name = "supplier_name")
-    private String supplierName;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "img")
+    private String img;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "image")
-    private String img;
-    
-
-    // updatable = false: không cho phép cập nhật sau khi tạo đảm bảo tính truy vết lịch sử
-    /*@CreationTimestamp:Tự động gán giá trị thời gian hiện tại (NOW()) cho trường này khi
-     bản ghi được chèn (INSERT) vào CSDL.*/
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt; // Khi INSERT: = NOW()
-
-    /*@UpdateTimestamp:	Tự động cập nhật giá trị thời gian hiện tại (NOW()) cho trường này
-    mỗi khi bản ghi được cập nhật (UPDATE).*/
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;// Khi INSERT: = NOW()
 
 }
