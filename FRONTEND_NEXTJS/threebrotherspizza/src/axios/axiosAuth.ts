@@ -10,12 +10,14 @@
  */
 
 /* lib jwtDecode giải mã token */
-import { jwtDecode } from "jwt-decode";    
+import { jwtDecode } from "jwt-decode";  
+//import các file cấu hình url api quản lý tập trung từ urls.tsx
+import { AUTH_URL, ROLEPERMISSION_URL } from "@/constants/urls";  
 
 /***I - tạo hàm tiện ích để login: phần này là hàm CALL api authentication
  * xác thực login sinh jwt token***/
 export async function login(username:string, password:string) {
-  const response = await fetch("http://localhost:8080/api/auth/login", {
+  const response = await fetch(`${AUTH_URL}`, {
     method: "POST",
     //content-type: là dữ liệu mong đợi từ server trả về là dạng json
     headers: {
@@ -98,7 +100,7 @@ export async function login(username:string, password:string) {
  * tiến hành xet role permission của username mà phân quyền***/
 export async function getPermission(token:string, username:string) {
   const response = await fetch(
-    `http://localhost:8080/api/authorization/getListPermissionsByUsername?username=${username}`,
+    `${ROLEPERMISSION_URL}?username=${username}`,
     {
       method: "POST",
       headers: {

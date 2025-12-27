@@ -1,30 +1,48 @@
 package webpizza.com.vn.webapp.controller.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.validation.Valid;
 import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserCreateRequestDTO_CL;
 import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserUpdateRequestDTO_CL;
 import webpizza.com.vn.webapp.service.client.UserServiceCL;
 
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/client/users")
 public class UserControllerCL {
+
     //tiem phu thuoc autowired UserService vao
     @Autowired
     private UserServiceCL userServiceCL;
 
     /*************1-1: getall có phân trang**********************/
-    /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
+  
+    /*  
+     -> @CrossOrigin(origins = "${client.url}") : cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
+     -> ${client.url}: thì trong application.properties mình đã cấu hình là 
+     client.url = "http://localhost:3000" nên ở đây chỉ cần lôi key là đc quản lý 
+     cấu hình tập trung
     * */
-    @CrossOrigin(origins = "http://localhost:3000") 
+    //@CrossOrigin(origins = "${client.url}") 
     @GetMapping
     public ResponseEntity<Map<String, Object>> index(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                      @RequestParam(defaultValue = "3") Integer pageSize,
@@ -35,7 +53,7 @@ public class UserControllerCL {
 
      
     /***************** 1-2: getById *******************/
-    @CrossOrigin(origins = "http://localhost:3000")
+    //@CrossOrigin(origins = "${client.url}") 
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
         //yeu cau service tra  ve id
@@ -45,7 +63,7 @@ public class UserControllerCL {
 
 
     /*****************-2 create**************************/
-    @CrossOrigin(origins = "http://localhost:3000") 
+    //@CrossOrigin(origins = "${client.url}") 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(@Valid @RequestBody UserCreateRequestDTO_CL objDTO){
         /* * Giải thích: 
@@ -60,14 +78,14 @@ public class UserControllerCL {
 
 
    /********************3 - delete**********************************/
-   @CrossOrigin(origins = "http://localhost:3000") 
+   //@CrossOrigin(origins = "${client.url}") 
    @DeleteMapping("/delete/{id}")
    public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer id){
        return userServiceCL.deleteUsre(id);
    }
 
    /*********************4- update**************************************/
-   @CrossOrigin(origins = "http://localhost:3000") 
+   //@CrossOrigin(origins = "${client.url}") 
    @PutMapping("/update/{id}")
    public ResponseEntity<Map<String, Object>> update(@PathVariable Integer id,
                                                      @RequestParam(value = "file", required = false) MultipartFile file,

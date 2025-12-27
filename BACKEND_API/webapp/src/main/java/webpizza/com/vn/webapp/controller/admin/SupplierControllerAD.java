@@ -28,7 +28,14 @@ public class SupplierControllerAD {
     private SupplierServiceAD supplierServiceAD;
 
     /* I _  get */
-    @CrossOrigin(origins = "http://localhost:3000") 
+    /*  
+     -> @CrossOrigin(origins = "${client.url}") : cho phép localhost 8080 chấp nhận
+    chay localhost 3000 khi localhost 8080 đang chay
+     -> ${client.url}: thì trong application.properties mình đã cấu hình là 
+     client.url = "http://localhost:3000" nên ở đây chỉ cần lôi key là đc quản lý 
+     cấu hình tập trung
+    * */
+    //@CrossOrigin(origins = "${client.url}") 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getSupIndex(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                            @RequestParam(defaultValue = "3") Integer pageSize,
@@ -38,7 +45,7 @@ public class SupplierControllerAD {
     }
 
     /* II - create */
-    @CrossOrigin(origins = "http://localhost:3000") 
+     //@CrossOrigin(origins = "${client.url}") 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createSup (@RequestParam("file") MultipartFile file,
                                                          @RequestParam("data") String jsonData){
@@ -59,7 +66,7 @@ public class SupplierControllerAD {
     }
 
     /*III - delete */
-    @CrossOrigin(origins = "http://localhost:3000") 
+    //@CrossOrigin(origins = "${client.url}") 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deleteSup(@PathVariable Integer id){
         return supplierServiceAD.deleteSupplier(id);
@@ -67,7 +74,7 @@ public class SupplierControllerAD {
 
 
     /*IV - update */
-    @CrossOrigin(origins = "http://localhost:3000") 
+    //@CrossOrigin(origins = "${client.url}") 
     @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateSup(@PathVariable Integer id,
                                                         @RequestParam(value = "file", required = false) MultipartFile file,

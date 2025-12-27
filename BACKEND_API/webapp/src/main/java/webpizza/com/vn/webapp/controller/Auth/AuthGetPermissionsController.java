@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,9 +21,7 @@ public class AuthGetPermissionsController {
     @Autowired
     private UserPermissionsService userPerService;
     
-     /***method này xử lý phần phần quyền AUTHORIZATION Cho tài khoản vừa login và sinh 
-     * ra token (AUTHENTICATION xác thực ở trên)******/
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @PostMapping("/getListPermissionsByUsername")
     public ResponseEntity<Map<String, Object>> getPermissions(@RequestParam String username ){
         //1. nhờ service thực hiện trả về ds quyền cho user 

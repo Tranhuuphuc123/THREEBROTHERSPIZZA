@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,10 +19,14 @@ public class SalaryLevelControllerAD {
 
     
     /*************1- getall**********************/
-    /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
+   /*  
+     -> @CrossOrigin(origins = "${client.url}") : cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
+     -> ${client.url}: thì trong application.properties mình đã cấu hình là 
+     client.url = "http://localhost:3000" nên ở đây chỉ cần lôi key là đc quản lý 
+     cấu hình tập trung
     * */
-    @CrossOrigin(origins = "http://localhost:3000") 
+    //@CrossOrigin(origins = "${client.url}") 
     @GetMapping
     public ResponseEntity<Map<String, Object>> index(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                      @RequestParam(defaultValue = "3") Integer pageSize,

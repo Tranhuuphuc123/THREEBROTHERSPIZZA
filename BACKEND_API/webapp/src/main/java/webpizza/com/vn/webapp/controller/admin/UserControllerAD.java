@@ -23,7 +23,7 @@ public class UserControllerAD {
     /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
     * */
-    @CrossOrigin(origins = "http://localhost:3000") 
+    //@CrossOrigin(origins = "http://localhost:3000") 
     @GetMapping
     public ResponseEntity<Map<String, Object>> index(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                      @RequestParam(defaultValue = "3") Integer pageSize,
@@ -34,7 +34,7 @@ public class UserControllerAD {
 
     
     /***************** 1-2: getById *******************/
-    @CrossOrigin(origins = "http://localhost:3000")
+    //@CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
         //yeu cau service tra  ve id
@@ -44,7 +44,7 @@ public class UserControllerAD {
 
 
     /*****************-2 create**************************/
-    @CrossOrigin(origins = "http://localhost:3000") 
+    //@CrossOrigin(origins = "http://localhost:3000") 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(@RequestParam("file") MultipartFile file,
                                                       @RequestParam("data") String jsonData){
@@ -66,7 +66,7 @@ public class UserControllerAD {
 
 
    /********************3 - delete**********************************/
-   @CrossOrigin(origins = "http://localhost:3000") 
+   //@CrossOrigin(origins = "http://localhost:3000") 
    @DeleteMapping("/delete/{id}")
    public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer id){
        return userServiceAD.deleteUsre(id);
@@ -74,7 +74,7 @@ public class UserControllerAD {
 
 
    /*********************4- update**************************************/
-   @CrossOrigin(origins = "http://localhost:3000") 
+   //@CrossOrigin(origins = "http://localhost:3000") 
    @PutMapping("/update/{id}")
    public ResponseEntity<Map<String, Object>> update(@PathVariable Integer id,
                                                      @RequestParam(value = "file", required = false) MultipartFile file,

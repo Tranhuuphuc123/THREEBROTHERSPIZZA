@@ -67,10 +67,6 @@ public class AuthController {
     *  với HTTP Status Code 200 OK, và gửi JWT vừa tạo trong đối tượng AuthResponseDTO về
     * cho client (trình duyệt/ứng dụng di động). */
 
-    /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
-    chay localhost 3000 khi localhost 8080 đang chay
-    * */
-    @CrossOrigin(origins = "http://localhost:3000") 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> Login(@RequestBody AuthRequestDTO request){
         //1. yêu cầu xác thực của spring security -> nho nó xác minh tài khoản -> tra cho user mot token

@@ -1,9 +1,11 @@
 /***cấu hình axios call api cho phần client page***/
 import axios from "axios";
+//import các file cấu hình url api quản lý tập trung từ urls.tsx
+import { CLIENT_URL } from "@/constants/urls"; 
 
 const axiosClient = axios.create({
     //lay dia chi api tu backend -> dia chi root api
-    baseURL: "http://localhost:8080/api/client",
+    baseURL: `${CLIENT_URL}`,
     headers:{
          //content-type: là dữ liệu mong đợi từ server trả về là dạng json
         "Content-Type": "application/json",

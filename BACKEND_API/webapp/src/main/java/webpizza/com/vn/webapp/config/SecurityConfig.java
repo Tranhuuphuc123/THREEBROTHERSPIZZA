@@ -4,6 +4,7 @@ import webpizza.com.vn.webapp.JWT.JwtFilter;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,6 +56,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
+     /*  
+      + ${client.url}: thì trong application.properties mình đã cấu hình là 
+     client.url = "http://localhost:3000" nên ở đây chỉ cần lôi key là đc quản lý 
+     cấu hình tập trung
+     */
+    @Value("${client.url}")
+    private String clientUrl;
 
     /*tao method xu ly loc xy ly: bat ke request nao di qua cung phai qua filter nay moi dc
     * => tuc no loc kiem tra phai co jwt token moi dc di qua va xu ly tiep khong thi out
@@ -178,8 +187,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Cho phép nguồn (Origin) từ phía Frontend của bạn
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+
+        // Cho phép nguồn (Origin) từ phía Frontend của bạn chạy port 3000: http://localhost:3000
+        configuration.setAllowedOrigins(Arrays.asList(clientUrl));
         // Cho phép các phương thức HTTP cần thiết bao gồm cả OPTIONS đi kèm
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         // Cho phép các Header quan trọng, đặc biệt là 'Authorization' chứa Token JWT

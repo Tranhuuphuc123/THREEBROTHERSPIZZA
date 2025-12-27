@@ -5,8 +5,8 @@ import React, { useState } from "react";
 //import admin.css vao trong file admin layout.tsx
 import "./admin.css";
 
-import Sidebar from "@/components/admin/Sidebar";
-import Nav from "@/components/admin/Nav";
+import Sidebar from "@/components/admin/sidebar";
+import Nav from "@/components/admin/nav";
 
 export default function RootAdminLayout({
   children,

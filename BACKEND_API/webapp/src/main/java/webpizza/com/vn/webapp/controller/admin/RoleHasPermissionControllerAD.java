@@ -21,10 +21,14 @@ public class RoleHasPermissionControllerAD {
     private RoleHasPermissionsServiceAD roleHasPermissionsServiceAD;
 
     //getall
-    /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
+     /*  
+     -> @CrossOrigin(origins = "${client.url}") : cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
+     -> ${client.url}: thì trong application.properties mình đã cấu hình là 
+     client.url = "http://localhost:3000" nên ở đây chỉ cần lôi key là đc quản lý 
+     cấu hình tập trung
     * */
-    @CrossOrigin(origins = "http://localhost:3000") 
+    //@CrossOrigin(origins = "${client.url}")  
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAll(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                       @RequestParam(defaultValue = "3") Integer pageSize,
@@ -34,7 +38,7 @@ public class RoleHasPermissionControllerAD {
     }
 
     //create permission
-    @CrossOrigin(origins = "http://localhost:3000")
+    //@CrossOrigin(origins = "${client.url}")  
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(@Valid @RequestBody RoleHasPerCreateRequestDTO_AD objCreate){
         try{
@@ -51,7 +55,7 @@ public class RoleHasPermissionControllerAD {
     }
 
     //api create batch userhasroles
-    @CrossOrigin(origins = "http://localhost:3000")
+   //@CrossOrigin(origins = "${client.url}")  
     @PostMapping("/batch-create")
     public ResponseEntity<Map<String, Object>> batchCreate(@Valid @RequestBody RoleHasPerBatchCreateRequestDTO_AD objCreate){
         try{
@@ -68,14 +72,14 @@ public class RoleHasPermissionControllerAD {
     }
 
     //update pẻmission
-    @CrossOrigin(origins = "http://localhost:3000")
+   //@CrossOrigin(origins = "${client.url}")  
     @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> update(@PathVariable(value = "id") Integer id, @RequestBody RoleHasPerUpdateRequestDTO_AD objUpdate){
         return roleHasPermissionsServiceAD.updateRoleHasPermission(id, objUpdate);
     }
 
     //delete permission
-    @CrossOrigin(origins = "http://localhost:3000")
+   //@CrossOrigin(origins = "${client.url}")  
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> delete(@PathVariable(value = "id") Integer id){
         return roleHasPermissionsServiceAD.deleteRoleHasPermission(id);
