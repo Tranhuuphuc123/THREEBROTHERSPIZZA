@@ -4,9 +4,9 @@ import Image from 'next/image';
 import React from 'react';
 import { EditAccountPropsTypes } from "@/types/AccountTypes";
 import { useToast } from '@/contexts/ToastContext';
-import { useModal } from "@/contexts/ModalContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faCamera, faUser, faEnvelope, faPhone, faMapMarkerAlt, faCakeCandles, faVenusMars } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/navigation';
 import axiosClient from '@/axios/axiosClient';
 import { UPLOAD_URL } from "@/constants/urls";
 
@@ -14,13 +14,14 @@ import { UPLOAD_URL } from "@/constants/urls";
 const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
     //import context modal
     const { showToast } = useToast();
-    const { closeModal } = useModal();
+    //khởi tạo biến router 
+    const router = useRouter();
 
     // ... Giữ nguyên toàn bộ logic State và Handlers của bạn ...
     // const [listSalaryLevel, setListSalaryLevel] = useState<any[]>([]);
     const [name, setName] = useState<string>('');
     const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    // const [password, setPassword] = useState<string>('');
     const [gender, setGender] = useState<number>(1);
     const [birthday, setBirthday] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -56,7 +57,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
             const updateData = {
                 name: name.trim(),
                 username: username.trim(),
-                password: password,
+                // password: password,
                 gender: Number(gender),
                 birthday: birthday === "" ? null : birthday,
                 email: email.trim(),
@@ -71,7 +72,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
             });
             showToast(response.data.msg || "Cập nhật thành công!", 'success');
             if (onReload) onReload();
-            closeModal();
+            router.push('/client')
         } catch (error: any) {
             showToast(error.response?.data?.message || 'Có lỗi khi cập nhật!', 'danger');
         }
@@ -100,7 +101,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                 if (data) {
                     setName(data.name ?? "");
                     setUsername(data.username ?? "");
-                    setPassword(""); // Không hiện mật khẩu cũ
+                    // setPassword(""); // Không hiện mật khẩu cũ
                     setGender(data.gender ?? 1);
 
                     // Trong useEffect fetchAccountById
@@ -201,12 +202,14 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                                                     readOnly disabled />
                                         </div>
                                         <div className="col-md-6 mb-4">
-                                            <label className="form-label fw-semibold small text-uppercase">Mật khẩu mới</label>
+                                            {/* --- 
+                                                 <label className="form-label fw-semibold small text-uppercase">Mật khẩu mới</label>
                                             <input type="password" 
                                                     placeholder="Để trống nếu giữ nguyên" 
                                                     className="form-control form-control-lg border-2 shadow-none shadow-sm-hover" 
                                                     value={password} 
                                                     onChange={(e) => setPassword(e.target.value)} />
+                                            --- */}
                                         </div>
                                     </div>
 
@@ -227,7 +230,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                                                 <FontAwesomeIcon icon={faCakeCandles} 
                                                     className="me-2 opacity-50"/> Ngày sinh</label>
                                             <input type="date" 
-                                                    className="form-control form-control-lg border-2 shadow-none shadow-sm-hover" 
+                                                    className="form-control form-control-lg border-2 shadow-none shadow-sm-hover custom-date-input" 
                                                     value={birthday} 
                                                     onChange={(e) => setBirthday(e.target.value)} />
                                         </div>
@@ -267,12 +270,32 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
             
             {/* CSS bổ sung để làm đẹp hơn */}
             <style jsx>{`
+            /* Ép icon lịch hiển thị trở lại */
+                .custom-date-input::-webkit-calendar-picker-indicator {
+                    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23666" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    cursor: pointer;
+                    opacity: 1;
+                    display: block;
+                    width: 20px;
+                    height: 20px;
+                    /* Chỉnh màu icon sang xám đậm để dễ thấy trên nền trắng */
+                    filter: invert(0.5); 
+                }
+
+                /* Đảm bảo icon không bị ẩn bởi browser */
+                .custom-date-input {
+                    position: relative;
+                    -webkit-appearance: listbox !important; /* Quan trọng: Ghi đè CSS của Bootstrap */
+                    appearance: listbox !important;
+                }
                 .form-control:focus, .form-select:focus {
                     border-color: #0d6efd;
                     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
                 }
                 .shadow-sm-hover:hover {
-                    border-color: #dee2e6;
+                    border-color: #0a4e92ff;
                 }
                 .group-avatar:hover label {
                     transform: scale(1.1);
