@@ -11,7 +11,7 @@ cho username coi quyền lây đc ở username trong localstorage có khớp v�
 quyền có trong file permissionName.tsx không */
 import {USER_VIEW, USERS_ROLES, ROLES_PERMISSIONS} from '@/constants/permissionsName'
 
-export default function () {
+export default function Sidebar() {
   
   /* Lấy danh sách quyền từ localStorage
    >> giải thích code<<<
