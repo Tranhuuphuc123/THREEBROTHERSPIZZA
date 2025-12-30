@@ -1,9 +1,10 @@
+CREATE DATABASE  IF NOT EXISTS `cake_maker` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `cake_maker`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
 -- Host: localhost    Database: cake_maker
 -- ------------------------------------------------------
 -- Server version	8.4.0
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -388,7 +389,7 @@ CREATE TABLE `suppliers` (
   `address` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -397,6 +398,7 @@ CREATE TABLE `suppliers` (
 
 LOCK TABLES `suppliers` WRITE;
 /*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
+INSERT INTO `suppliers` VALUES (1,'sup001','AN NHIEN Corp','20251227_011521_CocosLogoTransparent.png','07103941756','can tho','nha cung cap hang dau viet nam'),(2,'sup002','AN NHIEN Corp','20251227_012306_CocosLogoTransparent.png','07103941756','can tho','nha cung cap hang dau viet nam');
 /*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -466,7 +468,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,'Trần Hữu Phúc','Huuphuc','$2a$10$stBX2kv6gOca9kp1.hGB/.47U6g/WuSrUCCe/6wpIRz/OGFswdmsa',1,'1996-09-22','huuphuc@gmail.com','20251218_102424_ngoc.jpg','0962428167','Cần Thơ',3,'2025-12-18 09:30:15','2025-12-25 13:22:14',1),(3,'Trieu Nhu Ngoc','NgocCute','$2a$10$SjW0pJHDqapMTHDrWzgwVO8U.AHjsBTuBJVgTIDa.LqJt/8p9pMby',0,'2003-02-12','ngoc@gmail.com','20251218_162349_images.jpg','0710941756','Ninh Kieu Can Tho',1,'2025-12-18 16:23:50','2025-12-18 16:23:50',1),(4,'Linh','Linh','$2a$10$uugfmWd417YULiVojHAkS.gpkpLoA0X2B/DQhJQU/DGaZeMG5Jyjm',0,'2007-01-23','linh@gmail.com','20251218_162642_tiem-anh-the-kami-1334301.jpg','0936052119','Ninh Kieu Can Tho',2,'2025-12-18 16:26:43','2025-12-18 16:26:43',1);
+INSERT INTO `users` VALUES (2,'Trần Hữu Phúc','Huuphuc','$2a$10$stBX2kv6gOca9kp1.hGB/.47U6g/WuSrUCCe/6wpIRz/OGFswdmsa',1,'1996-09-22','huuphuc@gmail.com','20251218_102424_ngoc.jpg','0962428167','Cần Thơ',3,'2025-12-18 09:30:15','2025-12-25 13:22:14',1),(3,'Triệu Như Ngọc','NgocCute','$2a$10$SjW0pJHDqapMTHDrWzgwVO8U.AHjsBTuBJVgTIDa.LqJt/8p9pMby',0,'1996-02-09','ngoc@gmail.com','20251218_162349_images.jpg','0710941756','Ninh Kieu  - Can Tho',1,'2025-12-18 16:23:50','2025-12-27 10:05:50',1),(4,'Ngọc Linh','Linh','$2a$10$uugfmWd417YULiVojHAkS.gpkpLoA0X2B/DQhJQU/DGaZeMG5Jyjm',0,'2007-01-23','linh@gmail.com','20251218_162642_tiem-anh-the-kami-1334301.jpg','0936052119','Ninh Kieu Can Tho',2,'2025-12-18 16:26:43','2025-12-28 00:20:34',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -508,4 +510,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-25 13:59:33
+-- Dump completed on 2025-12-30 21:25:53

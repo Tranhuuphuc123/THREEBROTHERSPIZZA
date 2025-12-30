@@ -6,12 +6,18 @@ COLLATE utf8mb4_unicode_ci;
 
 USE cake_maker;
 
+-- nhóm lệnh truy ván 
 select * from roles;
 select * from users;
 select * from permissions;
 select * from users_roles;
 select * from roles_permissions;
 select * from supplíe;
+
+select * from categories;
+select * from suppliers;
+select * from products;
+select * from promotions;
 
 CREATE TABLE suppliers (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,

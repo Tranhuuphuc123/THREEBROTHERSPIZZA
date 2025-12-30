@@ -212,7 +212,6 @@ export default function Header() {
                       <DropdownToggle as="div">
                         <Image
                           alt="avatar"
-
                           // Ghép URL server với tên file ảnh lấy từ state
                           src={avatar ? `${UPLOAD_URL}/${avatar}` : "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png"}
                           roundedCircle

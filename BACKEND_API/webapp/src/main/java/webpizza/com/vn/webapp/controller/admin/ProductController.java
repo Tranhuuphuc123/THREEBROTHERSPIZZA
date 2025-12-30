@@ -16,64 +16,57 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import webpizza.com.vn.webapp.DTO.admin.ProductDTO_AD.ProductCreateRequestDTOAD;
+import webpizza.com.vn.webapp.DTO.admin.ProductDTO_AD.ProductUpdateRequestDTOAD;
 import webpizza.com.vn.webapp.DTO.admin.SupplierDTO_AD.SupplierCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.SupplierDTO_AD.SupplierUpdateRequestDTO_AD;
+import webpizza.com.vn.webapp.service.admin.ProductServiceAD;
 import webpizza.com.vn.webapp.service.admin.SupplierServiceAD;
 
 @RestController
-@RequestMapping("/api/admin/suppliers")
-public class SupplierControllerAD {
+@RequestMapping("/api/admin/products")
+public class ProductController {
     @Autowired
-    private SupplierServiceAD supplierServiceAD;
+    private ProductServiceAD productServiceAD;
 
     /* I _  get */
-    /*  
-     -> @CrossOrigin(origins = "${client.url}") : cho phép localhost 8080 chấp nhận
-    chay localhost 3000 khi localhost 8080 đang chay
-     -> ${client.url}: thì trong application.properties mình đã cấu hình là 
-     client.url = "http://localhost:3000" nên ở đây chỉ cần lôi key là đc quản lý 
-     cấu hình tập trung
-    * */
-    //@CrossOrigin(origins = "${client.url}") 
+
     @GetMapping
     public ResponseEntity<Map<String, Object>> getSupIndex(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                            @RequestParam(defaultValue = "3") Integer pageSize,
                                                            @RequestParam(defaultValue = "id") String sortBy){
         //goi service thuc thi method  getall
-        return supplierServiceAD.getAllSupplierPagination(pageNumber,pageSize, sortBy);                                                         
+        return productServiceAD.getAllProductPagination(pageNumber,pageSize, sortBy);                                                         
     }
 
-    /* II - create */
-     //@CrossOrigin(origins = "${client.url}") 
+     /* II - create */
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> createSup (@RequestParam("file") MultipartFile file,
+    public ResponseEntity<Map<String, Object>> createPro (@RequestParam("file") MultipartFile file,
                                                          @RequestParam("data") String jsonData){
         //khoi tao lop ObjectMapper de map json(param:data)  -> parse(chuyen) json data thanh value trong dto -> day len entity luu vao csdl
         ObjectMapper objectMapper = new ObjectMapper();
         
         //khoi tao dto
-        SupplierCreateRequestDTO_AD objDTO = null;
+        ProductCreateRequestDTOAD objDTO = null;
 
         //tien hanh cho dto doc va ghi nhan data  tu json gui len map thogn qua lop ObjectMapper
         try{
-            objDTO = objectMapper.readValue(jsonData, SupplierCreateRequestDTO_AD.class);
+            objDTO = objectMapper.readValue(jsonData, ProductCreateRequestDTOAD.class);
         }catch(Exception e){
             e.printStackTrace();
         }
 
-        return supplierServiceAD.createSupplier(objDTO, file);
+        return productServiceAD.createProduct(objDTO, file);
     }
 
-    /*III - delete */
-    //@CrossOrigin(origins = "${client.url}") 
+     /*III - delete */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Map<String, Object>> deleteSup(@PathVariable Integer id){
-        return supplierServiceAD.deleteSupplier(id);
+    public ResponseEntity<Map<String, Object>> deletePro(@PathVariable Integer id){
+        return productServiceAD.deleteProduct(id);
     }
 
 
     /*IV - update */
-    //@CrossOrigin(origins = "${client.url}") 
     @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateSup(@PathVariable Integer id,
                                                         @RequestParam(value = "file", required = false) MultipartFile file,
@@ -82,15 +75,15 @@ public class SupplierControllerAD {
         ObjectMapper objectMapper = new ObjectMapper();
 
          //khoi tao dto
-        SupplierUpdateRequestDTO_AD objDTO = null;
+        ProductUpdateRequestDTOAD objDTO = null;
 
          //tien hanh cho dto doc va ghi nhan data  tu json gui len map thogn qua lop ObjectMapper
         try{
-            objDTO = objectMapper.readValue(jsonData, SupplierUpdateRequestDTO_AD.class);
+            objDTO = objectMapper.readValue(jsonData, ProductUpdateRequestDTOAD.class);
         }catch(Exception e){
             e.printStackTrace();
         }
 
-        return supplierServiceAD.updateSupplier(id, objDTO, file);
+        return productServiceAD.updateProduct(id, objDTO, file);
     }
 }
