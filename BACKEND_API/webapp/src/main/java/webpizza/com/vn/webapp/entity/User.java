@@ -91,7 +91,7 @@ public class User {
                        join acl_roles ar on ar.role_id = au.id
                        where ....<đk cần truy vấn>...
     * */
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

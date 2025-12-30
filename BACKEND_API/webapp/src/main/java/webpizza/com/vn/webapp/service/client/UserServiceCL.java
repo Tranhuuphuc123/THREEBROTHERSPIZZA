@@ -1,6 +1,7 @@
 package webpizza.com.vn.webapp.service.client;
 
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserCreateRequestDTO_CL;
 import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserUpdateRequestDTO_CL;
+import webpizza.com.vn.webapp.entity.Role;
 import webpizza.com.vn.webapp.entity.User;
+import webpizza.com.vn.webapp.entity.UserHasRoles;
 import webpizza.com.vn.webapp.exceptions.ValidationErrorResponse;
 import webpizza.com.vn.webapp.exceptions.Violations;
+import webpizza.com.vn.webapp.repository.RoleRepository;
+import webpizza.com.vn.webapp.repository.UserHasRolesRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +44,12 @@ public class UserServiceCL {
 
     @Autowired
     private webpizza.com.vn.webapp.repository.UserRepository userRepo;
+
+    @Autowired
+    private UserHasRolesRepository userHasRoleRepo;
+
+    @Autowired
+    private RoleRepository roleRepo;
 
     /*tao bien string lay url cau hinh luu file da thiet lap ben application.properties
     * @Value: annotation dc su dung de gan gia tri cho mot bien tu cac nguon:
@@ -125,6 +136,8 @@ public class UserServiceCL {
 
     /*II - Post(create)*/
     //MultipartFile: la mot interface trong spring, dc su dung de xu ly cac tep files -> dc upload thog qua giao thuc HTTP request
+     //Nếu bạn có @Transactional: Nếu việc lưu Role bị lỗi, Spring sẽ tự động "xóa" luôn thằng User vừa tạo trước đó để đảm bảo dữ liệu trong Database luôn sạch sẽ, đúng cặp đúng cặp.
+    @Transactional 
     public ResponseEntity<Map<String, Object>> createUser(UserCreateRequestDTO_CL objCreate){
         //a - khoi tao bien response de luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
@@ -193,6 +206,17 @@ public class UserServiceCL {
                 throw new ConstraintViolationException("Ten ban dang ky da ton tai vui long chon ten khac hahaaha", null);
             }else{
                 User createEntity = userRepo.save(newEntity);
+
+                //tạo role mặc định cho user phải lưu lại ms có id
+                UserHasRoles newRole = new UserHasRoles();
+                 //lấy role từ db -> gán cứng user mới create là role có id 4: customer luôn
+                Role defaultRole = roleRepo.findById(4).orElseThrow(() -> new RuntimeException("Role không tồn tại lol"));
+
+                newRole.setUser(createEntity);
+                newRole.setRole(defaultRole);
+
+                //lưu lại vào userhasrole
+                userHasRoleRepo.save(newRole);
 
                 //c-4 tra ve ket qua cho nguoi dung theo chuan restfullAPI
                 response.put("data", createEntity);
