@@ -33,13 +33,10 @@ public class ProductCreateRequestDTOAD {
     private Float price;
 
     @NotNull(message = "Quantity is required")
-    private Float quantity;
+    private Integer quantity;
 
     private Integer isActive;
 
     @NotNull(message = "Category ID is required")
     private Integer categoryId;
-
-    @NotNull(message = "Supplier ID is required")
-    private Integer supplierId;
 }

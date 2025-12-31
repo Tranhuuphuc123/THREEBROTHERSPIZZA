@@ -18,10 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import webpizza.com.vn.webapp.DTO.admin.ProductDTO_AD.ProductCreateRequestDTOAD;
 import webpizza.com.vn.webapp.DTO.admin.ProductDTO_AD.ProductUpdateRequestDTOAD;
-import webpizza.com.vn.webapp.DTO.admin.SupplierDTO_AD.SupplierCreateRequestDTO_AD;
-import webpizza.com.vn.webapp.DTO.admin.SupplierDTO_AD.SupplierUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.service.admin.ProductServiceAD;
-import webpizza.com.vn.webapp.service.admin.SupplierServiceAD;
 
 @RestController
 @RequestMapping("/api/admin/products")

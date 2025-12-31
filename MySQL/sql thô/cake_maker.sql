@@ -12,12 +12,12 @@ select * from users;
 select * from permissions;
 select * from users_roles;
 select * from roles_permissions;
-select * from supplíe;
+
 
 select * from categories;
-select * from suppliers;
 select * from products;
 select * from promotions;
+
 
 CREATE TABLE suppliers (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -69,20 +69,19 @@ CREATE TABLE products (
   code VARCHAR(200) NOT NULL,
   name VARCHAR(500) NOT NULL,
   image TEXT,
-  promotion_id INT UNSIGNED NOT NULL,
+  promotion_id INT UNSIGNED DEFAULT NULL,
   short_description TEXT,
   description VARCHAR(500),
   price FLOAT,
-  quantity FLOAT,
+  quantity INT,
   is_active BOOLEAN,
   category_id INT UNSIGNED NOT NULL,
-  supplier_id INT UNSIGNED NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
   FOREIGN KEY (promotion_id) REFERENCES promotions(id),
-  FOREIGN KEY (category_id) REFERENCES categories(id),
-  FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+  FOREIGN KEY (category_id) REFERENCES categories(id)
 );
+
 
 CREATE TABLE product_images (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,

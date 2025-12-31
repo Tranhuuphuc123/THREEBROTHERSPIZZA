@@ -12,7 +12,7 @@ import {DeleteAccountPropsTypes} from "@/types/AccountTypes";
 import axiosAdmin from "@/axios/axiosAdmin";
 
 
-const DeleteAccountPage: React.FC<DeleteAccountPropsTypes> = ({
+const DeleteModal: React.FC<DeleteAccountPropsTypes> = ({
   id,
   onReload,
 }) => {
@@ -64,4 +64,4 @@ const DeleteAccountPage: React.FC<DeleteAccountPropsTypes> = ({
   );
 };
 
-export default DeleteAccountPage;
+export default DeleteModal;

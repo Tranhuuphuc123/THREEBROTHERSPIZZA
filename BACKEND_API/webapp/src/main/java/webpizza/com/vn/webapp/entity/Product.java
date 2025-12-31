@@ -48,7 +48,7 @@ public class Product {
     private Float price;
 
     @Column(name = "quantity")
-    private Float quantity;
+    private Integer quantity;
 
     @Column(name = "is_active")
     private Integer isActive;
@@ -56,11 +56,6 @@ public class Product {
     //khóa ngoại category
     @Column(name = "category_id")
     private Integer categoryIid;
-
-    //khóa ngoại supplier
-    @Column(name = "supplier_id")
-    private Integer supplierId;
-
     
     // updatable = false: không cho phép cập nhật sau khi tạo đảm bảo tính truy vết lịch sử
     /*@CreationTimestamp:Tự động gán giá trị thời gian hiện tại (NOW()) cho trường này khi

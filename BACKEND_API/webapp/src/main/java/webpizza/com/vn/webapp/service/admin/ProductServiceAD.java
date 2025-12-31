@@ -155,7 +155,6 @@ public class ProductServiceAD {
             }
 
             newEntity.setCategoryIid(objCreate.getCategoryId());
-            newEntity.setSupplierId(objCreate.getSupplierId());
 
             //goi repo lưu vao csdl
             Product createProEntity = productRepo.save(newEntity);
@@ -274,9 +273,6 @@ public class ProductServiceAD {
             }
             if(objUpdate.getCategoryId() != null){
                 proEntity.setCategoryIid((objUpdate.getCategoryId()));
-            }
-            if(objUpdate.getSupplierId() != null){
-                proEntity.setSupplierId((objUpdate.getSupplierId()));
             }
 
             //nho rep update(save lai)

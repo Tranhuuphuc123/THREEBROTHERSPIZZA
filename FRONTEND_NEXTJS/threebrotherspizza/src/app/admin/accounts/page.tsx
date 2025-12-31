@@ -46,9 +46,9 @@ import Modal from "react-bootstrap/Modal";
 import { useModal } from "@/contexts/ModalContext";
 
 //import page form create product(form create tự thiết kế bằng bootstrap)
-import CreateProductForm from "@/app/admin/accounts/create/page";
+import CreateModal from "@/app/admin/accounts/create/page";
 //import page form delete product
-import DeleteProductForm from "@/app/admin/accounts/delete/page";
+import DeleteModal from "@/app/admin/accounts/delete/page";
 //import form edit products
 import UpdateModal from "@/app/admin/accounts/edit/page";
 
@@ -451,7 +451,7 @@ export default function AccountsManage () {
           <Modal.Title>Thêm mới accounts</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CreateProductForm onReload={handleReload} />
+          <CreateModal onReload={handleReload} />
         </Modal.Body>
       </Modal>
 
@@ -464,7 +464,7 @@ export default function AccountsManage () {
             để tránh truyền id là 0 hoặc rỗng vào API 
           */}
           {selectedId !== null ? (
-            <DeleteProductForm id={selectedId} onReload={handleReload} />
+            <DeleteModal id={selectedId} onReload={handleReload} />
           ) : (
             <p>Không tìm thấy dữ liệu để xóa</p>
           )}
