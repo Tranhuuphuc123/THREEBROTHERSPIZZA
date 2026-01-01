@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RoleCreateRequestDTO_AD{
 
-    @NotBlank(message = "con cec ai cho may de trong")
+    @NotBlank(message = "khong duoc de trong")
     @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
     private String name;
 
-    @NotBlank(message = "con cec ai cho may de trong")
+    @NotBlank(message = "Khong dc de trong")
     @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
     private String displayName;
 
-    @NotBlank(message = "con cec ai cho may de trong ")
+    @NotBlank(message = "Khong dc de trong ")
     @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
     private String guardName;
 

@@ -36,7 +36,7 @@ public class SupplierServiceAD {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    /* _ - get hien thi co phan trang */
+    /*I _ - get hien thi co phan trang */
     public ResponseEntity<Map<String, Object>> getAllSupplierPagination(int pageNumber, int pageSize, String sortBy){
         //1. khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();

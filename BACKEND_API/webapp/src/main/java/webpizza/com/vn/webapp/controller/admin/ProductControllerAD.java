@@ -22,12 +22,11 @@ import webpizza.com.vn.webapp.service.admin.ProductServiceAD;
 
 @RestController
 @RequestMapping("/api/admin/products")
-public class ProductController {
+public class ProductControllerAD {
     @Autowired
     private ProductServiceAD productServiceAD;
 
     /* I _  get */
-
     @GetMapping
     public ResponseEntity<Map<String, Object>> getSupIndex(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                            @RequestParam(defaultValue = "3") Integer pageSize,
