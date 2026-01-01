@@ -35,3 +35,9 @@ export const PRODUCT_VIEW = "product_view"
 export const PRODUCT_CREATE = "product_create"
 export const PRODUCT_UPDATE = "product_update"
 export const PRODUCT_DELETE = "product_delete"
+
+//nhom quyen cua table supplỉer
+export const SUPPLIER_VIEW = "supplier_view"
+export const SUPPLIER_CREATE = "supplier_create"
+export const SUPPLIER_EDIT = "supplier_edit"
+export const SUPPLIER_DELTE = "supplier_delete"

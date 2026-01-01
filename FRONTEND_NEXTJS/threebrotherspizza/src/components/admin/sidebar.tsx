@@ -9,7 +9,7 @@ import { faHouse, faUser, faBox } from "@fortawesome/free-solid-svg-icons";
 /* import constants permissionsName.tsx lấy list tên các quyền cần text
 cho username coi quyền lây đc ở username trong localstorage có khớp với 
 quyền có trong file permissionName.tsx không */
-import {USER_VIEW, USERS_ROLES, ROLES_PERMISSIONS, PRODUCT_VIEW} from '@/constants/permissionsName'
+import {USER_VIEW, USERS_ROLES, ROLES_PERMISSIONS, PRODUCT_VIEW,SUPPLIER_VIEW } from '@/constants/permissionsName'
 
 export default function Sidebar() {
   
@@ -35,6 +35,7 @@ export default function Sidebar() {
   const canViewUsers_Roles = strPermission.includes(USERS_ROLES);
   const canViewRoles_Pers = strPermission.includes(ROLES_PERMISSIONS);
   const canViewProducts = strPermission.includes(PRODUCT_VIEW);
+  const canViewSupplier = strPermission.includes(SUPPLIER_VIEW);
 
   /*state trạng thái đảm bảo rằng việc kiểm tra quyền (canCreate) chỉ được thực hiện
    sau khi Client đã tải xong để tránh lệch pha với Server.
@@ -129,6 +130,16 @@ export default function Sidebar() {
               <Link href="/admin/products" className="sidebar-link">
                 <FontAwesomeIcon icon={faBox} className="fa-fw" />
                 Products
+              </Link>
+            </li>
+          )}
+
+           {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
+          {canViewSupplier && (
+             <li className="sidebar-item">
+              <Link href="/admin/suppliers" className="sidebar-link">
+                <FontAwesomeIcon icon={faBox} className="fa-fw" />
+                Suppliers
               </Link>
             </li>
           )}
