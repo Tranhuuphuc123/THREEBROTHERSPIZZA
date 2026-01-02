@@ -6,12 +6,23 @@ COLLATE utf8mb4_unicode_ci;
 
 USE cake_maker;
 
+-- nhóm lệnh truy ván 
 select * from roles;
 select * from users;
 select * from permissions;
 select * from users_roles;
 select * from roles_permissions;
-select * from suppliers;
+
+
+select * from categories;
+select * from products;
+select * from promotions;
+
+-- show value: name và type trong table chỉ định cụ thể
+-- show create table products;
+-- lệnh tắt kiểm tra khóa ngoại 
+-- set foreign_key_checks = 0;
+
 
 CREATE TABLE suppliers (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -63,19 +74,16 @@ CREATE TABLE products (
   code VARCHAR(200) NOT NULL,
   name VARCHAR(500) NOT NULL,
   image TEXT,
-  promotion_id INT UNSIGNED NOT NULL,
   short_description TEXT,
   description VARCHAR(500),
   price FLOAT,
-  quantity FLOAT,
+  quantity INT,
   is_active BOOLEAN,
   category_id INT UNSIGNED NOT NULL,
-  supplier_id INT UNSIGNED NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
   FOREIGN KEY (promotion_id) REFERENCES promotions(id),
-  FOREIGN KEY (category_id) REFERENCES categories(id),
-  FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+  FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
 CREATE TABLE product_images (

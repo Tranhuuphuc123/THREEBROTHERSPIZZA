@@ -22,13 +22,11 @@ import axiosAdmin from '@/axios/axiosAdmin';
 const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
 
     //khai bao bien trang thai state - state dùng cho input nhập liệu từ client
-    const [listPromotion, setListPromotion] = useState<any[]>([]); // Danh sách mã giảm giá 
     const [listCategory, setListCategory] = useState<any[]>([]); // danh sách loại sản phẩm
 
     // States cho Product (Đã fix đồng bộ với logic sản phẩm)
     const [code, setCode] = useState<string>('');
     const [name, setName] = useState<string>('');
-    const [promotionID, setPromotionID] = useState<number | null >(null);
     const [shortDescription, setShortDescription] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [price, setPrice] = useState<number>(0);
@@ -76,7 +74,6 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
             const newProduct = {
                 code: code.trim(),
                 name: name.trim(),
-                promotionID: promotionID ? Number(promotionID) : null,
                 shortDescription: shortDescription.trim(),
                 description: description.trim(),
                 price: Number(price), // Bên TS dùng number cho cả float/double là chuẩn
@@ -111,16 +108,6 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
     /**********su dung useEffect để thực thi call api cho mục danh mục và khuyến mãi **********/
     //su dung useEffect de chay duy nhat lan dau khi compoents nay render xong
     useEffect(() => {
-        const fetchPromotion = async () => {
-            try {
-                const res = await axiosAdmin.get("/promotions");
-                const data = res.data.data ? res.data.data : res.data;
-                setListPromotion(data);
-            } catch (error) {
-                console.error('Lỗi tải dữ liệu khuyến mãi:', error);
-            }
-        }
-
         const fetchCategory = async () => {
             try {
                 const res = await axiosAdmin.get("/categories");
@@ -130,7 +117,6 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 console.error('Lỗi tải dữ liệu danh mục:', error);
             }
         }
-        fetchPromotion();
         fetchCategory();
     }, []);
 
@@ -154,14 +140,14 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 <div className="row">
                     {/* Mã sản phẩm */}
                     <div className="col-md-6 mb-3">
-                        <label className="form-label fw-bold">Mã sản phẩm</label>
-                        <input type="text" className="form-control" placeholder="Mã SP..." 
+                        <label className="form-label fw-bold">Product Code</label>
+                        <input type="text" className="form-control" placeholder="Product Code..." 
                             onChange={(e) => setCode(e.target.value)} required />
                     </div>
                     {/* Tên sản phẩm */}
                     <div className="col-md-6 mb-3">
-                        <label className="form-label fw-bold">Tên sản phẩm</label>
-                        <input type="text" className="form-control" placeholder="Nhập tên sản phẩm" 
+                        <label className="form-label fw-bold">Product Name</label>
+                        <input type="text" className="form-control" placeholder="Enter Product name" 
                             onChange={(e) => setName(e.target.value)} required />
                     </div>
                 </div>
@@ -169,13 +155,13 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 <div className="row">
                     {/* Giá bán */}
                     <div className="col-md-6 mb-3">
-                        <label className="form-label fw-bold">Giá bán</label>
+                        <label className="form-label fw-bold">Price</label>
                         <input type="number" step="0.01" className="form-control" placeholder="0.00"
                             onChange={(e) => setPrice(Number(e.target.value))} required />
                     </div>
                     {/* Số lượng */}
                     <div className="col-md-6 mb-3">
-                        <label className="form-label fw-bold">Số lượng</label>
+                        <label className="form-label fw-bold">Quantity</label>
                         <input type="number" className="form-control" placeholder="0"
                             onChange={(e) => setQuantity(Number(e.target.value))} required />
                     </div>
@@ -184,30 +170,16 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 <div className="row">
                     {/* Loại sản phẩm (Category) */}
                     <div className="col-md-6 mb-3">
-                        <label className="form-label fw-bold">Loại sản phẩm</label>
+                        <label className="form-label fw-bold">Category Product</label>
                         <select 
                             className="form-select" 
                             value={categoryID ?? ''} 
                             onChange={(e) => setCategoryID(e.target.value ? Number(e.target.value) : null)} 
                             required
                         >
-                            <option value="">-- Chọn loại sản phẩm --</option>
+                            <option value="">-- Choose category of product --</option>
                             {listCategory && listCategory.map((cat: any) => (
                                 <option key={cat.id} value={cat.id}>{cat.name}</option>
-                            ))}
-                        </select>
-                    </div>
-                    {/* Mã giảm giá (Promotion) */}
-                    <div className="col-md-6 mb-3">
-                        <label className="form-label fw-bold">Khuyến mãi</label>
-                        <select 
-                            className="form-select" 
-                            value={promotionID ?? ''} 
-                            onChange={(e) => setPromotionID(e.target.value ? Number(e.target.value) : null)}
-                        >
-                            <option value="">-- Không áp dụng --</option>
-                            {listPromotion && listPromotion.map((pro: any) => (
-                                <option key={pro.id} value={pro.id}>{pro.name}</option>
                             ))}
                         </select>
                     </div>

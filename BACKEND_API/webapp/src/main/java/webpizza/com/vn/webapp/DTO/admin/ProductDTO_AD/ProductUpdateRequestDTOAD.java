@@ -19,9 +19,6 @@ public class ProductUpdateRequestDTOAD {
 
     private String image;
 
-    @NotNull(message = "PromotionId is required")
-    private Integer promotionId;
-
     @Column(name = "short_description")
     private String shortDescription;
 

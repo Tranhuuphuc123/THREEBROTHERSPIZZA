@@ -143,7 +143,6 @@ public class ProductServiceAD {
             newEntity.setCode(objCreate.getCode());
             newEntity.setName(objCreate.getName());
             newEntity.setImage(newFile);
-            newEntity.setPromotionId(objCreate.getPromotionId());
             newEntity.setShortDescription(objCreate.getShortDescription());
             newEntity.setDescription(objCreate.getDescription());
             newEntity.setPrice(objCreate.getPrice());
@@ -252,10 +251,7 @@ public class ProductServiceAD {
                     System.err.println("loi xu ly file: " + e.getMessage());
                 }
             }
-
-            if(objUpdate.getPromotionId() != null){
-                proEntity.setPromotionId((objUpdate.getPromotionId()));
-            }
+            
             if(objUpdate.getShortDescription() != null){
                 proEntity.setShortDescription((objUpdate.getShortDescription()));
             }

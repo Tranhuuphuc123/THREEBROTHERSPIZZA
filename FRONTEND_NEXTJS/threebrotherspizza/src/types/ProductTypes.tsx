@@ -5,7 +5,6 @@ export interface ProductTypes {
     code: string;
     name: string;
     image: string;
-    promotionId: number
     shortDescription: string;
     description: string;
     price: number;

@@ -34,10 +34,6 @@ public class Product {
     @Column(name = "image")
     private String image;
 
-    //khóa ngoại promotion
-    @Column(name = "promotion_id")
-    private Integer promotionId;
-
     @Column(name = "short_description")
     private String shortDescription;
 

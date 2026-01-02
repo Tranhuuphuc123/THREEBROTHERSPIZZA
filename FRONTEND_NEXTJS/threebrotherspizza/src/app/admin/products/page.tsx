@@ -315,7 +315,6 @@ export default function ProductManage () {
                 <th></th>
                 <th>Avatar</th>
                 <th>Name</th>
-                <th>Promotion</th>
                 <th>Short Desr</th>
                 <th>Price</th>
                 <th>Quantity</th>
@@ -338,7 +337,6 @@ export default function ProductManage () {
                       />
                     </td>
                     <td>{acc.name}</td>
-                    <td>{acc.promotionId}</td>
                     <td>{acc.shortDescription}</td>
                     <td>{acc.price}</td>
                     <td>{acc.quantity}</td>
