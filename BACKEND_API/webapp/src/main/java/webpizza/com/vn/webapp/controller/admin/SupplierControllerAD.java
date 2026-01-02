@@ -43,6 +43,15 @@ public class SupplierControllerAD {
         return supplierServiceAD.getAllSupplierPagination(pageNumber,pageSize, sortBy);                                                         
     }
 
+    
+    /***************** 1-2: getById *******************/
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
+        //yeu cau service tra  ve id
+        return supplierServiceAD.getById(id);
+    }
+
+
     /* II - create */
      //@CrossOrigin(origins = "${client.url}") 
     @PostMapping("/create")

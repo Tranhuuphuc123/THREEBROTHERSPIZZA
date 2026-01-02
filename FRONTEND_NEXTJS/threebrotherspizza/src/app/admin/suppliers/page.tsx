@@ -48,9 +48,9 @@ import { useModal } from "@/contexts/ModalContext";
 //import page form create product(form create tự thiết kế bằng bootstrap)
 import CreateModal from "@/app/admin/suppliers/create/page";
 //import page form delete product
-//import DeleteModal from "@/app/admin/accounts/delete/page";
+import DeleteModal from "@/app/admin/suppliers/delete/page";
 //import form edit products
-//import UpdateModal from "@/app/admin/accounts/edit/page";
+import UpdateModal from "@/app/admin/suppliers/edit/page";
 
 //make variale api url file upload img
 import { UPLOAD_URL } from "@/constants/urls";
@@ -424,32 +424,33 @@ export default function SupplierManage () {
         </Modal.Body>
       </Modal>
 
-      {/* <Modal show={show && modalType === "delete"} onHide={closeModal}>
+      <Modal show={show && modalType === "delete"} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Xác nhận xóa {selectedId}</Modal.Title>
+          <Modal.Title>Confirm Delete {selectedId}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedId !== null ? (
             <DeleteModal id={selectedId} onReload={handleReload} />
           ) : (
-            <p>Không tìm thấy dữ liệu để xóa</p>
+            <p>No find data</p>
           )}
         </Modal.Body>
-      </Modal> */}
+      </Modal>
 
 
-      {/* <Modal show={show && modalType === "edit"} onHide={closeModal}>
+      <Modal show={show && modalType === "edit"} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Account - edit value {selectedId}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedId !== null ? (
+            // ruột của form modal edit context dẫn từ trang supplier/edit/pages
             <UpdateModal id={selectedId} onReload={handleReload} />
           ) : (
             <p>Không tìm thấy dữ liệu để xóa</p>
           )}
         </Modal.Body>
-      </Modal> */}
+      </Modal>
     </>
   );
 };
