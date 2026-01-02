@@ -70,6 +70,35 @@ public class SupplierServiceAD {
     }
 
 
+    /*I_2: trả về danh sách suppliers theo id cần tiềm */
+    public ResponseEntity<Map<String, Object>> getById (Integer id){
+        //khoi tao bien luu ket qua tra ve
+        Map<String, Object> response = new HashMap<>();
+
+        //nho repo thuc thi tra ve ket qua id => luu trong bien Optional(chap nhan gia tri null)
+        Optional<Supplier> optFoundById = supplierRepo.findById(id);
+        //neu no co ton tai
+        if(optFoundById.isPresent()){
+            //nhan id vau tim kiem dc
+            Supplier supllierEntity = optFoundById.get();
+
+            //tra ve thong bao thanh cong
+            response.put("data", supllierEntity);
+            response.put("statuscode", 201);
+            response.put("msg", "Return id of Supplier success");
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            //tra ve ket qua nguoi dung
+            response.put("data", null);
+            response.put("statuscode", 404);
+            response.put("msg", "Please seen result search");
+
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     /*II - create */
     public ResponseEntity<Map<String, Object>> createSupplier(SupplierCreateRequestDTO_AD objCreate, MultipartFile file) {
         Map<String, Object> response = new HashMap<>();
@@ -141,21 +170,33 @@ public class SupplierServiceAD {
         //neu tim thay id 
         if(optFound.isPresent()){
             //gan nhan id do cho trg do dugn tren csdl
-            Supplier delSuplID = optFound.get();
+            Supplier supEntityGetByID = optFound.get();
 
-            //nho repo thuc hien xoa entity can xoa do
-            supplierRepo.delete(delSuplID);
+            /*xu ly tien hanh xoa ruot anh ung voi taikhoan cua anh do*/
+            String rootFolder = Paths.get("").toAbsolutePath().toString();
+            Path filePath = Path.of(rootFolder + File.separator + uploadDir + File.separator + supEntityGetByID.getImg());
+
+            /*tien hanh xoa anh cu neu ton tai*/
+             try{
+                //tien hanh deleteIfExits co ton tai no moi xoa
+                Files.deleteIfExists(filePath);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+             //nho repository xoa dat r
+            supplierRepo.delete((supEntityGetByID));
 
             //tra ve thong bao chuan restfull api
             response.put("data",null );
             response.put("statuscode", 200);
-            response.put("msg", "delete thanh cong");
+            response.put("msg", "delete success");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             response.put("data",null );
             response.put("statuscode", 404);
-            response.put("msg", "delete khong thanh cong");
+            response.put("msg", "delete not success");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -187,12 +228,12 @@ public class SupplierServiceAD {
             }
 
             //xu ly trg img
-            if(file != null){
+            if(file != null && !file.isEmpty()){
                 try{
                     //su dung datetime luu ten anh theo gio phut giay + ten img: tranh bi trung lap
                     String randomString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
                     //tiet lap file path lay dung ten goc o dia luu folder trong project
-                    String rootFolder = Paths.get("null").toAbsolutePath().toString();
+                    String rootFolder = Paths.get("").toAbsolutePath().toString();
                     //tao duong dan xu ly luu file
                     String newFile = randomString + "_" + file.getOriginalFilename();
                     String filePath = rootFolder + File.separator + uploadDir + File.separator + newFile;
@@ -204,7 +245,7 @@ public class SupplierServiceAD {
                     file.transferTo(destinatinFile);
 
                     //xoa anh cu(chi xoa neu ten anh cu ton tai)
-                    if(supEntity.getImg() != null){
+                    if(supEntity.getImg() != null && !supEntity.getImg().isEmpty()){
                         Path delPath = Paths.get(rootFolder, uploadDir, supEntity.getImg());
                         Files.deleteIfExists(delPath);
                     }
