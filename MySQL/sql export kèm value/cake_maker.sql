@@ -30,7 +30,7 @@ CREATE TABLE `categories` (
   `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +39,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES (1,'cat001','Pan Crust','This is the signature crust of Pizza Hut, baked in a deep pan, with a crispy edge and a fluffy interior.'),(2,'cat002','Hand-Tossed','This type of sole is hand-kneaded, has a moderate thickness, and is softer and more durable than Pan.');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +124,7 @@ CREATE TABLE `permissions` (
   `updated_at` datetime DEFAULT NULL,
   `module_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +133,7 @@ CREATE TABLE `permissions` (
 
 LOCK TABLES `permissions` WRITE;
 /*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
-INSERT INTO `permissions` VALUES (1,'user_view','user manage can view','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Account Manage'),(2,'user_create','user manage can create','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Account Manage'),(3,'user_update','user manage can update','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Account Manage'),(4,'user_delete','user manage can delete','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Account Manage'),(5,'role_view','role manage can view','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Role Manage'),(6,'role_create','role manage can create','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Roles Manage'),(7,'role_update','role manage can update','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Roles Manage'),(8,'role_delete','role manage can delete','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Roles Manage'),(9,'permission_view','permission manage can view','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Permission Manage'),(10,'permission_create','permission manage can create','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Permission Manage'),(11,'permission_update','permission manage can update','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Permission Manage'),(12,'permission_delete','permission manage can delete','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Permission Manage'),(13,'product_view','product manage can view','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Product Manage'),(14,'product_create','product manage can create','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Product Manage'),(15,'product_update','product manage can update','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Product Manage'),(16,'product_delete','product manage can delete','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Product Manage'),(17,'users_roles_view','user_roles manage can view','web',NULL,NULL,'Authorization Users_Roles Manage'),(18,'roles_permissions_view','roles_per manage can view','web',NULL,NULL,'Authorization Roles_Pers  Manage');
+INSERT INTO `permissions` VALUES (1,'user_view','user manage can view','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Account Manage'),(2,'user_create','user manage can create','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Account Manage'),(3,'user_update','user manage can update','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Account Manage'),(4,'user_delete','user manage can delete','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Account Manage'),(5,'role_view','role manage can view','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Roles Manage'),(6,'role_create','role manage can create','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Roles Manage'),(7,'role_update','role manage can update','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Roles Manage'),(8,'role_delete','role manage can delete','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Roles Manage'),(9,'permission_view','permission manage can view','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Permission Manage'),(10,'permission_create','permission manage can create','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Permission Manage'),(11,'permission_update','permission manage can update','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Permission Manage'),(12,'permission_delete','permission manage can delete','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Permission Manage'),(13,'product_view','product manage can view','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Product Manage'),(14,'product_create','product manage can create','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Product Manage'),(15,'product_update','product manage can update','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Product Manage'),(16,'product_delete','product manage can delete','web','2025-12-20 15:12:17','2025-12-20 15:12:17','Product Manage'),(17,'users_roles_view','user_roles manage can view','web',NULL,NULL,'Authorization Users_Roles Manage'),(18,'roles_permissions_view','roles_per manage can view','web',NULL,NULL,'Authorization Roles_Pers  Manage'),(19,'supplier_view','supplier manage can view','web',NULL,NULL,'supplier manage'),(20,'supplier_create','supplier manage can create','web',NULL,NULL,'supplier manage'),(21,'supplier_edit','supplier manage can edit','web',NULL,NULL,'supplier manage'),(22,'supplier_delete','supplier manage can delete','web',NULL,NULL,'supplier manage');
 /*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,24 +206,18 @@ CREATE TABLE `products` (
   `code` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` text COLLATE utf8mb4_unicode_ci,
-  `promotion_id` int unsigned NOT NULL,
   `short_description` text COLLATE utf8mb4_unicode_ci,
   `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` float DEFAULT NULL,
-  `quantity` float DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT NULL,
   `category_id` int unsigned NOT NULL,
-  `supplier_id` int unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `promotion_id` (`promotion_id`),
   KEY `category_id` (`category_id`),
-  KEY `supplier_id` (`supplier_id`),
-  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`promotion_id`) REFERENCES `promotions` (`id`),
-  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
-  CONSTRAINT `products_ibfk_3` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,6 +226,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES (2,'pr001','pepperoni','20251231_141507_pepperoni.jpg','pizza Pepperoni','The perfect combination of crispy grilled Pepperoni sausage with its characteristic mild spiciness, topped with creamy Mozzarella cheese and rich tomato sauce.',4.5,20,1,2,'2025-12-31 14:15:08','2025-12-31 14:15:08'),(5,'pr004','Sea food','20260102_135057_Capture001.png','pizza Pepperoni','The perfect combination of crispy grilled Pepperoni sausage with its characteristic mild spiciness, topped with creamy Mozzarella cheese and rich tomato sauce.',4.5,20,1,2,'2026-01-02 13:50:58','2026-01-02 13:50:58');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,7 +247,7 @@ CREATE TABLE `promotions` (
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,6 +256,7 @@ CREATE TABLE `promotions` (
 
 LOCK TABLES `promotions` WRITE;
 /*!40000 ALTER TABLE `promotions` DISABLE KEYS */;
+INSERT INTO `promotions` VALUES (1,'No discount',0,'There are no discounts of any kind.',1,'2025-12-31 00:00:00','2025-12-31',NULL),(2,'Noel',10,'Christmas discount program',1,'2025-12-20 00:00:00','2025-12-24','2025-12-26'),(3,'New Year',10,'New Year\'s 2026 discount program',1,'2025-12-31 00:00:00','2025-12-31','2026-01-01'),(4,'Lunar New Year',15,'Asian holiday discount program',1,'2025-12-31 00:00:00','2026-02-16','2026-02-19');
 /*!40000 ALTER TABLE `promotions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,7 +304,7 @@ CREATE TABLE `roles_permissions` (
   KEY `permission_id` (`permission_id`),
   CONSTRAINT `roles_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
   CONSTRAINT `roles_permissions_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,7 +313,7 @@ CREATE TABLE `roles_permissions` (
 
 LOCK TABLES `roles_permissions` WRITE;
 /*!40000 ALTER TABLE `roles_permissions` DISABLE KEYS */;
-INSERT INTO `roles_permissions` VALUES (1,4,1),(2,4,3),(3,4,13),(4,1,1),(5,1,2),(6,1,3),(7,1,4),(8,2,13),(9,2,14),(10,2,15),(11,2,16),(12,3,13),(13,3,14),(14,3,15),(15,3,16),(16,1,17),(17,1,18);
+INSERT INTO `roles_permissions` VALUES (1,4,1),(2,4,3),(3,4,13),(8,2,13),(9,2,14),(10,2,15),(11,2,16),(57,3,13),(58,3,14),(59,3,15),(60,3,16),(61,3,19),(62,3,20),(63,3,21),(64,3,22),(65,1,1),(66,1,2),(67,1,3),(68,1,4),(69,1,17),(70,1,18),(71,1,13),(72,1,14),(73,1,15),(74,1,16),(75,1,19),(76,1,20),(77,1,21),(78,1,22),(79,1,5),(80,1,6),(81,1,7),(82,1,8),(83,1,9),(84,1,10),(85,1,11),(86,1,12);
 /*!40000 ALTER TABLE `roles_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,7 +395,7 @@ CREATE TABLE `suppliers` (
 
 LOCK TABLES `suppliers` WRITE;
 /*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
-INSERT INTO `suppliers` VALUES (1,'sup001','AN NHIEN Corp','20251227_011521_CocosLogoTransparent.png','07103941756','can tho','nha cung cap hang dau viet nam'),(2,'sup002','AN NHIEN Corp','20251227_012306_CocosLogoTransparent.png','07103941756','can tho','nha cung cap hang dau viet nam');
+INSERT INTO `suppliers` VALUES (1,'sup001','AN NHIEN Corp','20260102_115224_577562312_2188407715020307_5044873480267308774_n.jpg','07103941756','can tho','nha cung cap hang dau viet nam'),(2,'sup002','TAN NHIEN Corp','20251227_012306_CocosLogoTransparent.png','0939052119','dong nai','nha cung cap hang dau viet nam');
 /*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -456,10 +453,11 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT NULL,
+  `active_code` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `salary_level_id` (`salary_level_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`salary_level_id`) REFERENCES `salary_levels` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -468,7 +466,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,'Trần Hữu Phúc','Huuphuc','$2a$10$stBX2kv6gOca9kp1.hGB/.47U6g/WuSrUCCe/6wpIRz/OGFswdmsa',1,'1996-09-22','huuphuc@gmail.com','20251218_102424_ngoc.jpg','0962428167','Cần Thơ',3,'2025-12-18 09:30:15','2025-12-25 13:22:14',1),(3,'Triệu Như Ngọc','NgocCute','$2a$10$SjW0pJHDqapMTHDrWzgwVO8U.AHjsBTuBJVgTIDa.LqJt/8p9pMby',0,'1996-02-09','ngoc@gmail.com','20251218_162349_images.jpg','0710941756','Ninh Kieu  - Can Tho',1,'2025-12-18 16:23:50','2025-12-27 10:05:50',1),(4,'Ngọc Linh','Linh','$2a$10$uugfmWd417YULiVojHAkS.gpkpLoA0X2B/DQhJQU/DGaZeMG5Jyjm',0,'2007-01-23','linh@gmail.com','20251218_162642_tiem-anh-the-kami-1334301.jpg','0936052119','Ninh Kieu Can Tho',2,'2025-12-18 16:26:43','2025-12-28 00:20:34',1);
+INSERT INTO `users` VALUES (2,'Trần Hữu Phúc','Huuphuc','$2a$10$stBX2kv6gOca9kp1.hGB/.47U6g/WuSrUCCe/6wpIRz/OGFswdmsa',1,'1996-09-22','huuphuc@gmail.com','20251218_102424_ngoc.jpg','0962428167','Cần Thơ',3,'2025-12-18 09:30:15','2025-12-25 13:22:14',1,NULL),(3,'Triệu Như Ngọc','NgocCute','$2a$10$SjW0pJHDqapMTHDrWzgwVO8U.AHjsBTuBJVgTIDa.LqJt/8p9pMby',0,'1996-02-09','ngoc@gmail.com','20251218_162349_images.jpg','0710941756','Ninh Kieu  - Can Tho',1,'2025-12-18 16:23:50','2025-12-27 10:05:50',1,NULL),(14,NULL,'Phuong','$2a$10$eGilmp.U5dQ9ERMaKI4gR.Ujpfr/ZEjeWBqEquZrTuZPwe2azvIuW',1,NULL,NULL,NULL,NULL,NULL,1,'2025-12-30 22:23:48','2025-12-30 22:23:48',1,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -488,7 +486,7 @@ CREATE TABLE `users_roles` (
   KEY `role_id` (`role_id`),
   CONSTRAINT `users_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `users_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -497,7 +495,7 @@ CREATE TABLE `users_roles` (
 
 LOCK TABLES `users_roles` WRITE;
 /*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
-INSERT INTO `users_roles` VALUES (1,2,1),(2,3,3),(3,4,2);
+INSERT INTO `users_roles` VALUES (1,2,1),(2,3,3),(5,14,4);
 /*!40000 ALTER TABLE `users_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -510,4 +508,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-30 21:25:53
+-- Dump completed on 2026-01-04 21:57:05
