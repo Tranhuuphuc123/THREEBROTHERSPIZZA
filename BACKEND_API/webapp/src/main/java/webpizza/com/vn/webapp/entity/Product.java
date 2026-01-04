@@ -51,7 +51,7 @@ public class Product {
 
     //khóa ngoại category
     @Column(name = "category_id")
-    private Integer categoryIid;
+    private Integer categoryId;
     
     // updatable = false: không cho phép cập nhật sau khi tạo đảm bảo tính truy vết lịch sử
     /*@CreationTimestamp:Tự động gán giá trị thời gian hiện tại (NOW()) cho trường này khi

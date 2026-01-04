@@ -2,16 +2,14 @@ package webpizza.com.vn.webapp.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import webpizza.com.vn.webapp.entity.Permission;
 
 @Repository
-public interface PermissionRepository extends CrudRepository<Permission, Integer>,
-        PagingAndSortingRepository<Permission, Integer> {
+public interface PermissionRepository extends JpaRepository<Permission, Integer> {
 
         /* #####tạo hàm trả về danh sách các quyền thật có của username cụ thể #####
         -> :username: :username được gọi là Named Parameter (Tham số được đặt tên)

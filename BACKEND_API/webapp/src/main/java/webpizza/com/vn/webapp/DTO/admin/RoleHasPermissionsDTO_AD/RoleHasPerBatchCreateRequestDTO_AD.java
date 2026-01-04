@@ -14,6 +14,9 @@ public class RoleHasPerBatchCreateRequestDTO_AD {
     @NotNull(message = "Khong duoc de trong role id")
     private Integer roleId;
 
+    /*sở dĩ dùng list là create nhiều permission cho một role
+    nên cần khai báo là list co permission để chứa nhiều name 
+    permission cho mọt role khi create */
     @NotNull(message = "Ko duoc de trong permission id")
     private List<Integer> permissionId;
 }

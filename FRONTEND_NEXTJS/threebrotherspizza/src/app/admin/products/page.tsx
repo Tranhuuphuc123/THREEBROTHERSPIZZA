@@ -30,7 +30,6 @@ import axiosAdmin from "@/axios/axiosAdmin";
 
 //sử dụng icon của lib fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ApiResponseTypes } from "@/types/AccountTypes";
 import {
   faPlus,
   faTrash,
@@ -49,7 +48,7 @@ import { useModal } from "@/contexts/ModalContext";
 //import page form create product(form create tự thiết kế bằng bootstrap)
 import CreateModal from "@/app/admin/products/create/page";
 //import page form delete product
-//import DeleteModal from "@/app/admin/products/delete/page";
+import DeleteModal from "@/app/admin/products/delete/page";
 //import form edit products
 //import UpdateModal from "@/app/admin/products/edit/page";
 
@@ -428,7 +427,7 @@ export default function ProductManage () {
         </Modal.Body>
       </Modal>
 
-      {/* <Modal show={show && modalType === "delete"} onHide={closeModal}>
+      <Modal show={show && modalType === "delete"} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete {selectedId}</Modal.Title>
         </Modal.Header>
@@ -439,7 +438,7 @@ export default function ProductManage () {
             <p>No value Delete</p>
           )}
         </Modal.Body>
-      </Modal> */}
+      </Modal>
 
 {/* 
       <Modal show={show && modalType === "edit"} onHide={closeModal}>

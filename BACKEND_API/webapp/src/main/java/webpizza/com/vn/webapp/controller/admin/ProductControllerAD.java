@@ -35,6 +35,15 @@ public class ProductControllerAD {
         return productServiceAD.getAllProductPagination(pageNumber,pageSize, sortBy);                                                         
     }
 
+     
+    /***************** 1-2: getById *******************/
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
+        //yeu cau service tra  ve id
+        return productServiceAD.getById(id);
+    }
+
+
      /* II - create */
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createPro (@RequestParam("file") MultipartFile file,

@@ -1,6 +1,5 @@
 package webpizza.com.vn.webapp.service.client;
 
-
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import webpizza.com.vn.webapp.exceptions.ValidationErrorResponse;
 import webpizza.com.vn.webapp.exceptions.Violations;
 import webpizza.com.vn.webapp.repository.RoleRepository;
 import webpizza.com.vn.webapp.repository.UserHasRolesRepository;
+import webpizza.com.vn.webapp.service.auoth.EmailService;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +51,11 @@ public class UserServiceCL {
 
     @Autowired
     private RoleRepository roleRepo;
+
+    /* tiêm EmailService xử lý xác nhận email vào */
+    @Autowired
+    private EmailService emailService;
+
 
     /*tao bien string lay url cau hinh luu file da thiet lap ben application.properties
     * @Value: annotation dc su dung de gan gia tri cho mot bien tu cac nguon:
@@ -134,7 +140,7 @@ public class UserServiceCL {
 
 
 
-    /*II - Post(create)*/
+    /*II - Post(create) - trong phần này có xử lý create có xác nhận qua gmail*/
     //MultipartFile: la mot interface trong spring, dc su dung de xu ly cac tep files -> dc upload thog qua giao thuc HTTP request
      //Nếu bạn có @Transactional: Nếu việc lưu Role bị lỗi, Spring sẽ tự động "xóa" luôn thằng User vừa tạo trước đó để đảm bảo dữ liệu trong Database luôn sạch sẽ, đúng cặp đúng cặp.
     @Transactional 
@@ -189,15 +195,29 @@ public class UserServiceCL {
             //set mac dinh la 1
             newEntity.setGender(1);  
 
+            //lưu email
+            newEntity.setEmail(objCreate.getEmail());
+
             //lk khoa ngoai cua table salary_level
             newEntity.setLevelId(1);
 
-            //set mặc định là 1 - kích hoạt
-            newEntity.setIsActive(1);
+            //set mặc định là 0 - chưa kích hoạt đẻ xác nhận gmail thì mới kích hoạc là 1
+            newEntity.setIsActive(0);
 
-           // c-2 yeu cau repository luu lai khoi tao tren
-            // thuc hien
-            // nhan ten dk username va tien hanh kiem tra tranh trung ten username khi dang ky
+            /*tao khóa bí mật đẻ xác nhận gmail - nên sinh khóa bi mật 
+            kiểu mã hóa UUID(mã hóa sang dạng ký tự đặc biệt)
+            -> muốn mã hóa activeCode sang UUID thì search từ khóa "Generate UUID spring"
+            -> truy cập vào trang: "https://www.baeldung.com/java-uuid"
+            -> chọn phương thức mã hóa UUID sinh khóa bí mật(có nhiều method tôi chọn ở 
+            đây là UUID theo randomString đi:  UUID uuid = UUID.randomUUID() ) */
+            UUID uuid = UUID.randomUUID();
+            newEntity.setActiveCode(uuid.toString());
+
+
+           /** c-2 yeu cau repository luu lai khoi tao tren **
+            * thuc hien nhan ten dk username va tien hanh kiem tra tranh 
+            * trung ten username khi dang ky
+           */
            User existingUser = userRepo.findByUsername(objCreate.getUsername());
 
            // c-3 thuc hien kiem tra ds data trong mysql co trung ten username nao khong
@@ -207,9 +227,9 @@ public class UserServiceCL {
             }else{
                 User createEntity = userRepo.save(newEntity);
 
-                //tạo role mặc định cho user phải lưu lại ms có id
+                /*tạo role mặc định cho user là customer khi client create tài khoản*/
                 UserHasRoles newRole = new UserHasRoles();
-                 //lấy role từ db -> gán cứng user mới create là role có id 4: customer luôn
+                /*lấy role từ db -> gán cứng user mới create là role có id 4: customer luôn*/
                 Role defaultRole = roleRepo.findById(4).orElseThrow(() -> new RuntimeException("Role không tồn tại lol"));
 
                 newRole.setUser(createEntity);
@@ -217,6 +237,47 @@ public class UserServiceCL {
 
                 //lưu lại vào userhasrole
                 userHasRoleRepo.save(newRole);
+
+
+                /****xử lý xác nhận email khi đăng ký create tài khoản****/
+                /*tạo biến chứa hình thức xác nhận email theo cách thức đơn giản
+                SimpleMailMessage(không chứa file đính kèm khi gửi email)
+                 >>>>qui trình hoạt động đoạn dưới đây như sau:<<<<<<<<
+                  1/ đầu tiền khi gọi api create User này activeCode nó sẽ vãn là 0 chưa hoạt động đc
+                  dù đã tạo thành công create user account(vì nó cần x/m email mới cho activeCode 1)
+                  2/ sau đó ở api khi create account succes này ta gửi lên email kèm mã khóa bí mật UUID 
+                  đã mã hóa từ activecode theo UUID kiểu mã hóa sang ký tự đặc biệt dạng chuỗi random á để chi ??
+                   + thứ nhất là khi tạo xong tài khoản thì đúng là ok rồi nhưng muốn xác minh gmail cho chắc ăn mà 
+                   muons xác minh với nhau thì cần khóa bí mật để an toàn và có cái đẻ so cho khớp
+                   + thứ hai là khi gửi mail xác mình thì theo cấu trúc đơn giản là simpleMailMessage
+                       ++ to: địa mail gửi đến cho mail của ai
+                       ++ subject tên chủ đề gửi
+                       ++ content nội dung gửi
+                   + thứ ba khi emailService.sendemail gửi các nội dung đó đi thì email xác minh và gửi 
+                   lại thong báo là chào bạn vui lòng nhấp link xác minh
+                   --> lúc này email gửi link  
+                            <a href=\"http://localhost:8080/api/authEmail/active-account?email=\""
+                            + createEntity.getEmail() 
+                            + "&active_code=\"" + createEntity.getActiveCode()   
+                      chỗ đoạn này á là gửi link xác minh thực ra chính là link api thực hiện việc xác minh tài 
+                      khoản bao gồm email có phải đúng email của người cần xác mình khi create tài khoản và gửi 
+                      lên khong và activecode có khớp với khóa bí mật UUID activecode đã mã hóa khi create xong 
+                      account chưa. Nếu ok thì luận lý api xác minh sẽ đc call và xác minh nếu đúng email của 
+                      người vừa tạo và UUID activeCode khóa bí mật random á chính xác rồi thì nó sẽ xác thực 
+                      thành công và biến activeCode ban đầu từ 0 thành 1, tài khoản sẽ đc kích hoạt và active 
+                      code thành 1 thông báo  trạng thái là nó đã đc chấp nhận và có thể sử dụng
+                */
+                String to = createEntity.getEmail();
+                String subject = "Verify registered account";
+                String content = "Hello, " + createEntity.getUsername() 
+                    + "Please verify your newly created account by clicking the following confirmation link to activate your account"
+                    + ": <a href=\"http://localhost:8080/api/authEmail/active-account?email=\""
+                    + createEntity.getEmail() 
+                    + "&active_code=\"" + createEntity.getActiveCode()
+                    + "\">Actice Account</a>";
+                //tiến hành gửi email với các tham số khai báo để xác nhận email
+                emailService.SendEmail(to, subject, content);
+                
 
                 //c-4 tra ve ket qua cho nguoi dung theo chuan restfullAPI
                 response.put("data", createEntity);

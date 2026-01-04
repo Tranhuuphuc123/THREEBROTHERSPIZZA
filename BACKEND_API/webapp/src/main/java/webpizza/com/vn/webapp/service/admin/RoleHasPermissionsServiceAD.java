@@ -1,17 +1,12 @@
 package webpizza.com.vn.webapp.service.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import webpizza.com.vn.webapp.DTO.admin.RoleHasPermissionsDTO_AD.RoleHasPerBatchCreateRequestDTO_AD;
-import webpizza.com.vn.webapp.DTO.admin.RoleHasPermissionsDTO_AD.RoleHasPerCreateRequestDTO_AD;
-import webpizza.com.vn.webapp.DTO.admin.RoleHasPermissionsDTO_AD.RoleHasPerUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.entity.Permission;
 import webpizza.com.vn.webapp.entity.Role;
 import webpizza.com.vn.webapp.entity.RoleHasPermissions;
@@ -23,6 +18,7 @@ import java.util.*;
 
 @Service
 public class RoleHasPermissionsServiceAD {
+
     @Autowired
     private RoleHasPermissionRepository roleHasPermissionRepo;
 
@@ -31,182 +27,69 @@ public class RoleHasPermissionsServiceAD {
 
     @Autowired
     private PermissionRepository permissionRepo;
+   
+    /* method xử lý cấp quyền khong phân cấp 
+     => Hàm này sẽ dọn dẹp cái cũ và nạp cái mới. 
+     => giao diện dạng Checkbox như vậy, người dùng mong muốn chỉ cần
+      "Tích/Bỏ tích rồi ấn Lưu" là xong, chứ không muốn quan tâm hệ thống
+       đang gọi API Create hay Delete. Để giải quyết vấn đề "Update và Create
+       trong một button", phương pháp tối ưu nhất ở Backend là chiến lược "Sync" 
+       (Đồng bộ) thay vì tách rời Create/Update/Delete.
 
-    //getall co phan trang
-    public ResponseEntity<Map<String, Object>> getAllRoleHasPermission(Integer pageNumber, Integer pageSize, String sortBy){
-        // tao response luu ket qua tra ve
+
+      ====Thay vì viết hàm batchCreate, bạn hãy viết một hàm syncRolePermissions+=====
+      =>  Quy trình xử lý như sau:
+        + Nhận vào roleId và danh sách permissionIds mới nhất từ giao diện.
+        + Xóa tất cả các quyền cũ của roleId đó trong bảng trung gian.
+        + Thêm mới lại toàn bộ danh sách quyền vừa nhận được.
+    
+      =>  Tại sao làm cách này?
+        + Tránh việc phải so sánh cái nào có rồi thì giữ, cái nào chưa có thì thêm, 
+        cái nào thừa thì xóa (rất phức tạp và dễ lỗi logic).
+        + Đảm bảo dữ liệu trong DB luôn khớp 100% với những gì người dùng nhìn thấy
+         trên màn hình khi ấn nút "Lưu". 
+    */
+    @Transactional // Đảm bảo nếu lưu lỗi thì không bị xóa mất dữ liệu cũ
+    public ResponseEntity<Map<String, Object>> syncRolePermissions(RoleHasPerBatchCreateRequestDTO_AD obj) {
         Map<String, Object> response = new HashMap<>();
 
-        //xu ly phan trang
-        Pageable pageable = PageRequest.of(pageNumber -1, pageSize, Sort.by(sortBy)); // yeu cau
-        Page<RoleHasPermissions> pageResult = roleHasPermissionRepo.findAll(pageable); // goi repo lay ket qua tat ca
+        // 1. Xóa toàn bộ quyền cũ của Role này
+        roleHasPermissionRepo.deleteByRoleId(obj.getRoleId());
 
-        //neu co noi dung
-        if(pageResult.hasContent()){
-            //tra ket qua ve response
-            response.put("data",pageResult.getContent());
-            response.put("statuscode",201);
-            response.put("msg","tra ve ket qua thanh cong oh yeah");
+        // 2. Nếu danh sách permissionId gửi lên không rỗng, tiến hành lưu mới
+        List<RoleHasPermissions> savedEntities = new ArrayList<>();
+        if (obj.getPermissionId() != null && !obj.getPermissionId().isEmpty()) {
+            Role role = roleRepo.findById(obj.getRoleId())
+                    .orElseThrow(() -> new RuntimeException("Role không tồn tại"));
 
-            response.put("currentpage",pageNumber);
-            response.put("Nextpage",pageResult.hasNext());
-            response.put("permisionpage",pageResult.hasPrevious());
-            response.put("isFirst",pageResult.isFirst());
-            response.put("isLast",pageResult.isLast());
-            response.put("TotalPage",pageResult.getTotalPages());
-            response.put("TotalElement",pageResult.getTotalElements());
+            for (Integer pId : obj.getPermissionId()) {
+                Permission permission = permissionRepo.findById(pId)
+                        .orElseThrow(() -> new RuntimeException("Permission ID " + pId + " không tồn tại"));
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }else{
-            response.put("data", null);
-            response.put("statuscode", 404);
-            response.put("msg","khong tim thay du lieu huhuhu");
-
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-    }
-
-    /*II - Post(create)*/
-    public ResponseEntity<Map<String, Object>> createRoleHasPermission(RoleHasPerCreateRequestDTO_AD objcreate ){
-        //response luu ket qua tra ve
-        Map<String, Object> response = new HashMap<>();
-
-        //c-1 khoi tao UserEntity
-        RoleHasPermissions newEntity = new RoleHasPermissions();
-
-        Role role = roleRepo.findById(objcreate.getRoleId())
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-        Permission permission = permissionRepo.findById(objcreate.getPermissionId())
-                .orElseThrow(() -> new RuntimeException("Permission not found"));
-
-        newEntity.setRole(role);
-        newEntity.setPermission(permission);
-
-        //nhờ repo luu lại vào db
-        RoleHasPermissions createEntity = roleHasPermissionRepo.save(newEntity);
-
-        //c-4 tra ve ket qua cho nguoi dung theo chuan restfullAPI
-        response.put("data",createEntity);
-        response.put("statuscode",200);
-        response.put("msg","create thanh cong oh yeah");
-
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
-    }
-
-    /*II - 1: Post(create batch nhieu permissions cho role)*/
-    public ResponseEntity<Map<String, Object>> batchCreateRoleHasPermission(RoleHasPerBatchCreateRequestDTO_AD objCreate){
-        //tao response luu ket qua tra ve
-        Map<String, Object> response = new HashMap<>();
-
-        //goiu repository create nhieu role cho mot user
-        List<RoleHasPermissions> listCreateEntity = new ArrayList<>();
-        try{
-            for(Integer permissionId : objCreate.getPermissionId()){
-                RoleHasPermissions roleHasPermissions = new RoleHasPermissions();
-
-                Role role = roleRepo.findById(objCreate.getRoleId())
-                        .orElseThrow(() -> new RuntimeException("Role not found"));
-                Permission permission = permissionRepo.findById(permissionId)
-                        .orElseThrow(() -> new RuntimeException("Permission not found"));
-
-                roleHasPermissions.setRole(role);
-                roleHasPermissions.setPermission(permission);
-
-                roleHasPermissionRepo.save(roleHasPermissions);
-                listCreateEntity.add(roleHasPermissions);
+                RoleHasPermissions newRel = new RoleHasPermissions();
+                newRel.setRole(role);
+                newRel.setPermission(permission);
+                savedEntities.add(newRel);
             }
-        }catch(Exception ex){
-            throw ex;
+            roleHasPermissionRepo.saveAll(savedEntities);
         }
 
-        //tra ve ket qua chuan rest full api
-        response.put("data",listCreateEntity);
-        response.put("statuscode",201);
-        response.put("msg","create thanh cong oh yeah");
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        response.put("statuscode", 200);
+        response.put("msg", "Đã cập nhật phân quyền thành công!");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
-    //update
-    public ResponseEntity<Map<String, Object>> updateRoleHasPermission(Integer id, RoleHasPerUpdateRequestDTO_AD objUpdate){
-        //tao response luu ket qua tra ve
-        Map<String, Object> response = new HashMap<>();
-
-        //tim kiem entity theo id
-        Optional<RoleHasPermissions> optFound = roleHasPermissionRepo.findById(id);
-
-        //neu tim thay thi lay ra update
-        if(optFound.isPresent()){
-            //lay entity ra khoi hop qua opt
-            RoleHasPermissions entityEdit = optFound.get();
-
-            //kiem tra va cap nha cac truong tt null hoawc empty -> tien hanh bo qua va ghi nhan
-            if(objUpdate.getRoleId() != null){
-                Role role = roleRepo.findById(objUpdate.getRoleId())
-                        .orElseThrow(() -> new RuntimeException("New roleid not found"));
-
-                // capnhat goi tuong entity userid
-                entityEdit.setRole(role);
-            }
-            if(objUpdate.getPermissionId() != null ){
-                Permission permission = permissionRepo.findById(objUpdate.getPermissionId())
-                        .orElseThrow(() -> new RuntimeException("New permissionid not found"));
-
-                // capnhat goi tuong entity userid
-                entityEdit.setPermission(permission);
-            }
-
-            //goi repoluu lai cap nhat
-            RoleHasPermissions updatedEntity = roleHasPermissionRepo.save(entityEdit);
-
-            //goi response tra ve ket qua
-            response.put("data",updatedEntity);
-            response.put("statuscode",200);
-            response.put("msg","update thanh cong oh yeah");
-
-            return new ResponseEntity<>(response,HttpStatus.OK);
-        }else{
-
-            //goi response tra ve ket qua
-            response.put("data",null);
-            response.put("statuscode",404);
-            response.put("msg","update ko thanh cong huhuhu");
-
-            return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
-        }
-    }
-
-    //delete xoa
-    public ResponseEntity<Map<String, Object>> deleteRoleHasPermission(Integer id){
-        //tao response luu ket qua tra ve
-        Map<String,Object> response = new HashMap<>();
-
-        //tim theo id
-        Optional<RoleHasPermissions> optFound = roleHasPermissionRepo.findById(id);
-
-        //neu tim thay thi xoa
-        if(optFound.isPresent()){
-            //lay entity ra khoi hop qua opt
-            RoleHasPermissions deleteEntity = optFound.get();
-
-            //goi repo xoa entity
-            roleHasPermissionRepo.delete(deleteEntity);
-
-            //goi response luu ket qua tra ve
-            response.put("data",null);
-            response.put("statuscode",200);
-            response.put("msg","xoa thanh cong oh yeah");
-
-            return new ResponseEntity<>(response,HttpStatus.OK);
-        }else{
-            //goi response luu ket qua tra ve
-            response.put("data",null);
-            response.put("statuscode",404);
-            response.put("msg","xoa ko thanh cong oh no");
-
-            return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
-        }
+    /**Lấy danh sách ID các permission của một Role (Dùng để hiển thị checkbox trên UI)**/
+    public ResponseEntity<List<Integer>> getPermissionIdsByRoleId(Integer roleId) {
+        List<RoleHasPermissions> list = roleHasPermissionRepo.findByRoleId(roleId);
+        
+        // Chuyển đổi từ danh sách Entity sang danh sách ID nguyên bản
+        List<Integer> permissionIds = list.stream()
+                .map(item -> item.getPermission().getId())
+                .toList();
+                
+        return new ResponseEntity<>(permissionIds, HttpStatus.OK);
     }
 
 }

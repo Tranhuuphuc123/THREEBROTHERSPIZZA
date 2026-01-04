@@ -19,10 +19,8 @@ public class ProductUpdateRequestDTOAD {
 
     private String image;
 
-    @Column(name = "short_description")
     private String shortDescription;
 
-    @Column(name = "description")
     private String description;
 
     @NotNull(message = "price is required")

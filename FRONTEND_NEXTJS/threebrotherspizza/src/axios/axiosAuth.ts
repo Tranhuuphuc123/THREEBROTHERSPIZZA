@@ -154,6 +154,14 @@ export function getPayloadInfoFromToken() {
       if (!token) return null;
       try {
         const decoded: any = jwtDecode(token);
+
+        // KIỂM TRA HẾT HẠN (Dòng quan trọng)
+        const currentTime = Date.now() / 1000; // Đổi sang giây
+        if (decoded.exp && decoded.exp < currentTime) {
+          console.warn("Token đã hết hạn!");
+          return null; // Trả về null để Header biết đường mà ẩn Avatar
+        }
+
         // Giả sử Backend bạn lưu key là 'roles' hoặc 'role' trong payload
         return decoded.roles || decoded.role || null;
       } catch (error) {

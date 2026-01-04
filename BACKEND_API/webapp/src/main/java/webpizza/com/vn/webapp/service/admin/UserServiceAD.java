@@ -32,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /*lop luan ly logic code*/
-
 @Service
 public class UserServiceAD {
 

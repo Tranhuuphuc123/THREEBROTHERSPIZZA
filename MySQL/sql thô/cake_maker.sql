@@ -118,7 +118,8 @@ CREATE TABLE users (
   salary_level_id INT UNSIGNED NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
-  is_active BOOLEAN
+  is_active BOOLEAN,
+  active_code VARCHAR(200) -- khoa mã code dùng để active cho t/h gì đó vd xác nhận email
 );
 
 select * from users;

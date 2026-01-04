@@ -68,6 +68,8 @@ public class User {
     @Column(name = "is_active")
     private Integer isActive;
 
+    @Column(name = "active_code")
+    private String activeCode;
 
     @OneToMany(mappedBy = "user")
     private List<UserHasRoles> userHasRoles;

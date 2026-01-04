@@ -1,6 +1,5 @@
 package webpizza.com.vn.webapp.DTO.admin.ProductDTO_AD;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,10 +19,8 @@ public class ProductCreateRequestDTOAD {
 
     private String image;
 
-    @Column(name = "short_description")
     private String shortDescription;
 
-    @Column(name = "description")
     private String description;
 
     @NotNull(message = "price is required")

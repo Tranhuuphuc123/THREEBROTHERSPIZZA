@@ -10,13 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import webpizza.com.vn.webapp.DTO.admin.PermissionDTO_AD.PermissionCreateRequestDTO_AD;
+import webpizza.com.vn.webapp.DTO.admin.PermissionDTO_AD.PermissionGroupedDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.PermissionDTO_AD.PermissionUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.entity.Permission;
 import webpizza.com.vn.webapp.repository.PermissionRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -24,8 +27,27 @@ public class PermissionServiceAD {
     @Autowired
     private PermissionRepository permissionRepo;
 
+
+    //Hàm này sẽ lấy toàn bộ danh sách từ DB và dùng Java Stream để gộp nhóm theo module_name
+    public ResponseEntity<List<PermissionGroupedDTO_AD>> getPermissionsGrouped() {
+        // 1. Lấy tất cả permission phẳng từ repo
+        List<Permission> allPermissions = permissionRepo.findAll();
+
+        // 2. Logic gộp nhóm theo moduleName
+        // Map<String, List<Permission>>: Key là tên Module, Value là List các quyền của module đó
+        Map<String, List<Permission>> groupedMap = allPermissions.stream()
+                .collect(Collectors.groupingBy(Permission::getModuleName));
+
+        // 3. Chuyển đổi Map sang List DTO để Frontend dễ dùng
+        List<PermissionGroupedDTO_AD> result = groupedMap.entrySet().stream()
+                .map(entry -> new PermissionGroupedDTO_AD(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     // getall co phan trang
-    public ResponseEntity<Map<String, Object>> getAllPermission(Integer pageNumber, Integer pageSize, String sortBy){
+    public ResponseEntity<Map<String, Object>> getAllPermissionPagination(Integer pageNumber, Integer pageSize, String sortBy){
         // tao response luu ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 

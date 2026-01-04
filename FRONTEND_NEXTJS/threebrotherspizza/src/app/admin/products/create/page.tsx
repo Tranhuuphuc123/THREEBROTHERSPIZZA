@@ -32,7 +32,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
     const [price, setPrice] = useState<number>(0);
     const [quantity, setQuantity] = useState<number>(0);
     const [isActive, setIsActive] = useState<number>(1);
-    const [categoryID, setCategoryID] = useState<number | null>(null);
+    const [categoryId, setCategoryId] = useState<number | null>(null);
 
     /***method: xử lý sự kiện khi choosefile img thì ảnh hiện lên để có thể xem trc đc ảnh vừa chọn**/
     const [imagePreview, setImagePreview] = useState<string | null>(null); // state lưu img xem trước khi create sản phẩm
@@ -79,11 +79,11 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 price: Number(price), // Bên TS dùng number cho cả float/double là chuẩn
                 quantity: Number(quantity),
                 isActive: Number(isActive),
-                categoryID: categoryID ? Number(categoryID) : null,
+                categoryId: categoryId ? Number(categoryId) : null,
             };
 
             // Kiểm tra validate cơ bản trước khi gọi API
-            if (!categoryID) {
+            if (!categoryId) {
                 showToast("Vui lòng chọn loại sản phẩm", 'warning');
                 return;
             }
@@ -105,16 +105,16 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
         }
     };
 
-    /**********su dung useEffect để thực thi call api cho mục danh mục và khuyến mãi **********/
+    /**********su dung useEffect để thực thi call api cho mục danh mục **********/
     //su dung useEffect de chay duy nhat lan dau khi compoents nay render xong
     useEffect(() => {
         const fetchCategory = async () => {
             try {
-                const res = await axiosAdmin.get("/categories");
+                const res = await axiosAdmin.get("/Categories");
                 const data = res.data.data ? res.data.data : res.data;
                 setListCategory(data);
             } catch (error) {
-                console.error('Lỗi tải dữ liệu danh mục:', error);
+                console.error('Error load categories:', error);
             }
         }
         fetchCategory();
@@ -173,8 +173,8 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                         <label className="form-label fw-bold">Category Product</label>
                         <select 
                             className="form-select" 
-                            value={categoryID ?? ''} 
-                            onChange={(e) => setCategoryID(e.target.value ? Number(e.target.value) : null)} 
+                            value={categoryId ?? ''} 
+                            onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : null)} 
                             required
                         >
                             <option value="">-- Choose category of product --</option>
@@ -186,7 +186,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label fw-bold">Mô tả ngắn</label>
+                    <label className="form-label fw-bold">Short Description</label>
                     <input type="text" className="form-control" 
                         onChange={(e) => setShortDescription(e.target.value)} />
                 </div>

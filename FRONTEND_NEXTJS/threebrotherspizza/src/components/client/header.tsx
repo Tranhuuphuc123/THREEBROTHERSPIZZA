@@ -129,11 +129,22 @@ export default function Header() {
 
      // Lấy thông tin tổng hợp từ token
       const roles = getPayloadInfoFromToken();
-      if (roles) {
+      //kiểm tra token còn hạn không và lấy roles từ localstorage
+      if (roles && token) {
+        setIsLoggedIn(true);
         setUserRole(roles);
         setAvatar(savedAvatar);// Gán avatar từ localStorage vào state
         setUserId(savedId); // Lưu ID vào state để dùng nếu cần
       } else {
+        // TRƯỜNG HỢP: Không có token HOẶC token đã hết hạn
+        if (token) {
+          // Nếu có "xác" token nhưng đã hết hạn thì dọn dẹp sạch sẽ
+          localStorage.removeItem("token");
+          localStorage.removeItem("user_avatar");
+          localStorage.removeItem("permissions");
+          localStorage.removeItem("user_id");
+        }
+        setIsLoggedIn(false);
         setUserRole(null);
         setAvatar(null);
         setUserId(null);

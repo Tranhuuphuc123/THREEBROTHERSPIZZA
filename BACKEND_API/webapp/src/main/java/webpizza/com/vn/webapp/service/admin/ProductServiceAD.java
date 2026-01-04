@@ -83,6 +83,36 @@ public class ProductServiceAD {
         }
     }
 
+    
+    /*I_2: trả về danh sách suppliers theo id cần tiềm */
+    public ResponseEntity<Map<String, Object>> getById (Integer id){
+        //khoi tao bien luu ket qua tra ve
+        Map<String, Object> response = new HashMap<>();
+
+        //nho repo thuc thi tra ve ket qua id => luu trong bien Optional(chap nhan gia tri null)
+        Optional<Product> optFoundById = productRepo.findById(id);
+        //neu no co ton tai
+        if(optFoundById.isPresent()){
+            //nhan id vau tim kiem dc
+            Product productEntity = optFoundById.get();
+
+            //tra ve thong bao thanh cong
+            response.put("data", productEntity);
+            response.put("statuscode", 201);
+            response.put("msg", "Return id of Products success");
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            //tra ve ket qua nguoi dung
+            response.put("data", null);
+            response.put("statuscode", 404);
+            response.put("msg", "Please seen result search");
+
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 
      /*II - Post(create)*/
     //MultipartFile: la mot interface trong spring, dc su dung de xu ly cac tep files -> dc upload thog qua giao thuc HTTP request
@@ -153,7 +183,7 @@ public class ProductServiceAD {
                 newEntity.setIsActive(objCreate.getIsActive().intValue());
             }
 
-            newEntity.setCategoryIid(objCreate.getCategoryId());
+            newEntity.setCategoryId(objCreate.getCategoryId());
 
             //goi repo lưu vao csdl
             Product createProEntity = productRepo.save(newEntity);
@@ -183,19 +213,31 @@ public class ProductServiceAD {
             //gan nhan id do cho trg do dugn tren csdl
             Product delProID = optFound.get();
 
+            /*xu ly tien hanh xoa ruot anh ung voi taikhoan cua anh do*/
+            String rootFolder = Paths.get("").toAbsolutePath().toString();
+            Path filePath = Path.of(rootFolder + File.separator + uploadDir + File.separator + delProID.getImage());
+
+            /*tien hanh xoa anh cu neu ton tai*/
+             try{
+                //tien hanh deleteIfExits co ton tai no moi xoa
+                Files.deleteIfExists(filePath);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
             //nho repo thuc hien xoa entity can xoa do
             productRepo.delete(delProID);
 
             //tra ve thong bao chuan restfull api
             response.put("data",null );
             response.put("statuscode", 200);
-            response.put("msg", "delete thanh cong");
+            response.put("msg", "delete success");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             response.put("data",null );
             response.put("statuscode", 404);
-            response.put("msg", "delete khong thanh cong");
+            response.put("msg", "delete not success");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -229,7 +271,7 @@ public class ProductServiceAD {
                     //su dung datetime luu ten anh theo gio phut giay + ten img: tranh bi trung lap
                     String randomString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
                     //tiet lap file path lay dung ten goc o dia luu folder trong project
-                    String rootFolder = Paths.get("null").toAbsolutePath().toString();
+                    String rootFolder = Paths.get("").toAbsolutePath().toString();
                     //tao duong dan xu ly luu file
                     String newFile = randomString + "_" + file.getOriginalFilename();
                     String filePath = rootFolder + File.separator + uploadDir + File.separator + newFile;
@@ -268,7 +310,7 @@ public class ProductServiceAD {
                 proEntity.setIsActive((objUpdate.getIsActive()));
             }
             if(objUpdate.getCategoryId() != null){
-                proEntity.setCategoryIid((objUpdate.getCategoryId()));
+                proEntity.setCategoryId(objUpdate.getCategoryId());
             }
 
             //nho rep update(save lai)

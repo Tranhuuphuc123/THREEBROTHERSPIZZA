@@ -95,6 +95,22 @@
             <version>0.11.5</version>
         </dependency>
 
+        <!-- gói lib hỗ trợ xác thực gmail khi đăng ký tài khoản.. -->
+        <dependency>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>angus-mail</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
+
         <!--xử lý gi nhận localdate ngày tháng năm 
         Spring Boot sẽ tự register JavaTimeModule tránh báo lỗi lưu value có localdate: 
         "Java 8 date/time type `java.time.LocalDate` not supported by default"-->
