@@ -46,3 +46,21 @@ export const PROMOTIONS_VIEW = "promotion_view"
 export const PROMOTIONS_CREATE = "promotion_create"
 export const PROMOTIONS_EDIT = "promotion_edit"
 export const PROMOTIONS_DELETE = "promotion_delete"
+
+//nhom quyen cua table category
+export const CATEGORY_VIEW = "category_view"
+export const CATEGORY_CREATE = "category_create"
+export const CATEGORY_EDIT = "category_edit"
+export const CATEGORY_DELETE = "category_delete"
+
+//nhom quyen cua table material
+export const MATERIAL_VIEW = "material_view"
+export const MATERIAL_CREATE = "material_create"
+export const MATERIAL_EDIT = "material_edit"
+export const MATERIAL_DELETE = "material_delete"
+
+//nhom quyen cua table product_material
+export const PRODUCT_MATERIAL_VIEW = "product_material_view"
+export const PRODUCT_MATERIAL_CREATE = "product_material_create"
+export const PRODUCT_MATERIAL_EDIT = "product_material_edit"
+export const PRODUCT_MATERIAL_DELETE = "product_material_delete"

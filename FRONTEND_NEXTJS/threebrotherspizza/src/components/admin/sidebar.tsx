@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 //import fontAwesomeIcon lấy icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faUser, faBox, faTags, faIndustry, faKey, faIdBadge } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faUser, faBox, faTags, faIndustry, faKey, faIdBadge, faWheatAwn, faTeletype, faLifeRing, faList } from "@fortawesome/free-solid-svg-icons";
 
 /* import constants permissionsName.tsx lấy list tên các quyền cần text
 cho username coi quyền lây đc ở username trong localstorage có khớp với 
@@ -13,9 +13,13 @@ import {USER_VIEW, USERS_ROLES,
         ROLES_PERMISSIONS, 
         PRODUCT_VIEW,
         SUPPLIER_VIEW,
-        PROMOTIONS_VIEW
+        PROMOTIONS_VIEW,
+        CATEGORY_VIEW, 
+        MATERIAL_VIEW, 
+        PRODUCT_MATERIAL_VIEW
       } 
     from '@/constants/permissionsName'
+import { faWheatAlt } from "@fortawesome/free-solid-svg-icons/faWheatAlt";
 
 export default function Sidebar() {
   
@@ -43,6 +47,9 @@ export default function Sidebar() {
   const canViewProducts = strPermission.includes(PRODUCT_VIEW);
   const canViewSupplier = strPermission.includes(SUPPLIER_VIEW);
   const canViewPromotion = strPermission.includes(PROMOTIONS_VIEW);
+  const canViewMaterial = strPermission.includes(MATERIAL_VIEW);
+  const canViewCategory = strPermission.includes(CATEGORY_VIEW);
+  const canViewProductMaterial = strPermission.includes(PRODUCT_MATERIAL_VIEW);
 
   /*state trạng thái đảm bảo rằng việc kiểm tra quyền (canCreate) chỉ được thực hiện
    sau khi Client đã tải xong để tránh lệch pha với Server.
@@ -154,9 +161,39 @@ export default function Sidebar() {
           {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
           {canViewPromotion && (
              <li className="sidebar-item">
-              <Link href="/admin/suppliers" className="sidebar-link">
+              <Link href="/admin/promotion" className="sidebar-link">
                 <FontAwesomeIcon icon={faTags} className="fa-fw" />
                 Promotion
+              </Link>
+            </li>
+          )}
+
+          {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
+          {canViewMaterial && (
+             <li className="sidebar-item">
+              <Link href="/admin/material" className="sidebar-link">
+                <FontAwesomeIcon icon={faWheatAwn} className="fa-fw" />
+                Material
+              </Link>
+            </li>
+          )}
+
+          {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
+          {canViewCategory && (
+             <li className="sidebar-item">
+              <Link href="/admin/category" className="sidebar-link">
+                <FontAwesomeIcon icon={faList} className="fa-fw" />
+                Category
+              </Link>
+            </li>
+          )}
+
+          {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
+          {canViewProductMaterial && (
+             <li className="sidebar-item">
+              <Link href="/admin/productMaterial" className="sidebar-link">
+                <FontAwesomeIcon icon={faWheatAlt} className="fa-fw" />
+                Product_Material
               </Link>
             </li>
           )}
