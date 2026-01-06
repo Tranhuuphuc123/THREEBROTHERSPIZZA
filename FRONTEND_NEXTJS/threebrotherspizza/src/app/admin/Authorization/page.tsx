@@ -51,7 +51,7 @@ export default function RolePermissionManager() {
        đôi thời gian), dòng này cho phép trình duyệt gửi cả 2 yêu cầu cùng một lúc.
        */
       const [resRoles, resModules] = await Promise.all([
-        axiosAdmin.get('/role'), //call api getall lấy tất cả role
+        axiosAdmin.get('/roles/listRoles'), //call api getall lấy tất cả role
         //call api lấy tất cả permission đã gom nhóm theo modul_name
         axiosAdmin.get('/permissions/grouped') 
       ]);

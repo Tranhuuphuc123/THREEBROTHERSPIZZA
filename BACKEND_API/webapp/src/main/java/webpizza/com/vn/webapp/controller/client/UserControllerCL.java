@@ -3,9 +3,7 @@ package webpizza.com.vn.webapp.controller.client;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +32,6 @@ public class UserControllerCL {
     private UserServiceCL userServiceCL;
 
     /*************1-1: getall có phân trang**********************/
-  
     /*  
      -> @CrossOrigin(origins = "${client.url}") : cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
@@ -62,7 +59,7 @@ public class UserControllerCL {
 
 
 
-    /*****************-2 create**************************/
+    /*****************_ 2-1 create**************************/
     //@CrossOrigin(origins = "${client.url}") 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(@Valid @RequestBody UserCreateRequestDTO_CL objDTO){
@@ -75,6 +72,18 @@ public class UserControllerCL {
         return userServiceCL.createUser(objDTO);
     }
 
+    /******************2-2 ACTIVE USER - XÁC NHẬN TÀI KHOẢN EMAIL KHI CREATE ACCOUNT XONG********
+     * method này là sau khi create tài khoản xong thì cần xác minh lại qua email
+     * email sẽ cung cấp cái link xác mình từ api này đẻ coi user đk có email và activeCode 
+     * UUID(khóa bí mật á) coi có tòn tại và khớp không nếu ok thì nó tiến hành kích hoạt 
+     * lại is_active của account user khi create xong từ 0 thành 1 để kích hoạt tài khoản
+    */
+    @GetMapping("/active-account")
+    public ResponseEntity<Map<String, Object>> ActiveAccount(@RequestParam String email, @RequestParam String activeCode) {
+        //nhờ service kích hoạt
+        return userServiceCL.activeAccount(email, activeCode);
+    }
+    
 
 
    /********************3 - delete**********************************/

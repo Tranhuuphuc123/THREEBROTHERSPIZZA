@@ -50,7 +50,7 @@ import CreateModal from "@/app/admin/products/create/page";
 //import page form delete product
 import DeleteModal from "@/app/admin/products/delete/page";
 //import form edit products
-//import UpdateModal from "@/app/admin/products/edit/page";
+import EditModal from "@/app/admin/products/edit/page";
 
 //make variale api url file upload img
 import { UPLOAD_URL } from "@/constants/urls";
@@ -440,19 +440,19 @@ export default function ProductManage () {
         </Modal.Body>
       </Modal>
 
-{/* 
+
       <Modal show={show && modalType === "edit"} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Account - edit value {selectedId}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedId !== null ? (
-            <UpdateModal id={selectedId} onReload={handleReload} />
+            <EditModal id={selectedId} onReload={handleReload} />
           ) : (
             <p>No value Update</p>
           )}
         </Modal.Body>
-      </Modal> */}
+      </Modal>
     </>
   );
 };

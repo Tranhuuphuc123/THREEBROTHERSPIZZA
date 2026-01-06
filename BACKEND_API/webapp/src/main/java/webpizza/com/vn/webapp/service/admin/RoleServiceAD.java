@@ -15,6 +15,7 @@ import webpizza.com.vn.webapp.entity.Role;
 import webpizza.com.vn.webapp.repository.RoleRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,8 +24,26 @@ public class RoleServiceAD {
     @Autowired
     private RoleRepository roleRepo;
 
+    
+    //trả về danh sách roles: name và display name không phân trang
+    public ResponseEntity<Map<String, Object>> getRoles() {
+        //khởi tạo biến lưu trữ kết quả trả về
+        Map<String, Object> response = new HashMap();
+
+        //b - Yêu câu repository lấy dữ liệu -> gọi đén Repository.mehthod trong crudRepository
+        List<Role> lsRoles = (List<Role>) roleRepo.findAll();
+
+        //c - trả về kết quả cho người dùng -> trả theo chuẩn restFullApi
+        response.put("data", lsRoles);
+        response.put("statuscode", 200);
+        response.put("msg", "get dữ liệu thành công");
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+
     //getall co phan trang
-    public ResponseEntity<Map<String, Object>> getAllRole(Integer pageNumber, Integer pageSize, String sortBy){
+    public ResponseEntity<Map<String, Object>> getRolesPagination(Integer pageNumber, Integer pageSize, String sortBy){
         // tao response luu ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 

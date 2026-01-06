@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -64,6 +65,7 @@ public class UserServiceCL {
     * */
     @Value("${file.upload-dir}")
     private String uploadDir;
+
 
     /*I_1 GET ->lay va do du lieu co phan trang*/
     public ResponseEntity<Map<String, Object>> getAllUserPagination(int pageNumber, int pageSize, String sortby){
@@ -140,7 +142,7 @@ public class UserServiceCL {
 
 
 
-    /*II - Post(create) - trong phần này có xử lý create có xác nhận qua gmail*/
+    /*II - 1 Post(create) - trong phần này có xử lý create có xác nhận qua gmail*/
     //MultipartFile: la mot interface trong spring, dc su dung de xu ly cac tep files -> dc upload thog qua giao thuc HTTP request
      //Nếu bạn có @Transactional: Nếu việc lưu Role bị lỗi, Spring sẽ tự động "xóa" luôn thằng User vừa tạo trước đó để đảm bảo dữ liệu trong Database luôn sạch sẽ, đúng cặp đúng cặp.
     @Transactional 
@@ -271,9 +273,9 @@ public class UserServiceCL {
                 String subject = "Verify registered account";
                 String content = "Hello, " + createEntity.getUsername() 
                     + "Please verify your newly created account by clicking the following confirmation link to activate your account"
-                    + ": <a href=\"http://localhost:8080/api/authEmail/active-account?email=\""
+                    + ": <a href=\"http://localhost:8080/api/client/users/active-account?email="
                     + createEntity.getEmail() 
-                    + "&active_code=\"" + createEntity.getActiveCode()
+                    + "&activeCode=" + createEntity.getActiveCode()
                     + "\">Actice Account</a>";
                 //tiến hành gửi email với các tham số khai báo để xác nhận email
                 emailService.SendEmail(to, subject, content);
@@ -296,6 +298,44 @@ public class UserServiceCL {
     }
 
     
+    
+
+    /* II- 2: Tạo (Get) Service xác nhận kích hoạt account từ thông tin request user gửi lên 
+    email khi tiến hành create account user(service này thực thi xác minh account kích hoạt 
+    lại is_active của account mới create tư 0 thành 1 qua xác minh email) */
+    public ResponseEntity<Map<String, Object>> activeAccount(String email, String activeCode){
+         //khoi tao bien luu ket qua tra ve
+        Map<String, Object> response = new HashMap<>();
+
+        // nhờ repo của user đi tiềm email và active code thông qua method ứng câu lênh query trong sql từ repo
+        Optional<User> optFound = userRepo.findByEmailAndActiveCode(email, activeCode);
+        if(optFound.isPresent()){
+            //nếu tim đc thì kích hoạt tài khoản set isActive thành 1
+            User entityUpdate = optFound.get();
+            entityUpdate.setIsActive(1);
+            
+            //xóa bỏ activeCode đi mã kích hoạt bí mật này xóa đi
+            entityUpdate.setActiveCode(null);
+
+            //save lại trạng thái vừa thay đổi
+            userRepo.save(entityUpdate);
+
+            //trả về kết quả chuẩn restfull
+            response.put("data", entityUpdate);
+            response.put("statuscode", 200);
+            response.put("msg", " active User thanh cong");
+
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        }else{
+            response.put("data", null);
+            response.put("statuscode", 501);
+            response.put("msg", " không kích hoạt đc tài khoản");
+
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 
 
     /*III - Put(Update0*/

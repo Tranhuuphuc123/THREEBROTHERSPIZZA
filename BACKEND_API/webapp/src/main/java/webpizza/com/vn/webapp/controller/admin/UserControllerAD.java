@@ -19,6 +19,15 @@ public class UserControllerAD {
     @Autowired
     private UserServiceAD userServiceAD;
 
+
+    /*************1-1: getall không phân trang**********************/
+    @GetMapping("/listUsers")
+    public ResponseEntity<Map<String, Object>> getAlls(){
+    //gọi đến service thực hiện truy vấn CRUD - cụ thể là getAll dữ liệu mà mình viết logic bên đó
+        return  userServiceAD.getAllUser();
+    }
+
+
     /*************1-1 getall**********************/
     /*  @CrossOrigin(origins = "http://localhost:3000": cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay

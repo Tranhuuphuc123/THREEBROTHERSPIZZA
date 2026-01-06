@@ -12,14 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 import webpizza.com.vn.webapp.service.admin.CategoryServiceAD;
 
 @RestController
-@RequestMapping("api/admin/Categories")
+@RequestMapping("api/admin/categories")
 public class CategoryControllerAD {
     @Autowired
     private CategoryServiceAD categoryServiceAD;
 
-     /* I _  get */
+    /* I _ 0 get khong phân trang */
+    @GetMapping("/listCat")
+    public ResponseEntity<Map<String, Object>> getAllCat(){
+        //gọi service
+        return categoryServiceAD.getAllCategory();
+    }
+
+     /* I _ 1 get */
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getCatIndex(@RequestParam(defaultValue = "1") Integer pageNumber,
+    public ResponseEntity<Map<String, Object>> getAllCatPagination(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                            @RequestParam(defaultValue = "3") Integer pageSize,
                                                            @RequestParam(defaultValue = "id") String sortBy){
         //goi service thuc thi method  getall

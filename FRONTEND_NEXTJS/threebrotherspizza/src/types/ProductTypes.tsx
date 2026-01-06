@@ -20,3 +20,10 @@ export interface ProductTypes {
 export interface CreateProductPropsTypes {
    onReload?: () => void; //? truyền cũng đc mà không cũng đc
 }
+
+
+/**nterface cho kiểu dữ liệu cho page.tsx của edit product -> truyền props cho page *******/
+export interface EditProductPropsTypes {
+    id: number;
+    onReload?: () => void;
+}

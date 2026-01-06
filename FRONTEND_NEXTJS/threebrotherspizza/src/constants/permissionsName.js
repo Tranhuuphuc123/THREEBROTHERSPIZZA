@@ -5,7 +5,6 @@ sau đó dùng nó so sánh khớp quyền đó thì cho phép user đó call đ
 thực thi chức năng đó */
 
 
-
 // Nhóm quyền của table user
 export const USER_VIEW = "user_view"
 export const USER_CREATE = "user_create"
@@ -41,3 +40,9 @@ export const SUPPLIER_VIEW = "supplier_view"
 export const SUPPLIER_CREATE = "supplier_create"
 export const SUPPLIER_EDIT = "supplier_edit"
 export const SUPPLIER_DELTE = "supplier_delete"
+
+//nhom quyen cua table promotions
+export const PROMOTIONS_VIEW = "promotion_view"
+export const PROMOTIONS_CREATE = "promotion_create"
+export const PROMOTIONS_EDIT = "promotion_edit"
+export const PROMOTIONS_DELETE = "promotion_delete"

@@ -3,13 +3,19 @@ package webpizza.com.vn.webapp.service.auoth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /*class này phục vụ công tác xác thực qua gmail
 class này mọi class khác khi cần xác thưc qua gmail
 đều có thể dùng không nhất thiết là một class */
 
+/* annotation Async cấu hình để Spring Boot thực hiện việc 
+gửi mail ở một luồng (thread) riêng. Khi đó, sau khi lưu 
+User vào DB, Backend trả về "Thành công" cho Next.js ngay 
+lập tức, còn việc gửi mail sẽ chạy ngầm bên dưới. */
 @Service
+@Async 
 public class EmailService {
 
     //class JavaMailSender của spring hỗ trợ xác thực qua mail
@@ -29,7 +35,7 @@ public class EmailService {
         //xác nhận gửi email với thiết lặp: to(tới ai) - subject(tiêu đề) - content(nd gì)
         message.setTo(to);
         message.setSubject(subject);
-        message.setCc(content);
+        message.setText(content);
 
         // tiến hành gửi send message đi
         mailSender.send(message);

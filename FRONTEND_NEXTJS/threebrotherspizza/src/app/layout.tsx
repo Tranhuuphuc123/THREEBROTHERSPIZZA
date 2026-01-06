@@ -19,6 +19,7 @@ import ToastProvider from "@/contexts/ToastContext";
 import { ModalProvider } from "@/contexts/ModalContext";
 import BackToTop from "@/components/client/BackToTop";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -48,7 +49,6 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ToastProvider>
           <ModalProvider>{children}</ModalProvider>
-          <BackToTop></BackToTop>
         </ToastProvider>
       </body>
     </html>

@@ -1,6 +1,7 @@
 package webpizza.com.vn.webapp.service.admin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,23 @@ public class CategoryServiceAD {
     @Autowired
     private CategoryRepository categoryRepo;
 
+     /*I _0 - get hien thi không phan trang */
+     public ResponseEntity<Map<String, Object>> getAllCategory(){
+        //khởi tạo biến lưu trữ kết quả trả về
+        Map<String, Object> response = new HashMap();
 
-     /*I _ - get hien thi co phan trang */
+        //b - Yêu câu repository lấy dữ liệu -> gọi đén Repository.mehthod trong crudRepository
+        List<Category> lsCat = (List<Category>) categoryRepo.findAll();
+
+        //c - trả về kết quả cho người dùng -> trả theo chuẩn restFullApi
+        response.put("data", lsCat);
+        response.put("statuscode", 200);
+        response.put("msg", "get all category success!");
+
+        return new ResponseEntity(response, HttpStatus.OK);
+     }
+
+     /*I _1 - get hien thi co phan trang */
     public ResponseEntity<Map<String, Object>> getAllCategoryPagination(int pageNumber, int pageSize, String sortBy){
         //1. khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();

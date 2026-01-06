@@ -14,10 +14,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin/role")
+@RequestMapping("/api/admin/roles")
 public class RoleControllerAD {
     @Autowired
     private RoleServiceAD roleServiceAD;
+
+
+    //get value khong phân trang
+    @GetMapping("/listRoles")
+    public ResponseEntity<Map<String, Object>> getAlls(){
+       //gọi đến service thực hiện truy vấn CRUD - cụ thể là getAll dữ liệu mà mình viết logic bên đó
+		return  roleServiceAD.getRoles();
+    }
+
 
     //getall
      /*  
@@ -33,7 +42,7 @@ public class RoleControllerAD {
                                                       @RequestParam(defaultValue = "3") Integer pageSize,
                                                       @RequestParam(defaultValue = "id") String sortBy){
         // goi service thuc hien truy van hien thi tat ca thong tin cua table user co phan trang
-        return roleServiceAD.getAllRole(pageNumber, pageSize, sortBy);
+        return roleServiceAD.getRolesPagination(pageNumber, pageSize, sortBy);
     }
 
     //create permission

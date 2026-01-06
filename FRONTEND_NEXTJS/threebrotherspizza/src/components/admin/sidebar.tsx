@@ -4,12 +4,18 @@ import { useState, useEffect } from "react";
 
 //import fontAwesomeIcon lấy icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faUser, faBox } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faUser, faBox, faTags, faIndustry, faKey, faIdBadge } from "@fortawesome/free-solid-svg-icons";
 
 /* import constants permissionsName.tsx lấy list tên các quyền cần text
 cho username coi quyền lây đc ở username trong localstorage có khớp với 
 quyền có trong file permissionName.tsx không */
-import {USER_VIEW, USERS_ROLES, ROLES_PERMISSIONS, PRODUCT_VIEW,SUPPLIER_VIEW } from '@/constants/permissionsName'
+import {USER_VIEW, USERS_ROLES, 
+        ROLES_PERMISSIONS, 
+        PRODUCT_VIEW,
+        SUPPLIER_VIEW,
+        PROMOTIONS_VIEW
+      } 
+    from '@/constants/permissionsName'
 
 export default function Sidebar() {
   
@@ -36,6 +42,7 @@ export default function Sidebar() {
   const canViewRoles_Pers = strPermission.includes(ROLES_PERMISSIONS);
   const canViewProducts = strPermission.includes(PRODUCT_VIEW);
   const canViewSupplier = strPermission.includes(SUPPLIER_VIEW);
+  const canViewPromotion = strPermission.includes(PROMOTIONS_VIEW);
 
   /*state trạng thái đảm bảo rằng việc kiểm tra quyền (canCreate) chỉ được thực hiện
    sau khi Client đã tải xong để tránh lệch pha với Server.
@@ -108,7 +115,7 @@ export default function Sidebar() {
           {canViewUsers_Roles && (
               <li className="sidebar-item">
                 <Link href="/admin/User_has_Roles" className="sidebar-link">
-                  <FontAwesomeIcon icon={faUser} className="fa-fw" />
+                  <FontAwesomeIcon icon={faIdBadge} className="fa-fw" />
                   Users_Roles
                 </Link>
               </li>
@@ -118,7 +125,7 @@ export default function Sidebar() {
           {canViewRoles_Pers && (
               <li className="sidebar-item">
                 <Link href="/admin/Authorization" className="sidebar-link">
-                  <FontAwesomeIcon icon={faUser} className="fa-fw" />
+                  <FontAwesomeIcon icon={faKey} className="fa-fw" />
                 Authorizations
                 </Link>
               </li>
@@ -134,12 +141,22 @@ export default function Sidebar() {
             </li>
           )}
 
-           {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
+          {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
           {canViewSupplier && (
              <li className="sidebar-item">
               <Link href="/admin/suppliers" className="sidebar-link">
-                <FontAwesomeIcon icon={faBox} className="fa-fw" />
+                <FontAwesomeIcon icon={faIndustry} className="fa-fw" />
                 Suppliers
+              </Link>
+            </li>
+          )}
+
+          {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
+          {canViewPromotion && (
+             <li className="sidebar-item">
+              <Link href="/admin/suppliers" className="sidebar-link">
+                <FontAwesomeIcon icon={faTags} className="fa-fw" />
+                Promotion
               </Link>
             </li>
           )}

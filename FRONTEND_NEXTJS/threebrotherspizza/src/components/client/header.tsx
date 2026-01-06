@@ -161,7 +161,8 @@ export default function Header() {
   }, []);
 
   /***Hàm kiểm tra role là admin/Employee:cashier**/
-  const canAccessAdmin = userRole?.includes("admin") || userRole?.includes("cashier");
+  const canAccessAdmin = userRole?.includes("admin") || userRole?.includes("cashier") 
+                                                     || userRole?.includes("manager");
 
   /* useEffect để đóng modal khi chuyển trang */
   useEffect(() => {

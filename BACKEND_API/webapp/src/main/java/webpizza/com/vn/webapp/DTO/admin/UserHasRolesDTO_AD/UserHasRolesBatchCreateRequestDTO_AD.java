@@ -15,5 +15,5 @@ public class UserHasRolesBatchCreateRequestDTO_AD {
     private Integer userId;
 
     @NotNull(message = "con cec may de trong ta odam may")
-    private List<Integer> listRoleId;
+    private List<Integer> roleIds;
 }

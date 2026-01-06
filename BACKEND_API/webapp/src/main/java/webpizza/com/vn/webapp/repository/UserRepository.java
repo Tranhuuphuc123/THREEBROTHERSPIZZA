@@ -1,14 +1,14 @@
 package webpizza.com.vn.webapp.repository;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import webpizza.com.vn.webapp.entity.User;
 
 @Repository
-public interface UserRepository  extends CrudRepository<User, Integer>,
-        PagingAndSortingRepository<User, Integer> {
+public interface UserRepository  extends JpaRepository<User, Integer> {
 
     // Tìm user theo username
     User findByUsername(String userName);
@@ -50,4 +50,17 @@ public interface UserRepository  extends CrudRepository<User, Integer>,
         WHERE u.username = :username
         """)    
     User findByUsernameWithRoles(String username);
+
+
+    /***method này là câu lệnh sql truy vấn từ table user theo đk phải khớp email 
+     * và activeCode có tồn tại 
+     * --> phục vụ mục đích truy vấn lôi hai email và activeCode của user khi create xong
+     * nhằm để email thấy và kiểm tra khớp xác minh là có thì tiến hành active account vừa 
+     * tạo để kích hoạt is_active của user từ 0 thành 1 kích hoạt tài khoản*/
+    // @Query("""
+        
+    //     """)
+    Optional<User> findByEmailAndActiveCode(String email, String activeCode);
+
+
 }

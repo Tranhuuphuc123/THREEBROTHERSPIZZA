@@ -7,7 +7,6 @@ export interface PermissionTypes {
     module_name?: string; 
 }
 
-
 export interface ModuleGroup { 
     id: string; 
     name: string; 
@@ -18,4 +17,12 @@ export interface ModuleGroup {
 export interface Role { 
     id: number; 
     name: string; 
+     display_name?: string; 
+}
+
+
+export interface UserTypes{
+    id: number, 
+    username:string,
+    display_name?: string; 
 }

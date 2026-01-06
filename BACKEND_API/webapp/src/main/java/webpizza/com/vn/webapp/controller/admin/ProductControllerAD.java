@@ -26,11 +26,11 @@ public class ProductControllerAD {
     @Autowired
     private ProductServiceAD productServiceAD;
 
-    /* I _  get */
+    /* I _get có phân trang */
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getSupIndex(@RequestParam(defaultValue = "1") Integer pageNumber,
-                                                           @RequestParam(defaultValue = "3") Integer pageSize,
-                                                           @RequestParam(defaultValue = "id") String sortBy){
+    public ResponseEntity<Map<String, Object>> getAllProPagination(@RequestParam(defaultValue = "1") Integer pageNumber,
+                                                                   @RequestParam(defaultValue = "3") Integer pageSize,
+                                                                   @RequestParam(defaultValue = "id") String sortBy){
         //goi service thuc thi method  getall
         return productServiceAD.getAllProductPagination(pageNumber,pageSize, sortBy);                                                         
     }

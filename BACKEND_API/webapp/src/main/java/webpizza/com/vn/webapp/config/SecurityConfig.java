@@ -103,7 +103,11 @@ public class SecurityConfig {
                                 "/swagger-ui/**",  //cho phep api swagger dc phep qua cong an ninh security
                                 "/v3/api-docs/**",  //cho phep api docs cua swagger dc phep qua cong an ninh
                                 "/api/auth/**", // cho phép api của phần login auth             
-                                "/uploads/**"
+                                "/uploads/**", //cho phép ảnh đc public không cần kiểm tra api này
+                                "/api/admin/products/**", //cho phép quyền xem api sản phẩm không cần kiểm tra api này
+                                "/api/admin/products/{id}/**", //cho phép quyền tìm kiếm sản phẩm theo id không càn kiểm tra api này
+                                "/api/client/users/create/**", //cho phép create tài khoản khong cần kiểm tra api này
+                                "/api/client/users/active-account/**" //cho phép xác thực tài khoản qua gmail không cần ktra api này
                         )
                         .permitAll()  //cho phep truy cap ma khong can kiem tra
                         // Quan trọng: Phải cho phép OPTIONS request (Preflight) đi qua không cần token

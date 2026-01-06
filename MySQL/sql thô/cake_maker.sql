@@ -13,17 +13,15 @@ select * from permissions;
 select * from users_roles;
 select * from roles_permissions;
 
-
 select * from categories;
 select * from products;
 select * from promotions;
-
+select * from salary_levels;
 -- show value: name và type trong table chỉ định cụ thể
 -- show create table products;
 -- lệnh tắt kiểm tra khóa ngoại 
 -- set foreign_key_checks = 0;
-
-
+-- delete from users_roles where id in (12,13)
 CREATE TABLE suppliers (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
   code VARCHAR(500) NOT NULL,

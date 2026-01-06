@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -46,6 +47,22 @@ public class UserServiceAD {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
+      /*I_0 -  GET ->lay va do du lieu khong phan trang*/
+    public ResponseEntity<Map<String, Object>> getAllUser() {
+        //khởi tạo biến lưu trữ kết quả trả về
+        Map<String, Object> response = new HashMap();
+
+        //b - Yêu câu repository lấy dữ liệu -> gọi đén Repository.mehthod trong crudRepository
+        List<User> lsUsers = (List<User>) userRepo.findAll();
+
+        //c - trả về kết quả cho người dùng -> trả theo chuẩn restFullApi
+        response.put("data", lsUsers);
+        response.put("statuscode", 200);
+        response.put("msg", "get dữ liệu thành công");
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+    
     /*I_1 -  GET ->lay va do du lieu co phan trang*/
     public ResponseEntity<Map<String, Object>> getAllUserPagination(int pageNumber, int pageSize, String sortby){
         //a - khoi tao bien respone luu tru ket qua tra ve
