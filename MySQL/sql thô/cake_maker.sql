@@ -17,6 +17,7 @@ select * from categories;
 select * from products;
 select * from promotions;
 select * from salary_levels;
+
 -- show value: name và type trong table chỉ định cụ thể
 -- show create table products;
 -- lệnh tắt kiểm tra khóa ngoại 
