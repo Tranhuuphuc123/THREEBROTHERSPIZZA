@@ -21,10 +21,10 @@ public class SalaryLevels {
     private int id;
 
     @Column(name = "level_name")
-    private String levelname;
+    private String levelName;
 
     @Column(name = "hourly_wage")
-    private float hourlywage;
+    private float hourlyWage;
 
     @Column(name = "description")
     private String description;
