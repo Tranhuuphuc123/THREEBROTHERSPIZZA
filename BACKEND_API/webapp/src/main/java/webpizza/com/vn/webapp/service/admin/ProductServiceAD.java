@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -114,6 +115,27 @@ public class ProductServiceAD {
 
 
 
+    /***I_3: get all product theo product type *****
+     * --> phục vụ chức năng đổ api product có phân loại lên trang homepage, product 
+     * bên client giao diện người dùng
+     * */
+    public ResponseEntity<Map<String, Object>> getProductsByProductType(String productType) {
+        Map<String, Object> response = new HashMap<>();
+        
+        // Chỉ lấy những sản phẩm đang hoạt động (isActive = 1)
+        List<Product> list = productRepo.findByProductType(productType, 1);
+        
+        if(!list.isEmpty()) {
+            response.put("data", list);
+            response.put("statuscode", 200);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.put("msg", "No find data!");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
      /*II - Post(create)*/
     //MultipartFile: la mot interface trong spring, dc su dung de xu ly cac tep files -> dc upload thog qua giao thuc HTTP request
     public ResponseEntity<Map<String, Object>> createProduct(ProductCreateRequestDTOAD objCreate, MultipartFile file){
@@ -184,6 +206,7 @@ public class ProductServiceAD {
             }
 
             newEntity.setCategoryId(objCreate.getCategoryId());
+            newEntity.setProductType(objCreate.getProductType());
 
             //goi repo lưu vao csdl
             Product createProEntity = productRepo.save(newEntity);
@@ -311,6 +334,9 @@ public class ProductServiceAD {
             }
             if(objUpdate.getCategoryId() != null){
                 proEntity.setCategoryId(objUpdate.getCategoryId());
+            }
+            if(objUpdate.getProductType() != null){
+                proEntity.setProductType(objUpdate.getProductType());
             }
 
             //nho rep update(save lai)

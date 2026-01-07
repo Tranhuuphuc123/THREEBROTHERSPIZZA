@@ -26,7 +26,7 @@ public class ProductControllerAD {
     @Autowired
     private ProductServiceAD productServiceAD;
 
-    /* I _get có phân trang */
+    /* I _0 get có phân trang */
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllProPagination(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                                    @RequestParam(defaultValue = "3") Integer pageSize,
@@ -36,11 +36,19 @@ public class ProductControllerAD {
     }
 
      
-    /***************** 1-2: getById *******************/
+    /****I_1: getById **/
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
         //yeu cau service tra  ve id
         return productServiceAD.getById(id);
+    }
+
+    
+    /* I _2 get tất cả product theo product type phục vụ chức năng 
+    dổ api lên trang homepage, product, product detail ở trên NextJs */
+    @GetMapping("/client-list")
+    public ResponseEntity<Map<String, Object>> getListForClient(@RequestParam String productType) {
+        return productServiceAD.getProductsByProductType(productType);
     }
 
 

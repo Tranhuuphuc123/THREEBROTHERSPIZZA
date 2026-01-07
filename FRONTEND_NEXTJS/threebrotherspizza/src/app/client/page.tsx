@@ -17,13 +17,8 @@ chạy ở Trình duyệt (Client) thay vì chạy ở Server.
 /* xin chao cac ban minh la body Homepage cua client layout hehehe */
 import {
   Carousel,
-  Col,
   Container,
   Row,
-  Image,
-  Tabs,
-  Tab,
-  Card,
   Button,
 } from "react-bootstrap";
 import CarouselItem from "react-bootstrap/CarouselItem";
@@ -31,16 +26,47 @@ import CarouselCaption from "react-bootstrap/CarouselCaption";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {} from "@fortawesome/free-solid-svg-icons";
-import SwiperProduct from "@/components/client/swiperproduct";
+import { ProductCard } from "@/components/client/ProductCard";
 import Link from "next/link";
-import ChooseProduct from "@/components/client/chooseproduct";
-import Referfriendbanner from "@/components/client/referfriendbanner";
-import SwiperEducation from "@/components/client/swipereducation";
-import OrderBanner from "@/components/client/orderbanner";
-import BackToTop from "@/components/client/BackToTop";
 
 /* phan body cua homepage cuar client page layout */
 export default function HomePage() {
+
+  // Giả lập dữ liệu cho từng nhóm sản phẩm
+  const comboData = [
+    { id: 101, name: "Combo Gia Đình 1", description: "1 Pizza L, 1 Mì Ý, 4 Nước ngọt", price: "399.000đ", image: "/assets/client/img/combo/combo1.png", tag: "Hot" },
+    { id: 102, name: "Combo Bạn Bè", description: "2 Pizza M, 1 Khoai tây chiên", price: "299.000đ", image: "/assets/client/img/combo/combo2.jpg" },
+    { id: 103, name: "Combo Tiết Kiệm", description: "1 Pizza M, 2 Nước ngọt", price: "199.000đ", image: "/assets/client/img/combo/combo2.jpg" },
+    { id: 104, name: "Combo Độc Thân", description: "1 Pizza S, 1 Nước ngọt", price: "129.000đ", image: "/assets/client/img/combo/combo3.jpg" },
+  ];
+
+  const pizzaData = [
+    { id: 1, name: "Pizza Hải Sản Đào", description: "Tôm, thanh cua, xốt xào Đào...", price: "179.000đ", image: "/assets/client/img/pizzaCake/cheese.jpg", tag: "Mới" },
+    { id: 2, name: "Pizza 4 Cheese", description: "4 loại phô mai hảo hạng...", price: "169.000đ", image: "/assets/client/img/pizzaCake/pepperoni.jpg" },
+    { id: 3, name: "Pizza Xúc Xích", description: "Xúc xích Pepperoni đậm đà...", price: "159.000đ", image: "/assets/client/img/pizzaCake/cheese.jpg" },
+    { id: 4, name: "Pizza Rau Củ", description: "Nấm, ớt chuông, cà chua...", price: "149.000đ", image: "/assets/client/img/pizzaCake/seafoodpizza_shrimp.jpg" },
+  ];
+
+  // Render Section Helper để code ngắn gọn
+  const ProductSection = ({ title, data }: { title: string, data: any[] }) => (
+    <Container className="mb-5">
+      <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h2 className="fs-3 fw-bold text-dark mb-0">{title}</h2>
+        <Link href="/client/products" passHref>
+          <Button variant="link" className="text-danger fw-bold text-decoration-none">
+            View All
+          </Button>
+        </Link>
+      </div>
+      <Row className="g-4">
+        {data.map((item) => (
+          <ProductCard key={item.id} data={item} />
+        ))}
+      </Row>
+    </Container>
+  );
+
+  
   return (
     <>
       {/* Carousel */}
@@ -86,149 +112,27 @@ export default function HomePage() {
       </Carousel>
 
 
-      {/* phan body  */}
-      <main className=" my-5 flex-grow-1 ">
+      <main className="py-5">
+        {/* HÀNG 1: COMBO & KHUYẾN MÃI */}
+        <section className="promo-section bg-light py-5 mb-5">
+            <ProductSection title="🔥 COMBO KHUYẾN MÃI" data={comboData} />
+        </section>
 
-        {/*phần reliable shipping */}
-        <Container
-          fluid
-          style={{ backgroundColor: "#F2F6F4" }}
-          className="py-5 px-5"
-        >
-          <Row className="text-start py-4">
-            <Col lg={4} md={6} className="d-flex align-items-start">
-              <Image src="/globe.svg" width={40} height={40} className="me-5" />
-              <div>
-                <h5 className="fw-bold mb-4 ">Reliable Shipping</h5>
-                <p className="text-muted fs-6 fw-semi-bold">
-                  Green Society provides Canada Post Xpress Shipping right to
-                  your doorstep! You can also opt in for shipping insurance. For
-                  orders over $149, shipping is free!
-                </p>
-              </div>
-            </Col>
-            <Col lg={4} md={6} className="d-flex align-items-start">
-              <Image
-                src="/window.svg"
-                width={40}
-                height={40}
-                className="me-5"
-              />
-              <div>
-                <h5 className="fw-bold mb-4 ">You’re Safe With Us</h5>
-                <p className="text-muted fs-6 fw-semi-bold">
-                  Our secure payment system accepts the most common forms of
-                  payments making the checkout process quicker! The payments we
-                  accept are debit, all major credit cards, and cryptocurrency.
-                </p>
-              </div>
-            </Col>
-            <Col lg={4} md={6} className="d-flex align-items-start">
-              <Image src="/file.svg" width={40} height={40} className="me-5" />
-              <div>
-                <h5 className="fw-bold mb-4 ">Best Quality & Pricing</h5>
-                <p className="text-muted fs-6 fw-semi-bold">
-                  Here at Green Society, we take pride in the quality of our
-                  products and service. Our prices are set to ensure you receive
-                  your medication at a reasonable price and safely
-                </p>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+        {/* HÀNG 2: PIZZA */}
+        <section className="mb-5">
+            <ProductSection title="🍕 PIZZA NÓNG HỔI" data={pizzaData} />
+        </section>
 
-        {/* BEST DISPENSARY TO BUY WEED ONLINE IN CANADA */}
-        <Container className="text-center my-5 d-flex flex-column align-items-center">
-          <h1
-            className="text-center fw-bold mt-5"
-            style={{ fontSize: "30px" }}
-          >
-            BEST DISPENSARY TO BUY WEED ONLINE IN CANADA
-          </h1>
-           <Row>
-                <Col lg={4} className="">
-                  <Card
-                    className="d-flex align-items-center border h-100"
-                    style={{ backgroundColor: "#114B36" }}
-                  >
-                    <Card.Img
-                      className="mt-5"
-                      variant="top"
-                      style={{
-                        width: "120px",
-                        height: "120px",
-                      }}
-                      src="/products/product_1.png"
-                    />
-                    <Card.Body className="text-white text-center mx-5 mt-3 mb-5">
-                      <Card.Title className="fw-bold fs-4">
-                        Shop our Best Sellers
-                      </Card.Title>
-                      <Card.Text className=" fs-6 fw-lighter mx-3">
-                        Lorem ipsum dolor sit amet consectetur. Ullamcorper
-                        ipsum varius lorem blandit lectus magnis feugiat.
-                      </Card.Text>
-                      <Link
-                        className="text-decoration-underline"
-                        style={{ color: "#17AF26" }}
-                        href="#"
-                      >
-                        View All
-                      </Link>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col lg={8}>
-                  <SwiperProduct />
-                </Col>
-              </Row>
+        {/* HÀNG 3: MÌ Ý (PASTA) */}
+        <section className="mb-5">
+            {/* Truyền dữ liệu mì ý vào đây (tạm dùng pizzaData để demo) */}
+            <ProductSection title="🍝 MÌ Ý & CƠM" data={pizzaData.slice(0, 4)} />
+        </section>
 
-        </Container>
-
-        {/* choose your weed */}
-        <Container className="text-start py-5">
-          <h1
-            className="text-start fw-bold w-75 py-5"
-            style={{ fontSize: "40px" }}
-          >
-            CHOOSE YOUR WEED
-          </h1>
-
-          {/* tab */}
-          <div>
-            <h5 className="pe-4 mb-1 fw-semibold ">Filter by Interest</h5>
-            <div>
-              <Tabs
-                defaultActiveKey="flowers"
-                id="uncontrolled-tab-example"
-                className="w-75 "
-              >
-                <Tab eventKey="flowers" title="Flowers">
-                  <ChooseProduct></ChooseProduct>
-                </Tab>
-                <Tab eventKey="mushrooms" title="Mushrooms">
-                  <ChooseProduct></ChooseProduct>
-                </Tab>
-                <Tab eventKey="concentrate" title="Concentrate">
-                  <ChooseProduct></ChooseProduct>
-                </Tab>
-                <Tab eventKey="edibles" title="Edibles">
-                  <ChooseProduct></ChooseProduct>
-                </Tab>
-                <Tab eventKey="shopallweed" title="Shop All Weed">
-                  <ChooseProduct></ChooseProduct>
-                </Tab>
-              </Tabs>
-            </div>
-          </div>
-        </Container>
-
-     
-
-     
-
-        {/* banner order */}
-        <OrderBanner></OrderBanner>
+        {/* HÀNG 4: THỨC UỐNG */}
+        <section className="mb-5">
+             <ProductSection title="🥤 THỨC UỐNG" data={pizzaData.slice(0, 4)} />
+        </section>
       </main>
     </>
   );
