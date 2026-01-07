@@ -24,7 +24,7 @@ public class SalaryLevels {
     private String levelName;
 
     @Column(name = "hourly_wage")
-    private float hourlyWage;
+    private Float hourlyWage;
 
     @Column(name = "description")
     private String description;

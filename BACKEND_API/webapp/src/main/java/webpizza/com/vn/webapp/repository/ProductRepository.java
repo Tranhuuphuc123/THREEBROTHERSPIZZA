@@ -19,6 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
     * phục vụ chức năng đổ value lên giao diện homepage ở product card 
     * và đẩy value vào các trang product, product detail
     * **/
-    List<Product> findByProductType(String productType, Integer isActive);
+    //List<Product> findByProductType(String productType, Integer isActive);
 
 }

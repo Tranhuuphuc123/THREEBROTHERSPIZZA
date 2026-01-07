@@ -37,7 +37,7 @@ public class SalaryLevelServiceAD {
             //tra ve ket qua cho nguoi dung theo chuan restfull api 
             response.put("data", pageResult.getContent());
             response.put("statuscode", 201);
-            response.put("msg", "get du lieu thanh cong oh yeah da qua xa da");
+            response.put("msg", "get data success !");
 
             response.put("currentpage", pageNumber);
             response.put("isFirst", pageResult.isFirst());
@@ -51,7 +51,7 @@ public class SalaryLevelServiceAD {
         }else{
             response.put("data", null);
             response.put("statuscode", 404);
-            response.put("msg", "la du lieu khong co ");
+            response.put("msg", "get data failed ! ");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -88,43 +88,14 @@ public class SalaryLevelServiceAD {
 
 
     /*II - create */
-    public ResponseEntity<Map<String, Object>> createSalaryLevel(SalaryLevelCreateRequestDTO_AD objCreate, MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> createSalaryLevel(SalaryLevelCreateRequestDTO_AD objCreate) {
         Map<String, Object> response = new HashMap<>();
-        // String newFile = null;
-
-        // if (file != null && !file.isEmpty()) {
-        //     try {
-        //         // 1. Lấy tên file an toàn
-        //         String iso_8601 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        //         newFile = iso_8601 + "_" + file.getOriginalFilename();
-
-        //         // 2. Thiết lập đường dẫn lưu trữ (Dùng Path cho hiện đại và chính xác)
-        //         String rootFolder = System.getProperty("user.dir"); // Lấy thư mục gốc project
-        //         Path uploadPath = Paths.get(rootFolder, uploadDir); // Nối với biến uploadDir (ví dụ: "uploads")
-
-        //         // 3. Tạo thư mục nếu chưa tồn tại
-        //         if (!Files.exists(uploadPath)) {
-        //             Files.createDirectories(uploadPath);
-        //         }
-
-        //         // 4. Đường dẫn đầy đủ của file ảnh
-        //         Path filePath = uploadPath.resolve(newFile);
-
-        //         // 5. Ghi "ruột ảnh" xuống ổ đĩa
-        //         file.transferTo(filePath.toFile());
-
-        //     } catch (IOException e) {
-        //         e.printStackTrace();
-        //         response.put("msg", "Lỗi khi lưu file: " + e.getMessage());
-        //         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        //     }
-        // }
 
         try {
             // Khởi tạo và gán giá trị Entity
             SalaryLevels salaryLevel = new SalaryLevels();
+
             salaryLevel.setLevelName(objCreate.getLevelName());
-            // sup.setImg(newFile);
             salaryLevel.setHourlyWage(objCreate.getHourlyWage());
             salaryLevel.setDescription(objCreate.getDescription());
 
@@ -133,13 +104,13 @@ public class SalaryLevelServiceAD {
 
             response.put("data", createSalaryLevelEntity);
             response.put("statuscode", 200);
-            response.put("msg", "Create thành công");
+            response.put("msg", "Create sucess !");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
 
         } catch (Exception e) {
             response.put("data", null);
             response.put("statuscode", 500);
-            response.put("msg", "Lỗi database: " + e.getMessage());
+            response.put("msg", "wrong database: " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -157,18 +128,6 @@ public class SalaryLevelServiceAD {
         if(optFound.isPresent()){
             //gan nhan id do cho trg do dugn tren csdl
             SalaryLevels salaryLevelEntityGetByID = optFound.get();
-
-            /*xu ly tien hanh xoa ruot anh ung voi taikhoan cua anh do*/
-            // String rootFolder = Paths.get("").toAbsolutePath().toString();
-            // Path filePath = Path.of(rootFolder + File.separator + uploadDir + File.separator + supEntityGetByID.getImg());
-
-            /*tien hanh xoa anh cu neu ton tai*/
-            //  try{
-            //     //tien hanh deleteIfExits co ton tai no moi xoa
-            //     Files.deleteIfExists(filePath);
-            // }catch (IOException e){
-            //     e.printStackTrace();
-            // }
 
              //nho repository xoa dat r
             salaryLevelRepo.delete((salaryLevelEntityGetByID));
@@ -190,7 +149,7 @@ public class SalaryLevelServiceAD {
 
 
     /* IV_ UPDATE */
-    public ResponseEntity<Map<String, Object>> updateSupplier(Integer id, SalaryLevelUpdateRequestDTO_AD objUpdate, MultipartFile file){
+    public ResponseEntity<Map<String, Object>> updateSupplier(Integer id, SalaryLevelUpdateRequestDTO_AD objUpdate){
         //1. tao bien luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
@@ -213,57 +172,18 @@ public class SalaryLevelServiceAD {
                 salaryLevelEntity.setDescription((objUpdate.getDescription()));
             }
 
-            //xu ly trg img
-            // if(file != null && !file.isEmpty()){
-            //     try{
-            //         //su dung datetime luu ten anh theo gio phut giay + ten img: tranh bi trung lap
-            //         String randomString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-            //         //tiet lap file path lay dung ten goc o dia luu folder trong project
-            //         String rootFolder = Paths.get("").toAbsolutePath().toString();
-            //         //tao duong dan xu ly luu file
-            //         String newFile = randomString + "_" + file.getOriginalFilename();
-            //         String filePath = rootFolder + File.separator + uploadDir + File.separator + newFile;
-
-            //         //tien hanh lay ruot anh
-            //         File destinatinFile = new File(filePath);
-            //         //tien hanh tao folder uploads trong project neu no khong ton tai
-            //         destinatinFile.getParentFile().mkdirs();
-            //         file.transferTo(destinatinFile);
-
-            //         //xoa anh cu(chi xoa neu ten anh cu ton tai)
-            //         if(supEntity.getImg() != null && !supEntity.getImg().isEmpty()){
-            //             Path delPath = Paths.get(rootFolder, uploadDir, supEntity.getImg());
-            //             Files.deleteIfExists(delPath);
-            //         }
-
-            //         supEntity.setImg(newFile);
-            //     }catch(IOException e ){
-            //         System.err.println("loi xu ly file: " + e.getMessage());
-            //     }
-            // }
-
-            // if(objUpdate.getPhone() != null){
-            //     supEntity.setPhone((objUpdate.getPhone()));
-            // }
-            // if(objUpdate.getAddress() != null){
-            //     supEntity.setAddress((objUpdate.getAddress()));
-            // }
-            // if(objUpdate.getDescription() != null){
-            //     supEntity.setDescription((objUpdate.getDescription()));
-            // }
-
             //nho rep update(save lai)
             salaryLevelRepo.save(salaryLevelEntity);
 
             response.put("data",salaryLevelEntity );
             response.put("statuscode", 200);
-            response.put("msg", "update thanh cong");
+            response.put("msg", "update sucess !");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             response.put("data",null );
             response.put("statuscode", 404);
-            response.put("msg", "update khong thanh cong");
+            response.put("msg", "update failed !");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }

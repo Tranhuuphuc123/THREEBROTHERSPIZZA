@@ -14,10 +14,8 @@ public class SalaryLevelCreateRequestDTO_AD {
     private String levelName;
 
     @NotNull(message = "ai cho may de trong")
-    private float hourlyWage;
+    private Float hourlyWage;
 
     @NotBlank(message = "ai cho may de trong")
     private String description;
-
-
 }

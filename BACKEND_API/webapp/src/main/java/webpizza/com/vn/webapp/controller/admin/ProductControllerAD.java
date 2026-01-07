@@ -46,10 +46,10 @@ public class ProductControllerAD {
     
     /* I _2 get tất cả product theo product type phục vụ chức năng 
     dổ api lên trang homepage, product, product detail ở trên NextJs */
-    @GetMapping("/client-list")
-    public ResponseEntity<Map<String, Object>> getListForClient(@RequestParam String productType) {
-        return productServiceAD.getProductsByProductType(productType);
-    }
+    // @GetMapping("/client-list")
+    // public ResponseEntity<Map<String, Object>> getListForClient(@RequestParam String productType) {
+    //     return productServiceAD.getProductsByProductType(productType);
+    // }
 
 
      /* II - create */

@@ -37,13 +37,29 @@ public class SupplierServiceAD {
     private String uploadDir;
 
     /*I _ - get hien thi co phan trang */
-    public ResponseEntity<Map<String, Object>> getAllSupplierPagination(int pageNumber, int pageSize, String sortBy){
+    public ResponseEntity<Map<String, Object>> getAllSupplierPagination(int pageNumber, 
+                                                                        int pageSize, 
+                                                                        String sortBy,
+                                                                        String searchTerm){
         //1. khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
         //1. yeu cau repository lay du dieu - co xu ly phan trang
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(sortBy));
         Page<Supplier> pageResult = supplierRepo.findAll(pageable);
+
+        /* them dieu kien cho chuc nang tim keim
+         + khi search thi khong cos phan trang khi hien thi value
+         + khong search thi hien thi phan trang binh thuong
+        */
+       if(searchTerm == null || searchTerm.isEmpty()){
+        pageResult = supplierRepo.findAll(pageable);
+       }else{
+         //co yeu cau tim kiem thi tien hanh xoa phan trang di ma hien  thi value bt
+         pageResult = supplierRepo.findBySearchContains(searchTerm.toLowerCase(), 
+                                                        searchTerm.toLowerCase(), 
+                                                        pageable);
+       }
 
         if(pageResult.hasContent()){
             //tra ve ket qua cho nguoi dung theo chuan restfull api 

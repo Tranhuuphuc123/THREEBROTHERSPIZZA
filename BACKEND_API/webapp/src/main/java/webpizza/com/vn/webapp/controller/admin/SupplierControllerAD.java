@@ -38,9 +38,10 @@ public class SupplierControllerAD {
     @GetMapping
     public ResponseEntity<Map<String, Object>> getSupIndex(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                            @RequestParam(defaultValue = "3") Integer pageSize,
-                                                           @RequestParam(defaultValue = "id") String sortBy){
+                                                           @RequestParam(defaultValue = "id") String sortBy,
+                                                           @RequestParam(required = false) String search){
         //goi service thuc thi method  getall
-        return supplierServiceAD.getAllSupplierPagination(pageNumber,pageSize, sortBy);                                                         
+        return supplierServiceAD.getAllSupplierPagination(pageNumber,pageSize, sortBy, search);                                                         
     }
 
     

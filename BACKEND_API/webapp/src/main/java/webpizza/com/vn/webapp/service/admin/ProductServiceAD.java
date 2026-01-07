@@ -119,21 +119,21 @@ public class ProductServiceAD {
      * --> phục vụ chức năng đổ api product có phân loại lên trang homepage, product 
      * bên client giao diện người dùng
      * */
-    public ResponseEntity<Map<String, Object>> getProductsByProductType(String productType) {
-        Map<String, Object> response = new HashMap<>();
+    // public ResponseEntity<Map<String, Object>> getProductsByProductType(String productType) {
+    //     Map<String, Object> response = new HashMap<>();
         
-        // Chỉ lấy những sản phẩm đang hoạt động (isActive = 1)
-        List<Product> list = productRepo.findByProductType(productType, 1);
+    //     // Chỉ lấy những sản phẩm đang hoạt động (isActive = 1)
+    //     List<Product> list = productRepo.findByProductType(productType, 1);
         
-        if(!list.isEmpty()) {
-            response.put("data", list);
-            response.put("statuscode", 200);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            response.put("msg", "No find data!");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-    }
+    //     if(!list.isEmpty()) {
+    //         response.put("data", list);
+    //         response.put("statuscode", 200);
+    //         return new ResponseEntity<>(response, HttpStatus.OK);
+    //     } else {
+    //         response.put("msg", "No find data!");
+    //         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    //     }
+    // }
 
 
      /*II - Post(create)*/
