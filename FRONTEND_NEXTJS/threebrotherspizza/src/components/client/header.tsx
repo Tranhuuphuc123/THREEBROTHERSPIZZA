@@ -17,7 +17,7 @@ import {
 } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {} from "@fortawesome/free-solid-svg-icons";
+import {faCartShopping} from "@fortawesome/free-solid-svg-icons";
 
 //import lib modal va cac lib lien quan xu ly modal context cho form login
 import Modal from "react-bootstrap/Modal";
@@ -184,7 +184,11 @@ export default function Header() {
       >
         <Container>
           <NavbarBrand as={Link} href="/" className="fw-bold text-warning">
-            👑 THREEBROTHER'S PIZZA
+            <Image src= "/assets/admin/img/threebrotherpizzalogo.jpg" 
+                  width={20} 
+                  height={20} 
+                  className="mx-1 mb-1"/>
+            THREEBROTHER'S PIZZA
           </NavbarBrand>
           <NavbarToggle aria-controls="navbarNav" />
 
@@ -206,6 +210,8 @@ export default function Header() {
                 Product
               </NavLink>
 
+
+            {/* KHỐI XỬ LÝ SIGN IN / USER DROPDOWN */}
               {/* xu ly handle event click button dangnhap -> modal context form login 
                => dùng toán tử 3 ngôi kiểm tra state {!isLoggedIn ? (<button đăng nhập>): (<form giao diện accounts>)
                <=> nghĩa là kiểm tra token chưa cho là false thì !false = true thỏa đk thì hiện nút đăng nhập
@@ -244,7 +250,19 @@ export default function Header() {
                         )}
                       </DropdownMenu>
                     </Dropdown>
-                )}              
+                )} 
+
+
+                {/* --- PHẦN THÊM MỚI: CARD GIỎ HÀNG NẰM SÁT BÊN PHẢI --- */}
+                <Link href="" className="ms-lg-3 d-flex align-items-center text-decoration-none">
+                  <div className="cart-pill" style={{ marginLeft: "40px" }}>
+                    <FontAwesomeIcon icon={faCartShopping} className="cart-icon-fa" />
+                    <span className="cart-label">Giỏ hàng</span>
+                    <span className="cart-count">0</span>
+                  </div>
+                </Link>
+                {/* --- HẾT PHẦN GIỎ HÀNG--- */}            
+
             </Nav>
           </NavbarCollapse>
         </Container>
@@ -260,5 +278,6 @@ export default function Header() {
         </Modal.Body>
       </Modal>
     </>
+    
   );
 }

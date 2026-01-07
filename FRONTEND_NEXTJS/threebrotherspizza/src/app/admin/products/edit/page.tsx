@@ -25,6 +25,7 @@ const EditModal: React.FC<EditProductPropsTypes> = ({ id, onReload }) => {
     const [quantity, setQuantity] = useState<number>(0);
     const [isActive, setIsActive] = useState<number>(1);
     const [categoryId, setCategoryId] = useState<number | null>(null);
+    const [productType, setProductType] = useState<string>('');
 
     //khởi tạo toastcontext
     const { showToast } = useToast();
@@ -64,6 +65,9 @@ const EditModal: React.FC<EditProductPropsTypes> = ({ id, onReload }) => {
                 quantity: Number(quantity),
                 isActive: Number(isActive),
                 categoryId: categoryId ? Number(categoryId) : null,
+
+                //nếu chọn notype trong select khi nhấn submit thi nó lưu là null
+                productType: productType === 'No type' || productType === '' ? null : productType
             };
 
             formData.append('data', JSON.stringify(updateData));
@@ -122,6 +126,9 @@ const EditModal: React.FC<EditProductPropsTypes> = ({ id, onReload }) => {
                     setQuantity(Number(data.quantity));
                     setIsActive(data.isActive ?? 1);
                     setCategoryId(data.categoryId ? Number(data.categoryId) : null);
+
+                    //HIỂN THỊ ĐÚNG DỮ LIỆU CŨ TRÊN SELECT
+                    setProductType(data.productType ?? "");
                 }
             } catch (error) {
                 console.error("Load data failed!", error);
@@ -210,6 +217,28 @@ const EditModal: React.FC<EditProductPropsTypes> = ({ id, onReload }) => {
                             ))}
                         </select>
                     </div>
+
+                    {/* THÊM TRƯỜNG PRODUCT TYPE Ở ĐÂY */}
+                    <div className="mb-3">
+                        <label className="form-label fw-bold">Product Type</label>
+                        <select 
+                            className="form-select" 
+                            value={productType}
+                            onChange={(e) => setProductType(e.target.value)}
+                            required
+                        >
+                            <option value="">-- Select Product Type --</option>
+                            <option value="No type">No type</option>
+                            <option value="pizza cake traditional">Pizza Cake Traditional</option>
+                            <option value="pizza cake seafood">Pizza Cake Seafood</option>
+                            <option value="pizza mixed">Pizza Mixed</option>
+                            <option value="pizza vegetarian">Pizza Vegetarian</option>
+                            <option value="noodle">Noodle</option>
+                            <option value="drinking water">Drinking Water</option>
+                            <option value="pizza combo">Pizza Combo</option>
+                        </select>
+                    </div>
+
                     {/* Trạng thái hoạt động */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Status</label>

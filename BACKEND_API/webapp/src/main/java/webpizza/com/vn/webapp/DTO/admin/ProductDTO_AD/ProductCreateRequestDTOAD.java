@@ -33,4 +33,6 @@ public class ProductCreateRequestDTOAD {
 
     @NotNull(message = "Category ID is required")
     private Integer categoryId;
+
+    private String productType;
 }

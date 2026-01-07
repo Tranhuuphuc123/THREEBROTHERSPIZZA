@@ -1,8 +1,6 @@
 package webpizza.com.vn.webapp.DTO.admin.PromotionDTO_AD;
 
 import java.time.LocalDate;
-
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,28 +9,29 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PromotionCreateRequestDTO_AD {
 
-    @NotBlank(message = "khong duoc de trong")
+    @NotBlank(message = "The name cannot be left blank.")
     private String name;
     
-    @NotNull(message = "Giá trị giảm giá không được để trống")
-    @Positive(message = "Giá trị giảm giá phải là số dương")
+    @NotNull(message = "The discount cannot be left blank.")
+    @Positive(message = "The discount must be greater than 0.")
     private Float discount;
 
     private String description;
 
-    private String isActive;
+    // Chuyển sang boolean để khớp với Entity
+    private Integer isActive; 
 
-    
-    @NotNull(message = "Ngày bắt đầu không được để trống")
-    @FutureOrPresent(message = "Ngày bắt đầu phải là ngày hiện tại hoặc trong tương lai")
+    @NotNull(message = "Start date is required")
+    @FutureOrPresent(message = "Start date must be today or in the future")
     private LocalDate startDate;
 
-    @NotNull(message = "Ngày kết thúc không được để trống")
-    @Future(message = "Ngày kết thúc phải là một ngày trong tương lai")     
+    @NotNull(message = "End date is required")
+    @FutureOrPresent(message = "End date must be today or in the future") 
     private LocalDate endDate;
 }

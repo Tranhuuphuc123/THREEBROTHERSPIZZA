@@ -87,8 +87,28 @@ a {
 .custom-placeholder:-ms-input-placeholder {
   color: #9d9ea2;
 }
+/************trang homepage*************************/
+section {
+    scroll-margin-top: 100px;
+}
+h2 {
+    position: relative;
+    padding-left: 15px;
+}
+h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 70%;
+    background-color: #e31837;
+    border-radius: 2px;
+}
 
-/* hiệu ứng hover nổi nhẹ */
+
+/**************  thiết kê css cho giỏ hàng header client page ****************/
 .card {
   transition: all 0.3s ease;
 }
@@ -96,3 +116,75 @@ a {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* bóng mượt */
 }
+
+
+
+ .cart-pill {
+    background-color: white;
+    padding: 4px 8px 4px 12px;
+    border-radius: 50px; /* Bo tròn kiểu viên thuốc */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+
+  .cart-pill:hover {
+    background-color: #f8f9fa;
+    border-color: #ffc107; /* Màu vàng nhẹ khi hover giống logo */
+  }
+
+  /* Định dạng Icon FontAwesome */
+  
+
+  .cart-label {
+    color: #05422C;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  /* Số 0 màu đỏ sát lề phải */
+  .cart-count {
+    background-color: #e31837; /* Màu đỏ thương hiệu pizza */
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    min-width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  /*********** end thiết kê css cho giỏ hàng header client page ***************/
+
+
+  /********************footer**************************/
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  .social-icon:hover {
+    background-color: white;
+    color: #05422C;
+  }
+  li:hover a {
+    opacity: 1 !important;
+    padding-left: 5px;
+    transition: 0.3s;
+  }
+
+
+
+/******************css cho mục product details********************/
+

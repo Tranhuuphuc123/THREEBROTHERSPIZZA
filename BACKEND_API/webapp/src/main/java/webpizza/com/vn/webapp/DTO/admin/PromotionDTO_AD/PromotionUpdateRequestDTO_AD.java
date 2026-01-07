@@ -2,7 +2,6 @@ package webpizza.com.vn.webapp.DTO.admin.PromotionDTO_AD;
 
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,14 +23,14 @@ public class PromotionUpdateRequestDTO_AD {
 
     private String description;
 
-    private String isActive;
+    // Chuyển sang boolean để khớp với Entity
+    private Integer isActive; 
 
     
     @NotNull(message = "Ngày bắt đầu không được để trống")
-    @FutureOrPresent(message = "Ngày bắt đầu phải là ngày hiện tại hoặc trong tương lai")
     private LocalDate startDate;
 
     @NotNull(message = "Ngày kết thúc không được để trống")
-    @Future(message = "Ngày kết thúc phải là một ngày trong tương lai")     
+    @FutureOrPresent(message = "Ngày kết thúc phải từ ngày hiện tại trở đi")
     private LocalDate endDate;
 }

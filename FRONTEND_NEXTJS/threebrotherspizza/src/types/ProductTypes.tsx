@@ -13,6 +13,7 @@ export interface ProductTypes {
     categoryId: number;
     createAt: string;
     updateAt: string;
+    productType:string
 }
 
 
