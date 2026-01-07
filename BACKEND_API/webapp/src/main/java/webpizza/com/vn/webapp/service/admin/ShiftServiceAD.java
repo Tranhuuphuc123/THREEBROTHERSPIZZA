@@ -12,26 +12,30 @@ import org.springframework.web.multipart.MultipartFile;
 
 import webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD.SalaryLevelCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD.SalaryLevelUpdateRequestDTO_AD;
+import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftCreateRequestDTO_AD;
+import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.entity.SalaryLevels;
+import webpizza.com.vn.webapp.entity.Shifts;
 import webpizza.com.vn.webapp.repository.SalaryLevelRepository;
+import webpizza.com.vn.webapp.repository.ShiftRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class SalaryLevelServiceAD {
+public class ShiftServiceAD {
     @Autowired
-    private SalaryLevelRepository salaryLevelRepo;
+    private ShiftRepository shiftRepo;
 
     /*I _ - get hien thi co phan trang */
-    public ResponseEntity<Map<String, Object>> getAllSalaryLevelPagination(int pageNumber, int pageSize, String sortBy){
+    public ResponseEntity<Map<String, Object>> getAllShiftPagination(int pageNumber, int pageSize, String sortBy){
         //1. khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
         //1. yeu cau repository lay du dieu - co xu ly phan trang
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(sortBy));
-        Page<SalaryLevels> pageResult = salaryLevelRepo.findAll(pageable);
+        Page<Shifts> pageResult = shiftRepo.findAll(pageable);
 
         if(pageResult.hasContent()){
             //tra ve ket qua cho nguoi dung theo chuan restfull api 
@@ -58,22 +62,22 @@ public class SalaryLevelServiceAD {
     }
 
 
-    /*I_2: trả về danh sách salary_level theo id cần tiềm */
+    /*I_2: trả về danh sách shift theo id cần tiềm */
     public ResponseEntity<Map<String, Object>> getById (Integer id){
         //khoi tao bien luu ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
         //nho repo thuc thi tra ve ket qua id => luu trong bien Optional(chap nhan gia tri null)
-        Optional<SalaryLevels> optFoundById = salaryLevelRepo.findById(id);
+        Optional<Shifts> optFoundById = shiftRepo.findById(id);
         //neu no co ton tai
         if(optFoundById.isPresent()){
             //nhan id vau tim kiem dc
-            SalaryLevels salaryLevelEntity = optFoundById.get();
+            Shifts shiftEntity = optFoundById.get();
 
             //tra ve thong bao thanh cong
-            response.put("data", salaryLevelEntity);
+            response.put("data", shiftEntity);
             response.put("statuscode", 201);
-            response.put("msg", "Return id of Salary Level success");
+            response.put("msg", "Return id of Shift success");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
@@ -88,7 +92,7 @@ public class SalaryLevelServiceAD {
 
 
     /*II - create */
-    public ResponseEntity<Map<String, Object>> createSalaryLevel(SalaryLevelCreateRequestDTO_AD objCreate, MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> createShift(ShiftCreateRequestDTO_AD objCreate, MultipartFile file) {
         Map<String, Object> response = new HashMap<>();
         // String newFile = null;
 
@@ -122,16 +126,18 @@ public class SalaryLevelServiceAD {
 
         try {
             // Khởi tạo và gán giá trị Entity
-            SalaryLevels salaryLevel = new SalaryLevels();
-            salaryLevel.setLevelName(objCreate.getLevelName());
+            Shifts shift = new Shifts();
+            shift.setShiftName(objCreate.getShiftName());
             // sup.setImg(newFile);
-            salaryLevel.setHourlyWage(objCreate.getHourlyWage());
-            salaryLevel.setDescription(objCreate.getDescription());
+            shift.setStartTime(objCreate.getStartTime());
+            shift.setEndTime(objCreate.getEndTime());
+            shift.setWageMultiplier(objCreate.getWageMultiplier());
+            shift.setBonus(objCreate.getBonus());
 
             // Lưu vào DB
-            SalaryLevels createSalaryLevelEntity = salaryLevelRepo.save(salaryLevel);
+            Shifts createShiftEntity = shiftRepo.save(shift);
 
-            response.put("data", createSalaryLevelEntity);
+            response.put("data", createShiftEntity);
             response.put("statuscode", 200);
             response.put("msg", "Create thành công");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -146,17 +152,17 @@ public class SalaryLevelServiceAD {
 
 
     /*III - delete*/
-    public ResponseEntity<Map<String, Object>> deleteSalaryLevel(Integer id){
+    public ResponseEntity<Map<String, Object>> deleteShift(Integer id){
         //tao bien luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
         //phai tim suplier can xoa theo id cua no
-        Optional<SalaryLevels> optFound = salaryLevelRepo.findById(id);
+        Optional<Shifts> optFound = shiftRepo.findById(id);
 
         //neu tim thay id 
         if(optFound.isPresent()){
             //gan nhan id do cho trg do dugn tren csdl
-            SalaryLevels salaryLevelEntityGetByID = optFound.get();
+            Shifts shiftEntityGetByID = optFound.get();
 
             /*xu ly tien hanh xoa ruot anh ung voi taikhoan cua anh do*/
             // String rootFolder = Paths.get("").toAbsolutePath().toString();
@@ -171,7 +177,7 @@ public class SalaryLevelServiceAD {
             // }
 
              //nho repository xoa dat r
-            salaryLevelRepo.delete((salaryLevelEntityGetByID));
+            shiftRepo.delete((shiftEntityGetByID));
 
             //tra ve thong bao chuan restfull api
             response.put("data",null );
@@ -190,27 +196,33 @@ public class SalaryLevelServiceAD {
 
 
     /* IV_ UPDATE */
-    public ResponseEntity<Map<String, Object>> updateSupplier(Integer id, SalaryLevelUpdateRequestDTO_AD objUpdate, MultipartFile file){
+    public ResponseEntity<Map<String, Object>> updateShift(Integer id, ShiftUpdateRequestDTO_AD objUpdate, MultipartFile file){
         //1. tao bien luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
         //tiem kiem entity theo id
-        Optional<SalaryLevels> optFound = salaryLevelRepo.findById(id);
+        Optional<Shifts> optFound = shiftRepo.findById(id);
 
         //neu tim thay id 
         if(optFound.isPresent()){
             //gan id tim thay cho entity
-            SalaryLevels salaryLevelEntity = optFound.get();
+            Shifts shiftEntity = optFound.get();
 
             /* kiem tra dieu kien update neu khong co gi thi lay gia cu */
-            if(objUpdate.getLevelName() != null){
-                salaryLevelEntity.setLevelName(objUpdate.getLevelName());
+            if(objUpdate.getShiftName() != null){
+                shiftEntity.setShiftName(objUpdate.getShiftName());
             }
-            if(objUpdate.getHourlyWage() != 0){
-                salaryLevelEntity.setHourlyWage((objUpdate.getHourlyWage()));
+            if(objUpdate.getStartTime() != null){
+                shiftEntity.setStartTime((objUpdate.getStartTime()));
             }
-            if(objUpdate.getDescription() != null){
-                salaryLevelEntity.setDescription((objUpdate.getDescription()));
+            if(objUpdate.getEndTime() != null){
+                shiftEntity.setEndTime((objUpdate.getEndTime()));
+            }
+            if(objUpdate.getWageMultiplier() != 0){
+                shiftEntity.setWageMultiplier((objUpdate.getWageMultiplier()));
+            }
+            if(objUpdate.getBonus() != 0){
+                shiftEntity.setBonus(objUpdate.getBonus());
             }
 
             //xu ly trg img
@@ -253,9 +265,9 @@ public class SalaryLevelServiceAD {
             // }
 
             //nho rep update(save lai)
-            salaryLevelRepo.save(salaryLevelEntity);
+            shiftRepo.save(shiftEntity);
 
-            response.put("data",salaryLevelEntity );
+            response.put("data",shiftEntity );
             response.put("statuscode", 200);
             response.put("msg", "update thanh cong");
 

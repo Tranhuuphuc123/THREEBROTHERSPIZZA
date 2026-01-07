@@ -16,19 +16,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD.SalaryLevelCreateRequestDTO_AD;
-import webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD.SalaryLevelUpdateRequestDTO_AD;
-import webpizza.com.vn.webapp.service.admin.SalaryLevelServiceAD;
+import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftCreateRequestDTO_AD;
+import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftUpdateRequestDTO_AD;
+import webpizza.com.vn.webapp.service.admin.ShiftServiceAD;
 
 @RestController
-@RequestMapping("/api/admin/salary_levels")
-public class SalaryLevelControllerAD {
+@RequestMapping("/api/admin/shifts")
+public class ShiftControllerAD {
     @Autowired
-    private SalaryLevelServiceAD salaryLevelServiceAD;
+    private ShiftServiceAD shiftServiceAD;
 
-    
-    /*************1- getall**********************/
-   /*  
+    /* I _  get */
+    /*  
      -> @CrossOrigin(origins = "${client.url}") : cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
      -> ${client.url}: thì trong application.properties mình đã cấu hình là 
@@ -37,18 +36,19 @@ public class SalaryLevelControllerAD {
     * */
     //@CrossOrigin(origins = "${client.url}") 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> index(@RequestParam(defaultValue = "1") Integer pageNumber,
-                                                     @RequestParam(defaultValue = "3") Integer pageSize,
-                                                     @RequestParam(defaultValue = "id") String sortBy){
-        // goi service thuc hien truy van hien thi tat ca thong tin cua table user co phan trang
-        return salaryLevelServiceAD.getAllSalaryLevelPagination(pageNumber, pageSize, sortBy);
+    public ResponseEntity<Map<String, Object>> getSupIndex(@RequestParam(defaultValue = "1") Integer pageNumber,
+                                                           @RequestParam(defaultValue = "3") Integer pageSize,
+                                                           @RequestParam(defaultValue = "id") String sortBy){
+        //goi service thuc thi method  getall
+        return shiftServiceAD.getAllShiftPagination(pageNumber,pageSize, sortBy);                                                         
     }
 
+    
     /***************** 1-2: getById *******************/
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
         //yeu cau service tra  ve id
-        return salaryLevelServiceAD.getById(id);
+        return shiftServiceAD.getById(id);
     }
 
 
@@ -61,23 +61,23 @@ public class SalaryLevelControllerAD {
         ObjectMapper objectMapper = new ObjectMapper();
         
         //khoi tao dto
-        SalaryLevelCreateRequestDTO_AD objDTO = null;
+        ShiftCreateRequestDTO_AD objDTO = null;
 
         //tien hanh cho dto doc va ghi nhan data  tu json gui len map thogn qua lop ObjectMapper
         try{
-            objDTO = objectMapper.readValue(jsonData, SalaryLevelCreateRequestDTO_AD.class);
+            objDTO = objectMapper.readValue(jsonData, ShiftCreateRequestDTO_AD.class);
         }catch(Exception e){
             e.printStackTrace();
         }
 
-        return salaryLevelServiceAD.createSalaryLevel(objDTO, file);
+        return shiftServiceAD.createShift(objDTO, file);
     }
 
     /*III - delete */
     //@CrossOrigin(origins = "${client.url}") 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deleteSup(@PathVariable Integer id){
-        return salaryLevelServiceAD.deleteSalaryLevel(id);
+        return shiftServiceAD.deleteShift(id);
     }
 
 
@@ -91,15 +91,15 @@ public class SalaryLevelControllerAD {
         ObjectMapper objectMapper = new ObjectMapper();
 
          //khoi tao dto
-        SalaryLevelUpdateRequestDTO_AD objDTO = null;
+        ShiftUpdateRequestDTO_AD objDTO = null;
 
          //tien hanh cho dto doc va ghi nhan data  tu json gui len map thogn qua lop ObjectMapper
         try{
-            objDTO = objectMapper.readValue(jsonData, SalaryLevelUpdateRequestDTO_AD.class);
+            objDTO = objectMapper.readValue(jsonData, ShiftUpdateRequestDTO_AD.class);
         }catch(Exception e){
             e.printStackTrace();
         }
 
-        return salaryLevelServiceAD.updateSupplier(id, objDTO, file);
+        return shiftServiceAD.updateShift(id, objDTO, file);
     }
 }

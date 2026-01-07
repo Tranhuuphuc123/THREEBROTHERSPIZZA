@@ -1,4 +1,6 @@
-package webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD;
+package webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD;
+
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,15 +11,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SalaryLevelCreateRequestDTO_AD {
+public class ShiftUpdateRequestDTO_AD {
     @NotBlank(message = "ai cho may de trong")
-    private String levelName;
+    private String shiftName;
 
     @NotNull(message = "ai cho may de trong")
-    private float hourlyWage;
+    private LocalDateTime startTime;
+
+    @NotNull(message = "ai cho may de trong")
+    private LocalDateTime endTime;
 
     @NotBlank(message = "ai cho may de trong")
-    private String description;
+    private float wageMultiplier;
 
+    private float bonus;
 
 }

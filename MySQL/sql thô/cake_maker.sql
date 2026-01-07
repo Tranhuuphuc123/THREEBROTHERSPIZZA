@@ -16,7 +16,9 @@ select * from roles_permissions;
 select * from categories;
 select * from products;
 select * from promotions;
+
 select * from salary_levels;
+select * from shifts;
 
 -- show value: name và type trong table chỉ định cụ thể
 -- show create table products;
@@ -120,6 +122,9 @@ CREATE TABLE users (
   is_active BOOLEAN,
   active_code VARCHAR(200) -- khoa mã code dùng để active cho t/h gì đó vd xác nhận email
 );
+ALTER TABLE users
+ADD COLUMN active_code VARCHAR(200);
+
 
 select * from users;
 
