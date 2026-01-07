@@ -110,7 +110,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
     useEffect(() => {
         const fetchCategory = async () => {
             try {
-                const res = await axiosAdmin.get("/Categories");
+                const res = await axiosAdmin.get("/categories/listCat");
                 const data = res.data.data ? res.data.data : res.data;
                 setListCategory(data);
             } catch (error) {

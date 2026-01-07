@@ -1,6 +1,5 @@
 package webpizza.com.vn.webapp.DTO.admin.ProductDTO_AD;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductUpdateRequestDTOAD {
-    @NotBlank(message = "Code is required")
+    @NotBlank(message = "This field cannot be empty")
     private String code;
 
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "This field cannot be empty")
     private String name;
 
     private String image;
@@ -23,14 +22,14 @@ public class ProductUpdateRequestDTOAD {
 
     private String description;
 
-    @NotNull(message = "price is required")
+    @NotNull(message = "This field cannot be empty")
     private Float price;
 
-    @NotNull(message = "Quantity is required")
+    @NotNull(message = "This field cannot be empty")
     private Integer quantity;
 
     private Integer isActive;
 
-    @NotNull(message = "Category ID is required")
+    @NotNull(message = "This field cannot be empty")
     private Integer categoryId;
 }

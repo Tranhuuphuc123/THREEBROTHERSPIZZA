@@ -1,5 +1,7 @@
 -- DỰ ÁN WEB ĐỒ ÁN TỐT NGHIỆP APTECH JAVA SPRING BOOT  + NEXTJS: NHÓM 4 APTECH
 
+-- tai khoan text: Huuphuc - Admin123#
+DROP DATABASE cake_maker;
 CREATE DATABASE cake_maker
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
@@ -15,6 +17,9 @@ select * from roles_permissions;
 
 select * from categories;
 select * from products;
+select * from materials;
+select * from product_material;
+
 select * from promotions;
 select * from salary_levels;
 
@@ -46,7 +51,6 @@ CREATE TABLE materials (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
   name VARCHAR(500) NOT NULL,
   img TEXT,
-  category VARCHAR(500),
   supplier_id INT UNSIGNED NOT NULL,
   unit VARCHAR(100) NOT NULL,
   quantity INT,
@@ -56,6 +60,7 @@ CREATE TABLE materials (
   updated_at DATETIME,
   FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
 );
+
 
 CREATE TABLE promotions (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
