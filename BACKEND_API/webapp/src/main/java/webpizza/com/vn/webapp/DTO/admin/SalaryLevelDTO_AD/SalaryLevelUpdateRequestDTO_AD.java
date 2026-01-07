@@ -1,7 +1,6 @@
 package webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SalaryLevelUpdateRequestDTO_AD {
     @NotBlank(message = "ai cho may de trong")
-    private String levelname;
+    private String levelName;
 
-    @NotNull(message = "ai cho may de trong")
-    private float hourlywage;
+    @NotBlank(message = "ai cho may de trong")
+    private float hourlyWage;
 
     @NotBlank(message = "ai cho may de trong")
     private String description;

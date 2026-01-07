@@ -30,7 +30,7 @@ CREATE TABLE `categories` (
   `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'cat001','Pan Crust','This is the signature crust of Pizza Hut, baked in a deep pan, with a crispy edge and a fluffy interior.'),(2,'cat002','Hand-Tossed','This type of sole is hand-kneaded, has a moderate thickness, and is softer and more durable than Pan.');
+INSERT INTO `categories` VALUES (1,'cat001','Pan Crust','This is the signature crust of Pizza Hut, baked in a deep pan, with a crispy edge and a fluffy interior.'),(2,'cat002','Hand-Tossed','This type of sole is hand-kneaded, has a moderate thickness, and is softer and more durable than Pan.'),(3,'cat003','No  Type',NULL);
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,7 +85,6 @@ CREATE TABLE `materials` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `img` text COLLATE utf8mb4_unicode_ci,
-  `category` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `supplier_id` int unsigned NOT NULL,
   `unit` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `quantity` int DEFAULT NULL,
@@ -214,10 +213,11 @@ CREATE TABLE `products` (
   `category_id` int unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `product_type` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,7 +226,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (2,'pr001','pepperoni','20251231_141507_pepperoni.jpg','pizza Pepperoni','The perfect combination of crispy grilled Pepperoni sausage with its characteristic mild spiciness, topped with creamy Mozzarella cheese and rich tomato sauce.',4.5,20,1,2,'2025-12-31 14:15:08','2025-12-31 14:15:08'),(5,'pr004','Sea food','20260106_135929_seafoodpizza.jpg','pizza Pepperoni','The perfect combination of crispy grilled Pepperoni sausage with its characteristic mild spiciness, topped with creamy Mozzarella cheese and rich tomato sauce.',4.5,20,1,2,'2026-01-02 13:50:58','2026-01-06 13:59:30');
+INSERT INTO `products` VALUES (7,'p001','Pizza Cheese','20260107_210904_cheese.jpg','Pizza with only cheese','Pizza is just cheese, cheese, and more cheese.',5.56,15,1,2,'2026-01-07 21:09:05','2026-01-07 21:09:05','pizza vegetarian'),(8,'p002','Pizza Vegetable','20260107_211211_vegetable.jpg','Pizza for vegetarians','Onions, bell peppers, mushrooms, cucumbers, and tomatoes',5.56,5,1,1,'2026-01-07 21:12:12','2026-01-07 21:12:12','pizza vegetarian'),(9,'p003','Pizza Pepperoni','20260107_211345_pepperoni.jpg','Pizza Cake Traditional','Italian-style sausages and tomato sauce',5.56,7,1,2,'2026-01-07 21:13:46','2026-01-07 21:13:46','pizza cake traditional'),(10,'p004','Pizza Chicken','20260107_211519_pizza_truyenthong_ganuong.png','Pizza cake traditional','Chicken and pineapple',5.56,7,1,2,'2026-01-07 21:15:20','2026-01-07 21:15:20','pizza cake traditional'),(11,'p005','Pizza Ham','20260107_211716_pizza_truyenthong_thitnguoi.png','Pizza Cake Traditional','Ham and Mushroom',5.56,10,1,2,'2026-01-07 21:17:17','2026-01-07 21:17:17','pizza cake traditional'),(12,'p006','Pizza Hawaii','20260107_211838_pizza_truyenthong_hawaii.png','Pizza Cake Traditional','Ham, Bacon, and Pineapple',5.56,5,1,2,'2026-01-07 21:18:38','2026-01-07 21:18:38','pizza cake traditional'),(13,'p007','Pizza Pesto','20260107_212257_pesto.png','Pizza Cake Seafood','Shrimp, Crab, Ham, and Thousand Island Sauce',6.36,20,1,1,'2026-01-07 21:22:58','2026-01-07 21:22:58','pizza cake seafood'),(14,'p008','Pizza Shrimp','20260107_212420_pizza_seafood_shrimp.png','Pizza Cake Seafood','Shrimp, crab, squid, clams, and Marinara sauce.',6.36,20,1,1,'2026-01-07 21:24:21','2026-01-07 21:24:21','pizza cake seafood'),(15,'p009','Pizza Black Pepper Shrimp','20260107_212623_pizza_seafood_pesto.png','Pizza Cake Seafood','Shrimp, crab, squid, clams, and black pepper',6.36,15,1,2,'2026-01-07 21:26:24','2026-01-07 21:26:24','pizza cake seafood'),(16,'p010','Spicy Clam Spaghetti','20260107_213203_mihaisan.png','Spicy Clam Spaghetti','Spicy Clam Spaghetti with a hint of natural sweetness.',5.56,5,1,3,'2026-01-07 21:32:03','2026-01-07 21:32:03','noodle'),(17,'p011','Clam Basil Spaghetti','20260107_213302_mingheuhap.png','Clam Basil Spaghetti','Basil spaghetti with the natural sweetness of clams.',5.56,5,1,3,'2026-01-07 21:33:02','2026-01-07 21:33:02','noodle'),(18,'p012','Pesto Spaghetti','20260107_213504_miy.png','Pesto Spaghetti','Spaghetti, shrimp, and squid blended with green Pesto sauce.',5.56,5,1,3,'2026-01-07 21:35:04','2026-01-07 21:35:04','noodle'),(19,'p013','7Up','20260107_213628_7up.png','7 UP','Carbonated soft drinks',1.16,20,1,3,'2026-01-07 21:36:28','2026-01-07 21:36:28','drinking water'),(20,'p014','Mirinda','20260107_213715_mirinda.png','MIRINDA','Carbonated soft drinks',1.16,20,1,3,'2026-01-07 21:37:16','2026-01-07 21:37:16','drinking water'),(21,'p015','Beer 333','20260107_213839_333.png','Beer 333','Alcoholic beverages',1.96,15,1,3,'2026-01-07 21:38:39','2026-01-07 21:38:39','drinking water'),(22,'p016','Beer Heineken','20260107_213917_heineken.png','Beer Heineken','Alcoholic beverages',1.96,15,1,3,'2026-01-07 21:39:17','2026-01-07 21:39:17','drinking water'),(23,'p017','Aquafina','20260107_214007_aquafina.png','Aquafina','Natural spring water',1.16,20,1,3,'2026-01-07 21:40:08','2026-01-07 21:40:08','drinking water');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,7 +247,7 @@ CREATE TABLE `promotions` (
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,7 +256,7 @@ CREATE TABLE `promotions` (
 
 LOCK TABLES `promotions` WRITE;
 /*!40000 ALTER TABLE `promotions` DISABLE KEYS */;
-INSERT INTO `promotions` VALUES (1,'No discount',0,'There are no discounts of any kind.',1,'2025-12-31 00:00:00','2025-12-31',NULL),(2,'Noel',10,'Christmas discount program',1,'2025-12-20 00:00:00','2025-12-24','2025-12-26'),(3,'New Year',10,'New Year\'s 2026 discount program',1,'2025-12-31 00:00:00','2025-12-31','2026-01-01'),(4,'Lunar New Year',15,'Asian holiday discount program',1,'2025-12-31 00:00:00','2026-02-16','2026-02-19');
+INSERT INTO `promotions` VALUES (1,'No discount',0,'There are no discounts of any kind.',1,'2025-12-31 00:00:00','2025-12-31',NULL),(2,'Noel',10,'Christmas discount program',1,'2025-12-20 00:00:00','2025-12-24','2025-12-26'),(3,'New Year',10,'New Year\'s 2026 discount program',1,'2025-12-31 00:00:00','2025-12-31','2026-01-01'),(4,'Lunar New Year',14,'Asian holiday discount program',1,'2025-12-31 00:00:00','2026-02-16','2026-02-19');
 /*!40000 ALTER TABLE `promotions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -508,4 +508,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-06 15:03:12
+-- Dump completed on 2026-01-07 23:27:42

@@ -33,6 +33,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
     const [quantity, setQuantity] = useState<number>(0);
     const [isActive, setIsActive] = useState<number>(1);
     const [categoryId, setCategoryId] = useState<number | null>(null);
+    const [productType, setProductType] = useState<string>('');
 
     /***method: xử lý sự kiện khi choosefile img thì ảnh hiện lên để có thể xem trc đc ảnh vừa chọn**/
     const [imagePreview, setImagePreview] = useState<string | null>(null); // state lưu img xem trước khi create sản phẩm
@@ -80,6 +81,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 quantity: Number(quantity),
                 isActive: Number(isActive),
                 categoryId: categoryId ? Number(categoryId) : null,
+                productType: productType
             };
 
             // Kiểm tra validate cơ bản trước khi gọi API
@@ -110,7 +112,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
     useEffect(() => {
         const fetchCategory = async () => {
             try {
-                const res = await axiosAdmin.get("/Categories");
+                const res = await axiosAdmin.get("/categories/listCat");
                 const data = res.data.data ? res.data.data : res.data;
                 setListCategory(data);
             } catch (error) {
@@ -167,6 +169,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                     </div>
                 </div>
 
+                {/* Loại sản phẩm */}
                 <div className="row">
                     {/* Loại sản phẩm (Category) */}
                     <div className="col-md-6 mb-3">
@@ -185,6 +188,27 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                     </div>
                 </div>
 
+                {/* THÊM TRƯỜNG PRODUCT TYPE Ở ĐÂY */}
+                <div className="mb-3">
+                    <label className="form-label fw-bold">Product Type</label>
+                    <select 
+                        className="form-select" 
+                        value={productType}
+                        onChange={(e) => setProductType(e.target.value)}
+                        required
+                    >
+                        <option value="">-- Select Product Type --</option>
+                        <option value="No type">No type</option>
+                        <option value="pizza cake traditional">Pizza Cake Traditional</option>
+                        <option value="pizza cake seafood">Pizza Cake Seafood</option>
+                        <option value="pizza mixed">Pizza Mixed</option>
+                        <option value="pizza vegetarian">Pizza Vegetarian</option>
+                        <option value="noodle">Noodle</option>
+                        <option value="drinking water">Drinking Water</option>
+                        <option value="pizza combo">Pizza Combo</option>
+                    </select>
+                </div>
+
                 <div className="mb-3">
                     <label className="form-label fw-bold">Short Description</label>
                     <input type="text" className="form-control" 
@@ -197,19 +221,20 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                         onChange={(e) => setDescription(e.target.value)} />
                 </div>
 
+
                 {/* Trạng thái hoạt động */}
                 <div className="mb-3">
                     <label className="form-label fw-bold">Trạng thái</label>
                     <div className="form-check form-switch mt-1">
                         <input className="form-check-input" type="checkbox" checked={isActive === 1}
                             onChange={(e) => setIsActive(e.target.checked ? 1 : 0)} />
-                        <label className="form-check-label">Hiển thị sản phẩm</label>
+                        <label className="form-check-label">Display products</label>
                     </div>
                 </div>
 
                 <button type="submit" className="btn btn-primary w-100 mt-3">
                     <FontAwesomeIcon icon={faSave} className="me-2" />
-                    Lưu sản phẩm
+                   Save Product
                 </button>
             </form>
         </>

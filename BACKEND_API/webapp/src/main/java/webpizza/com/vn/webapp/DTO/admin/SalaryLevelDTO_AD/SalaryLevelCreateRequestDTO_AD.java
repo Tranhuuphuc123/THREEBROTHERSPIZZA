@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SalaryLevelCreateRequestDTO_AD {
     @NotBlank(message = "ai cho may de trong")
-    private String levelname;
+    private String levelName;
 
     @NotNull(message = "ai cho may de trong")
-    private float hourlywage;
+    private float hourlyWage;
 
     @NotBlank(message = "ai cho may de trong")
     private String description;

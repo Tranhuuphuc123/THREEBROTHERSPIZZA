@@ -64,7 +64,10 @@ public class UserServiceAD {
     }
     
     /*I_1 -  GET ->lay va do du lieu co phan trang*/
-    public ResponseEntity<Map<String, Object>> getAllUserPagination(int pageNumber, int pageSize, String sortby){
+    public ResponseEntity<Map<String, Object>> getAllUserPagination(int pageNumber, 
+                                                                    int pageSize, 
+                                                                    String sortby,
+                                                                    String searchTerm){
         //a - khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
@@ -78,6 +81,20 @@ public class UserServiceAD {
         * */
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(sortby));
         Page<User> pageResult = userRepo.findAll(pageable);
+
+        /* thêm đoạn này xử lý tìm kiếm 
+         -> neu nhu không co thuc thi tiem kiem thi hien thi phang trang binh thuong 
+         <=> serarch thi bo phan trang tiến hành get all value khi search từ khóa tiềm kiếm
+         là name or username
+        */
+        if(searchTerm == null || searchTerm.isEmpty()){
+            pageResult =  userRepo.findAll(pageable);
+        }else{
+            //co yeu cau tim kiem thi tien hanh xoa phan trang di
+            pageResult =  userRepo.findBySearchContains(searchTerm.toLowerCase(),
+                                                        searchTerm.toLowerCase(),
+                                                        pageable);
+        }
         
         if(pageResult.hasContent()){
             //tra ket qua cho nguoi dung -> tra theo chuan restfull APi sieu cap vip pro
