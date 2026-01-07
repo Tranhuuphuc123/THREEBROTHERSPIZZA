@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import webpizza.com.vn.webapp.DTO.admin.CategoryDTO_AD.CategoryCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.CategoryDTO_AD.CategoryUpdateRequestDTO_AD;
-import webpizza.com.vn.webapp.DTO.admin.RoleDTO_AD.RoleCreateRequestDTO_AD;
-import webpizza.com.vn.webapp.DTO.admin.RoleDTO_AD.RoleUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.entity.Category;
-import webpizza.com.vn.webapp.entity.Role;
 import webpizza.com.vn.webapp.repository.CategoryRepository;
 
 @Service
