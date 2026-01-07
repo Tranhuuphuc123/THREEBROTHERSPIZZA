@@ -1,5 +1,7 @@
 -- DỰ ÁN WEB ĐỒ ÁN TỐT NGHIỆP APTECH JAVA SPRING BOOT  + NEXTJS: NHÓM 4 APTECH
 
+-- tai khoan text: Huuphuc - Admin123#
+DROP DATABASE cake_maker;
 CREATE DATABASE cake_maker
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
@@ -15,6 +17,9 @@ select * from roles_permissions;
 
 select * from categories;
 select * from products;
+select * from materials;
+select * from product_material;
+
 select * from promotions;
 select * from salary_levels;
 
