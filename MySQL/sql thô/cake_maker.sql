@@ -1,5 +1,7 @@
 -- DỰ ÁN WEB ĐỒ ÁN TỐT NGHIỆP APTECH JAVA SPRING BOOT  + NEXTJS: NHÓM 4 APTECH
 
+-- tai khoan text: Huuphuc - Admin123#
+DROP DATABASE cake_maker;
 CREATE DATABASE cake_maker
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
@@ -15,8 +17,13 @@ select * from roles_permissions;
 
 select * from categories;
 select * from products;
+select * from materials;
+select * from product_material;
+
 select * from promotions;
+
 select * from salary_levels;
+select * from shifts;
 
 -- show value: name và type trong table chỉ định cụ thể
 -- show create table products;
@@ -46,7 +53,6 @@ CREATE TABLE materials (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
   name VARCHAR(500) NOT NULL,
   img TEXT,
-  category VARCHAR(500),
   supplier_id INT UNSIGNED NOT NULL,
   unit VARCHAR(100) NOT NULL,
   quantity INT,
@@ -57,12 +63,13 @@ CREATE TABLE materials (
   FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
 );
 
+
 CREATE TABLE promotions (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
   name TEXT NOT NULL,
   discount FLOAT,
   description TEXT,
-  is_active BOOLEAN,
+  is_active BOOLEAN,  -- với promotion của api này thì nền cho nó cơ chế auto tự động bắt ngày mà bật isActive
   created_at DATETIME,
   start_date DATE,
   end_date DATE
@@ -81,9 +88,11 @@ CREATE TABLE products (
   category_id INT UNSIGNED NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
+  product_type VARCHAR(100),
   FOREIGN KEY (promotion_id) REFERENCES promotions(id),
   FOREIGN KEY (category_id) REFERENCES categories(id)
 );
+
 
 CREATE TABLE product_images (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -120,6 +129,9 @@ CREATE TABLE users (
   is_active BOOLEAN,
   active_code VARCHAR(200) -- khoa mã code dùng để active cho t/h gì đó vd xác nhận email
 );
+ALTER TABLE users
+ADD COLUMN active_code VARCHAR(200);
+
 
 select * from users;
 
