@@ -67,7 +67,7 @@ CREATE TABLE promotions (
   name TEXT NOT NULL,
   discount FLOAT,
   description TEXT,
-  is_active BOOLEAN,
+  is_active BOOLEAN,  -- với promotion của api này thì nền cho nó cơ chế auto tự động bắt ngày mà bật isActive
   created_at DATETIME,
   start_date DATE,
   end_date DATE
@@ -86,9 +86,11 @@ CREATE TABLE products (
   category_id INT UNSIGNED NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
+  product_type VARCHAR(100),
   FOREIGN KEY (promotion_id) REFERENCES promotions(id),
   FOREIGN KEY (category_id) REFERENCES categories(id)
 );
+
 
 CREATE TABLE product_images (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
