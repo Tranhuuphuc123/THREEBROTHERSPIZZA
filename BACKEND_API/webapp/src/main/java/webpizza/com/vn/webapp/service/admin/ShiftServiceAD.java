@@ -10,13 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD.SalaryLevelCreateRequestDTO_AD;
-import webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD.SalaryLevelUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftUpdateRequestDTO_AD;
-import webpizza.com.vn.webapp.entity.SalaryLevels;
 import webpizza.com.vn.webapp.entity.Shifts;
-import webpizza.com.vn.webapp.repository.SalaryLevelRepository;
 import webpizza.com.vn.webapp.repository.ShiftRepository;
 
 import java.util.HashMap;
@@ -29,13 +25,25 @@ public class ShiftServiceAD {
     private ShiftRepository shiftRepo;
 
     /*I _ - get hien thi co phan trang */
-    public ResponseEntity<Map<String, Object>> getAllShiftPagination(int pageNumber, int pageSize, String sortBy){
+    public ResponseEntity<Map<String, Object>> getAllShiftPagination(int pageNumber, int pageSize, String sortBy, String searchTerm){
         //1. khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
         //1. yeu cau repository lay du dieu - co xu ly phan trang
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(sortBy));
         Page<Shifts> pageResult = shiftRepo.findAll(pageable);
+
+        /* them dieu kien cho chuc nang tim keim
+         + khi search thi khong cos phan trang khi hien thi value
+         + khong search thi hien thi phan trang binh thuong
+        */
+       if(searchTerm == null || searchTerm.isEmpty()){
+        pageResult = shiftRepo.findAll(pageable);
+       }else{
+         //co yeu cau tim kiem thi tien hanh xoa phan trang di ma hien  thi value bt
+         pageResult = shiftRepo.findBySearchContains(searchTerm.toLowerCase(),  
+                                                        pageable);
+       }
 
         if(pageResult.hasContent()){
             //tra ve ket qua cho nguoi dung theo chuan restfull api 
@@ -92,38 +100,9 @@ public class ShiftServiceAD {
 
 
     /*II - create */
-    public ResponseEntity<Map<String, Object>> createShift(ShiftCreateRequestDTO_AD objCreate, MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> createShift(ShiftCreateRequestDTO_AD objCreate) {
         Map<String, Object> response = new HashMap<>();
-        // String newFile = null;
-
-        // if (file != null && !file.isEmpty()) {
-        //     try {
-        //         // 1. Lấy tên file an toàn
-        //         String iso_8601 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        //         newFile = iso_8601 + "_" + file.getOriginalFilename();
-
-        //         // 2. Thiết lập đường dẫn lưu trữ (Dùng Path cho hiện đại và chính xác)
-        //         String rootFolder = System.getProperty("user.dir"); // Lấy thư mục gốc project
-        //         Path uploadPath = Paths.get(rootFolder, uploadDir); // Nối với biến uploadDir (ví dụ: "uploads")
-
-        //         // 3. Tạo thư mục nếu chưa tồn tại
-        //         if (!Files.exists(uploadPath)) {
-        //             Files.createDirectories(uploadPath);
-        //         }
-
-        //         // 4. Đường dẫn đầy đủ của file ảnh
-        //         Path filePath = uploadPath.resolve(newFile);
-
-        //         // 5. Ghi "ruột ảnh" xuống ổ đĩa
-        //         file.transferTo(filePath.toFile());
-
-        //     } catch (IOException e) {
-        //         e.printStackTrace();
-        //         response.put("msg", "Lỗi khi lưu file: " + e.getMessage());
-        //         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        //     }
-        // }
-
+  
         try {
             // Khởi tạo và gán giá trị Entity
             Shifts shift = new Shifts();
@@ -164,19 +143,7 @@ public class ShiftServiceAD {
             //gan nhan id do cho trg do dugn tren csdl
             Shifts shiftEntityGetByID = optFound.get();
 
-            /*xu ly tien hanh xoa ruot anh ung voi taikhoan cua anh do*/
-            // String rootFolder = Paths.get("").toAbsolutePath().toString();
-            // Path filePath = Path.of(rootFolder + File.separator + uploadDir + File.separator + supEntityGetByID.getImg());
-
-            /*tien hanh xoa anh cu neu ton tai*/
-            //  try{
-            //     //tien hanh deleteIfExits co ton tai no moi xoa
-            //     Files.deleteIfExists(filePath);
-            // }catch (IOException e){
-            //     e.printStackTrace();
-            // }
-
-             //nho repository xoa dat r
+            //nho repository xoa dat r
             shiftRepo.delete((shiftEntityGetByID));
 
             //tra ve thong bao chuan restfull api
@@ -196,7 +163,7 @@ public class ShiftServiceAD {
 
 
     /* IV_ UPDATE */
-    public ResponseEntity<Map<String, Object>> updateShift(Integer id, ShiftUpdateRequestDTO_AD objUpdate, MultipartFile file){
+    public ResponseEntity<Map<String, Object>> updateShift(Integer id, ShiftUpdateRequestDTO_AD objUpdate){
         //1. tao bien luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
@@ -224,45 +191,6 @@ public class ShiftServiceAD {
             if(objUpdate.getBonus() != 0){
                 shiftEntity.setBonus(objUpdate.getBonus());
             }
-
-            //xu ly trg img
-            // if(file != null && !file.isEmpty()){
-            //     try{
-            //         //su dung datetime luu ten anh theo gio phut giay + ten img: tranh bi trung lap
-            //         String randomString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-            //         //tiet lap file path lay dung ten goc o dia luu folder trong project
-            //         String rootFolder = Paths.get("").toAbsolutePath().toString();
-            //         //tao duong dan xu ly luu file
-            //         String newFile = randomString + "_" + file.getOriginalFilename();
-            //         String filePath = rootFolder + File.separator + uploadDir + File.separator + newFile;
-
-            //         //tien hanh lay ruot anh
-            //         File destinatinFile = new File(filePath);
-            //         //tien hanh tao folder uploads trong project neu no khong ton tai
-            //         destinatinFile.getParentFile().mkdirs();
-            //         file.transferTo(destinatinFile);
-
-            //         //xoa anh cu(chi xoa neu ten anh cu ton tai)
-            //         if(supEntity.getImg() != null && !supEntity.getImg().isEmpty()){
-            //             Path delPath = Paths.get(rootFolder, uploadDir, supEntity.getImg());
-            //             Files.deleteIfExists(delPath);
-            //         }
-
-            //         supEntity.setImg(newFile);
-            //     }catch(IOException e ){
-            //         System.err.println("loi xu ly file: " + e.getMessage());
-            //     }
-            // }
-
-            // if(objUpdate.getPhone() != null){
-            //     supEntity.setPhone((objUpdate.getPhone()));
-            // }
-            // if(objUpdate.getAddress() != null){
-            //     supEntity.setAddress((objUpdate.getAddress()));
-            // }
-            // if(objUpdate.getDescription() != null){
-            //     supEntity.setDescription((objUpdate.getDescription()));
-            // }
 
             //nho rep update(save lai)
             shiftRepo.save(shiftEntity);

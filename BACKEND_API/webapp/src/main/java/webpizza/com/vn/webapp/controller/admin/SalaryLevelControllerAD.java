@@ -40,9 +40,10 @@ public class SalaryLevelControllerAD {
     @GetMapping
     public ResponseEntity<Map<String, Object>> index(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                      @RequestParam(defaultValue = "3") Integer pageSize,
-                                                     @RequestParam(defaultValue = "id") String sortBy){
+                                                     @RequestParam(defaultValue = "id") String sortBy,
+                                                    @RequestParam(required = false) String search){
         // goi service thuc hien truy van hien thi tat ca thong tin cua table user co phan trang
-        return salaryLevelServiceAD.getAllSalaryLevelPagination(pageNumber, pageSize, sortBy);
+        return salaryLevelServiceAD.getAllSalaryLevelPagination(pageNumber, pageSize, sortBy, search);
     }
 
     /***************** 1-2: getById *******************/
@@ -74,7 +75,7 @@ public class SalaryLevelControllerAD {
     /*III - delete */
     //@CrossOrigin(origins = "${client.url}") 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Map<String, Object>> deleteSup(@PathVariable Integer id){
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer id){
         return salaryLevelServiceAD.deleteSalaryLevel(id);
     }
 
@@ -82,7 +83,7 @@ public class SalaryLevelControllerAD {
     /*IV - update */
     //@CrossOrigin(origins = "${client.url}") 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Map<String, Object>> update(@PathVariable(value = "id") Integer id, @RequestBody SalaryLevelUpdateRequestDTO_AD objUpdate){
-        return salaryLevelServiceAD.updateSupplier(id, objUpdate);
+    public ResponseEntity<Map<String, Object>> update(@PathVariable Integer id, @RequestBody SalaryLevelUpdateRequestDTO_AD objUpdate){
+        return salaryLevelServiceAD.updateSalaryLevel(id, objUpdate);
     }
 }
