@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import webpizza.com.vn.webapp.entity.Product;
@@ -15,10 +17,30 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
     // Code hiện tại máy bạn (Ví dụ: hàm phân trang cũ)
     Page<Product> findAll(Pageable pageable);
 
-   /** Tự động sinh query: SELECT * FROM products WHERE product_type = ? 
+   /** Query rõ ràng: SELECT * FROM products WHERE product_type = ? AND is_active = ?
     * phục vụ chức năng đổ value lên giao diện homepage ở product card 
     * và đẩy value vào các trang product, product detail
+    * dựa trên tiêu chí là producttype của bảng product và 
+    * trạng thái để lọc hiển thị các product theo hạng mục 
+    * danh sách loại...
     * **/
-    //List<Product> findByProductType(String productType, Integer isActive);
+    @Query("SELECT p FROM Product p WHERE p.productType = :productType AND p.isActive = :isActive")
+    List<Product> findByProductTypeAndIsActive(
+        @Param("productType") String productType, 
+        @Param("isActive") Integer isActive
+    );
+
+    /** Query để lấy tất cả sản phẩm có productType bắt đầu bằng pattern (ví dụ: "pizza%")
+     *  Phục vụ chức năng lấy tất cả các loại pizza khi vào trang product từ homepage
+     * ý là product trong csdl có mục product type nhưng vd cùng là pizza lại có nhiều 
+     * tên khác nhau: pizza seafood, pizza vegetabrian... mà mình muốn đổ các bánh pizza 
+     * thì koong đc do type tuy có chữa pizza nhưng phía hậu tố có thêm tên nên cần thêm query 
+     * này đẻ hiện thì các bánh có productype là pizza ở tiền tố tên
+     * */
+    @Query("SELECT p FROM Product p WHERE p.productType LIKE :productTypePattern AND p.isActive = :isActive")
+    List<Product> findByProductTypePatternAndIsActive(
+        @Param("productTypePattern") String productTypePattern, 
+        @Param("isActive") Integer isActive
+    );
 
 }

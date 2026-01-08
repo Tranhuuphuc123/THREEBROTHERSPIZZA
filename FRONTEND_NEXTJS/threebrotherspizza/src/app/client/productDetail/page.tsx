@@ -1,10 +1,129 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import axiosClient from "@/axios/axiosAdmin";
+import { UPLOAD_URL } from "@/constants/urls";
+
+interface ProductDetail {
+  id: number;
+  code: string;
+  name: string;
+  image: string;
+  shortDescription: string;
+  description: string;
+  price: number;
+  quantity: number;
+  isActive: number;
+  productType: string;
+}
 
 const PizzaProductDetails = () => {
+  const searchParams = useSearchParams();
+  const productId = searchParams.get("id");
+  
+  const [product, setProduct] = useState<ProductDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // State cho form chọn size và đế
+  const [selectedSize, setSelectedSize] = useState("small");
+  const [selectedBase, setSelectedBase] = useState("traditional");
+  const [note, setNote] = useState("");
+  
+  // Tính giá dựa trên size
+  const sizePrices = {
+    small: 0,
+    medium: 80000,
+    large: 190000,
+  };
+  
+  const basePrices = {
+    traditional: 0,
+    thin: 0,
+    cheese: 50000,
+  };
+  
+  // Lấy giá gốc từ API sản phẩm
+  const basePrice = product?.price || 0;
+  const sizePrice = sizePrices[selectedSize as keyof typeof sizePrices];
+  const basePriceExtra = basePrices[selectedBase as keyof typeof basePrices];
+  const totalPrice = basePrice + sizePrice + basePriceExtra;
+
+  // Format giá tiền
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN').format(price) + "đ";
+  };
+
+  // Gọi API lấy thông tin sản phẩm
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!productId) {
+        setError("Không tìm thấy ID sản phẩm");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await axiosClient.get(`/products/${productId}`);
+        
+        if (response.data.statuscode === 201 && response.data.data) {
+          setProduct(response.data.data);
+        } else {
+          setError("Không tìm thấy sản phẩm");
+        }
+      } catch (error: any) {
+        console.error("Error fetching product:", error);
+        setError(error.response?.data?.msg || "Có lỗi xảy ra khi tải sản phẩm");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  // Xử lý ảnh URL
+  const getImageUrl = (imagePath: string | null | undefined) => {
+    if (!imagePath) return "/assets/client/img/no_avatar.jpg";
+    if (imagePath.startsWith("http")) return imagePath;
+    if (imagePath.startsWith("/")) return imagePath;
+    return `${UPLOAD_URL}/${imagePath}`;
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="bg-light min-vh-100 py-5 d-flex justify-content-center align-items-center">
+        <div className="text-center">
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Is Loading...</span>
+          </div>
+          <p className="mt-3 text-muted">Is Loading product information...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !product) {
+    return (
+      <div className="bg-light min-vh-100 py-5 d-flex justify-content-center align-items-center">
+        <div className="text-center">
+          <i className="bi bi-exclamation-triangle text-warning" style={{ fontSize: '4rem' }}></i>
+          <h3 className="mt-3 text-danger">Not Product found</h3>
+          <p className="text-muted">{error || "Sản phẩm không tồn tại hoặc đã bị xóa"}</p>
+          <a href="/client" className="btn btn-success mt-3">
+            Return Homepage
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    // Sử dụng paddingBottom thay vì marginBottom để màu nền bg-light kéo dài hết khoảng trống
-    <div className="bg-light min-vh-100 py-5" style={{ marginBottom: '150px' }}>
+    <div className="bg-light min-vh-100 py-5" style={{ marginBottom: '650px' }}>
       <div className="container">
         <div className="row g-4">
           
@@ -12,31 +131,60 @@ const PizzaProductDetails = () => {
           <div className="col-lg-7">
             {/* Box Hình Ảnh Chính & Thumbs */}
             <div className="bg-white p-4 rounded-4 shadow-sm mb-4">
-              {/* Ảnh lớn */}
+              {/* Ảnh lớn - Cố định tỉ lệ */}
               <div className="text-center mb-4">
-                <div className="main-img-wrapper p-3 border rounded-4 bg-light">
+                <div className="main-img-wrapper p-3 border rounded-4 bg-light" style={{ 
+                  aspectRatio: '1 / 1', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  maxWidth: '100%',
+                  margin: '0 auto'
+                }}>
                   <Image
-                    src="/assets/client/img/pizza-rau-cu.png" 
-                    alt="Pizza Rau Củ"
+                    src={getImageUrl(product.image)} 
+                    alt={product.name}
                     className="img-fluid"
                     width={450}
                     height={450}
-                    style={{ objectFit: 'contain' }}
+                    style={{ 
+                      objectFit: 'contain',
+                      width: '100%',
+                      height: '100%',
+                      maxWidth: '100%',
+                      maxHeight: '100%'
+                    }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/assets/client/img/no_avatar.jpg";
+                    }}
                   />
                 </div>
               </div>
               
-              {/* 4 Ảnh con bên dưới */}
+              {/* 4 Ảnh con bên dưới - Cố định tỉ lệ */}
               <div className="row g-2 justify-content-center">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="col-3 col-md-2">
-                    <div className="thumb-item border rounded-3 p-1 cursor-pointer overflow-hidden shadow-sm hover-border-success">
+                    <div 
+                      className="thumb-item border rounded-3 p-1 cursor-pointer overflow-hidden shadow-sm hover-border-success"
+                      style={{
+                        aspectRatio: '1 / 1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
                       <Image
-                        src={`/assets/client/img/anhtemp/e-${i}.jpg`}
+                        src={getImageUrl(product.image)}
                         className="img-fluid rounded-2"
                         alt={`Thumb ${i}`}
                         width={100}
                         height={100}
+                        style={{ 
+                          objectFit: 'cover',
+                          width: '100%',
+                          height: '100%'
+                        }}
                       />
                     </div>
                   </div>
@@ -63,74 +211,111 @@ const PizzaProductDetails = () => {
               
               <div className="mt-4 bg-light p-3 rounded-4">
                 <label className="fw-bold small mb-2 text-dark">Gửi nhận xét của bạn</label>
-                <textarea className="form-control border-0 mb-2" rows="2" placeholder="Cảm nhận của bạn về món ăn này..."></textarea>
+                <textarea className="form-control border-0 mb-2" rows={2} placeholder="Cảm nhận của bạn về món ăn này..."></textarea>
                 <button className="btn btn-success btn-sm px-4 rounded-pill fw-bold">Gửi đánh giá</button>
               </div>
             </div>
           </div>
 
-          {/* CỘT PHẢI: THÔNG TIN & TÍNH TIỀN (STAY FIXED) */}
+          {/* CỘT PHẢI: THÔNG TIN & TÍNH TIỀN - BỎ STICKY */}
           <div className="col-lg-5">
-            {/* Loại bỏ các hiệu ứng trôi nổi, chỉ dùng sticky-top để đi theo khi cuộn */}
-            <div className="bg-white p-4 rounded-4 shadow-sm border border-success-subtle sticky-top" style={{ top: '20px', zIndex: 10 }}>
+            {/* Bỏ sticky-top để scroll đồng nhất với bên trái */}
+            <div className="bg-white p-4 rounded-4 shadow-sm border border-success-subtle">
               <div className="mb-3">
-                <div className="badge bg-success mb-2 px-3 py-2 rounded-pill">Món ăn phổ biến</div>
-                <h1 className="fw-bold h2 text-dark mb-1">Pizza Rau Củ</h1>
-                <p className="text-muted small">Hành tây, ớt chuông, nấm ống, dứa tươi và cà chua chín mọng trộn cùng phô mai Mozzarella.</p>
+                {product.isActive === 1 && (
+                  <div className="badge bg-success mb-2 px-3 py-2 rounded-pill">Best seller</div>
+                )}
+                <h1 className="fw-bold h2 text-dark mb-1">{product.name}</h1>
+                <p className="text-muted small mb-2">{product.shortDescription || product.description}</p>
+                {product.description && product.description !== product.shortDescription && (
+                  <p className="text-secondary" style={{ fontSize: '14px' }}>{product.description}</p>
+                )}
+                <div className="mt-2">
+                  <span className="badge bg-secondary me-2">Code: {product.code}</span>
+                  <span className="badge bg-info">Type: {product.productType}</span>
+                </div>
+                {/* Hiển thị giá gốc từ API */}
+                <div className="mt-3">
+                  <span className="text-muted small">Cross Price: </span>
+                  <span className="fw-bold text-success fs-5">{formatPrice(product.price)}</span>
+                </div>
               </div>
 
               <hr className="opacity-10" />
 
-              {/* 1. Chọn kích thước */}
-              <div className="mb-4">
-                <label className="fw-bold small mb-3 text-uppercase d-flex align-items-center">
+              {/* 1. Chọn kích thước - Chỉ hiện cho Pizza */}
+              {product.productType?.toLowerCase().includes("pizza") && (
+                <div className="mb-4">
+                  <label className="fw-bold small mb-3 text-uppercase d-flex align-items-center">
                     <span className="bg-success text-white rounded-circle me-2 d-inline-flex justify-content-center align-items-center" style={{width:20, height:20, fontSize:10}}>1</span>
-                    Chọn kích thước
-                </label>
-                <div className="d-flex gap-2">
-                  <button className="btn btn-outline-success flex-fill active py-2 border-2">
-                    <div className="fw-bold">Nhỏ 6"</div>
-                  </button>
-                  <button className="btn btn-outline-success flex-fill py-2 border-2">
-                    <div className="fw-bold">Vừa 9"</div>
-                    <div className="small text-success">+80k</div>
-                  </button>
-                  <button className="btn btn-outline-success flex-fill py-2 border-2">
-                    <div className="fw-bold">Lớn 12"</div>
-                    <div className="small text-success">+190k</div>
-                  </button>
+                    Select choose size
+                  </label>
+                  <div className="d-flex gap-2">
+                    <button 
+                      className={`btn btn-outline-success flex-fill py-2 border-2 ${selectedSize === "small" ? "active" : ""}`}
+                      onClick={() => setSelectedSize("small")}
+                    >
+                      <div className="fw-bold">Small 6"</div>
+                      <div className="small text-muted">Cross price</div>
+                    </button>
+                    <button 
+                      className={`btn btn-outline-success flex-fill py-2 border-2 ${selectedSize === "medium" ? "active" : ""}`}
+                      onClick={() => setSelectedSize("medium")}
+                    >
+                      <div className="fw-bold">Medium 9"</div>
+                      <div className="small text-success">+{formatPrice(0.80)}</div>
+                    </button>
+                    <button 
+                      className={`btn btn-outline-success flex-fill py-2 border-2 ${selectedSize === "large" ? "active" : ""}`}
+                      onClick={() => setSelectedSize("large")}
+                    >
+                      <div className="fw-bold">Big 12"</div>
+                      <div className="small text-success">+{formatPrice(1.20)}</div>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* 2. Chọn đế */}
-              <div className="mb-4">
-                <label className="fw-bold small mb-3 text-uppercase d-flex align-items-center">
+              {/* 2. Chọn đế - Chỉ hiện cho Pizza */}
+              {product.productType?.toLowerCase().includes("pizza") && (
+                <div className="mb-4">
+                  <label className="fw-bold small mb-3 text-uppercase d-flex align-items-center">
                     <span className="bg-success text-white rounded-circle me-2 d-inline-flex justify-content-center align-items-center" style={{width:20, height:20, fontSize:10}}>2</span>
-                    Chọn loại đế
-                </label>
-                <select className="form-select border-2 py-2 border-success-subtle rounded-3">
-                  <option>Đế Dày Giòn truyền thống</option>
-                  <option>Đế Mỏng Giòn rụm</option>
-                  <option>Đế Viền Phô Mai (+50k)</option>
-                </select>
-              </div>
+                   Select choose base type
+                  </label>
+                  <select 
+                    className="form-select border-2 py-2 border-success-subtle rounded-3"
+                    value={selectedBase}
+                    onChange={(e) => setSelectedBase(e.target.value)}
+                  >
+                    <option value="traditional">Crust Pan</option>
+                    <option value="thin">Hand tosse</option>
+                  </select>
+                </div>
+              )}
 
               {/* 3. Ghi chú */}
               <div className="mb-4">
-                <label className="fw-bold small mb-2 text-uppercase text-secondary">Ghi chú thêm</label>
-                <textarea className="form-control rounded-3 bg-light border-0" rows="2" placeholder="Ví dụ: Cắt làm 8 miếng, không lấy dứa..."></textarea>
+                <label className="fw-bold small mb-2 text-uppercase text-secondary">Note more</label>
+                <textarea 
+                  className="form-control rounded-3 bg-light border-0" 
+                  rows={2} 
+                  placeholder="ex: Cut into 8 pieces, excluding the pineapple..."
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                ></textarea>
               </div>
 
               {/* Phần Tổng kết & Nút bấm */}
               <div className="pt-3 border-top mt-4">
                 <div className="d-flex justify-content-between align-items-end mb-4">
-                  <span className="fw-bold text-secondary">Tổng thanh toán:</span>
+                  <span className="fw-bold text-secondary">Total Amount:</span>
                   <div className="text-end">
-                    <span className="h2 fw-bold text-danger mb-0">139.000đ</span>
+                    <span className="h2 fw-bold text-danger mb-0">{formatPrice(totalPrice)}</span>
                   </div>
                 </div>
                 <button className="btn btn-success w-100 py-3 fw-bold fs-5 shadow rounded-3 text-uppercase">
-                  Thêm vào giỏ hàng
+                  Add to cart
                 </button>
               </div>
             </div>
@@ -148,6 +333,13 @@ const PizzaProductDetails = () => {
         .btn-outline-success.active {
             background-color: #e8f5e9;
             color: #198754;
+        }
+        /* Đảm bảo ảnh giữ tỉ lệ */
+        .main-img-wrapper img {
+          object-fit: contain !important;
+        }
+        .thumb-item img {
+          object-fit: cover !important;
         }
       `}</style>
     </div>

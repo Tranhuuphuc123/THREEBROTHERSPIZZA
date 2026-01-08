@@ -28,40 +28,98 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {} from "@fortawesome/free-solid-svg-icons";
 import { ProductCard } from "@/components/client/ProductCard";
 import Link from "next/link";
+//import axios call api đổ value của product vào product carc
+import axiosClient from '@/axios/axiosAdmin'
+import { useEffect, useState } from "react";
+
+//make variale api url file upload img
+import { UPLOAD_URL } from "@/constants/urls";
 
 /* phan body cua homepage cuar client page layout */
 export default function HomePage() {
 
-  // Giả lập dữ liệu cho từng nhóm sản phẩm
-  const comboData = [
-    { id: 101, name: "Combo Gia Đình 1", description: "1 Pizza L, 1 Mì Ý, 4 Nước ngọt", price: "399.000đ", image: "/assets/client/img/combo/combo1.png", tag: "Hot" },
-    { id: 102, name: "Combo Bạn Bè", description: "2 Pizza M, 1 Khoai tây chiên", price: "299.000đ", image: "/assets/client/img/combo/combo2.jpg" },
-    { id: 103, name: "Combo Tiết Kiệm", description: "1 Pizza M, 2 Nước ngọt", price: "199.000đ", image: "/assets/client/img/combo/combo2.jpg" },
-    { id: 104, name: "Combo Độc Thân", description: "1 Pizza S, 1 Nước ngọt", price: "129.000đ", image: "/assets/client/img/combo/combo3.jpg" },
-  ];
+  /* state lưu dữ liệu từ api */
+  const [comboData, setComboData] = useState<any[]>([]);
+  const [pizzaData, setPizzaData] = useState<any[]>([]);
+  const [pastaData, setPastaData] = useState<any[]>([]);
+  const [drinkData, setDrinkData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const pizzaData = [
-    { id: 1, name: "Pizza Hải Sản Đào", description: "Tôm, thanh cua, xốt xào Đào...", price: "179.000đ", image: "/assets/client/img/pizzaCake/cheese.jpg", tag: "Mới" },
-    { id: 2, name: "Pizza 4 Cheese", description: "4 loại phô mai hảo hạng...", price: "169.000đ", image: "/assets/client/img/pizzaCake/pepperoni.jpg" },
-    { id: 3, name: "Pizza Xúc Xích", description: "Xúc xích Pepperoni đậm đà...", price: "159.000đ", image: "/assets/client/img/pizzaCake/cheese.jpg" },
-    { id: 4, name: "Pizza Rau Củ", description: "Nấm, ớt chuông, cà chua...", price: "149.000đ", image: "/assets/client/img/pizzaCake/seafoodpizza_shrimp.jpg" },
-  ];
+  /* Hàm gọi API theo productType*/
+  const fetchProductsByType = async (productType: string) => {
+    try {
+      const response = await axiosClient.get(`/products/client-list`, {
+        params: { productType }
+      });
+      
+      if (response.data.statuscode === 200 && response.data.data) {
+        // Map dữ liệu từ API sang format ProductCard cần
+        return response.data.data.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          description: item.shortDescription || item.description || "",
+          price: formatPrice(item.price),
+          image: item.image ? `${UPLOAD_URL}/${item.image}` : "/assets/client/img/default.png",
+          tag: item.isActive === 1 ? "Hot" : undefined,
+        }));
+      }
+      return [];
+    } catch (error) {
+      console.error(`Error fetching ${productType}:`, error);
+      return [];
+    }
+  };
 
-  // Render Section Helper để code ngắn gọn
-  const ProductSection = ({ title, data }: { title: string, data: any[] }) => (
+  // Format giá tiền
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN').format(price) + "đ";
+  };
+
+  // Gọi API khi component mount
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      
+      // Gọi song song tất cả API
+      const [special, pizza, pasta, drink] = await Promise.all([
+        fetchProductsByType("pizza combo"),
+        fetchProductsByType("pizza cake seafood"),
+        fetchProductsByType("noodle"),
+        fetchProductsByType("drinking water"),
+      ]);
+
+      // Chỉ lấy 4 sản phẩm đầu tiên cho homepage
+      setComboData(special.slice(0, 4));
+      setPizzaData(pizza.slice(0, 4));
+      setPastaData(pasta.slice(0, 4));
+      setDrinkData(drink.slice(0, 4));
+      setLoading(false);
+    };
+
+    loadData();
+  }, []);
+
+  /* Render Section Helper để code ngắn gọn*/
+  const ProductSection = ({ title, data, productType }: { title: string, data: any[], productType: string }) => (
     <Container className="mb-5">
       <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
         <h2 className="fs-3 fw-bold text-dark mb-0">{title}</h2>
-        <Link href="/client/products" passHref>
+        <Link href={`/client/products?type=${productType}`} passHref>
           <Button variant="link" className="text-danger fw-bold text-decoration-none">
             View All
           </Button>
         </Link>
       </div>
       <Row className="g-4">
-        {data.map((item) => (
-          <ProductCard key={item.id} data={item} />
-        ))}
+        {loading ? (
+          <div className="text-center py-5">loading...</div>
+        ) : data.length > 0 ? (
+          data.map((item) => (
+            <ProductCard key={item.id} data={item} />
+          ))
+        ) : (
+          <div className="text-center py-5 text-muted">No product data..</div>
+        )}
       </Row>
     </Container>
   );
@@ -74,39 +132,39 @@ export default function HomePage() {
         <CarouselItem>
           <img
             className="d-block w-100"
-            src="https://thepizzacompany.vn/images/thumbs/000/0004542_TPC_Digital_LTO_4CHEESExCoconut%20copy_Website_Banner%20Slider_W1200%20x%20H480%20px.png"
+            src="/assets/banner/banner1.png"
             alt="Slide 1"
             style={{ height: "70vh", objectFit: "cover" }}
           />
           <CarouselCaption>
-            <h3>Hoàng Gia Restaurant 👑</h3>
-            <p>Ẩm thực tinh tế, không gian sang trọng.</p>
+            <h3>Royal Restaurant 👑</h3>
+            <p>Exquisite cuisine, elegant ambiance..</p>
           </CarouselCaption>
         </CarouselItem>
 
         <CarouselItem>
           <img
             className="d-block w-100"
-            src="https://thepizzacompany.vn/images/thumbs/000/0004335_TPC_WEBSITE_DIGITAL-COMBO-ECOM-AWO-2025_1200x480px.jpeg"
+            src="/assets/banner/banner2.png"
             alt="Slide 2"
             style={{ height: "70vh", objectFit: "cover" }}
           />
           <CarouselCaption>
-            <h3>Hương vị đẳng cấp</h3>
-            <p>Mỗi món ăn là một câu chuyện 😋</p>
+            <h3>Premium taste</h3>
+            <p>Each dish tells a story.😋</p>
           </CarouselCaption>
         </CarouselItem>
 
         <CarouselItem>
           <img
             className="d-block w-100"
-            src="https://thepizzacompany.vn/images/thumbs/000/0004514_TPC_LTO%20PESTO-DISAN_BannerWeb_1200x480px.png"
+            src="/assets/banner/banner3.png"
             alt="Slide 3"
             style={{ height: "70vh", objectFit: "cover" }}
           />
           <CarouselCaption>
-            <h3>Trải nghiệm đặc biệt</h3>
-            <p>Ẩn mình giữa lòng thành phố 🌆</p>
+            <h3>A unique experience</h3>
+            <p>Nestled in the heart of the city 🌆</p>
           </CarouselCaption>
         </CarouselItem>
       </Carousel>
@@ -115,23 +173,22 @@ export default function HomePage() {
       <main className="py-5">
         {/* HÀNG 1: COMBO & KHUYẾN MÃI */}
         <section className="promo-section bg-light py-5 mb-5">
-            <ProductSection title="🔥 COMBO KHUYẾN MÃI" data={comboData} />
+          <ProductSection title="🔥 COMBO HOT PROMOTION" data={comboData} productType="pizza" />
         </section>
-
+        
         {/* HÀNG 2: PIZZA */}
         <section className="mb-5">
-            <ProductSection title="🍕 PIZZA NÓNG HỔI" data={pizzaData} />
+          <ProductSection title="🍕 PIZZA HOT" data={pizzaData} productType="pizza" />
         </section>
 
         {/* HÀNG 3: MÌ Ý (PASTA) */}
         <section className="mb-5">
-            {/* Truyền dữ liệu mì ý vào đây (tạm dùng pizzaData để demo) */}
-            <ProductSection title="🍝 MÌ Ý & CƠM" data={pizzaData.slice(0, 4)} />
+          <ProductSection title="🍝 PASTA NOODLE" data={pastaData} productType="noodle" />
         </section>
 
         {/* HÀNG 4: THỨC UỐNG */}
         <section className="mb-5">
-             <ProductSection title="🥤 THỨC UỐNG" data={pizzaData.slice(0, 4)} />
+          <ProductSection title="🥤 DRINKING WATER" data={drinkData} productType="drinking water" />
         </section>
       </main>
     </>

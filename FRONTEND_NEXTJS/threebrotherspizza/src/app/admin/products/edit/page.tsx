@@ -235,7 +235,7 @@ const EditModal: React.FC<EditProductPropsTypes> = ({ id, onReload }) => {
                             <option value="pizza vegetarian">Pizza Vegetarian</option>
                             <option value="noodle">Noodle</option>
                             <option value="drinking water">Drinking Water</option>
-                            <option value="pizza combo">Pizza Combo</option>
+                            <option value="pizza combo">Pizza Special</option>
                         </select>
                     </div>
 

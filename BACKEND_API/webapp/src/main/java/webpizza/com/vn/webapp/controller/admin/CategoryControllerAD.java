@@ -38,9 +38,18 @@ public class CategoryControllerAD {
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllCatPagination(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                            @RequestParam(defaultValue = "3") Integer pageSize,
-                                                           @RequestParam(defaultValue = "id") String sortBy){
+                                                           @RequestParam(defaultValue = "id") String sortBy,
+                                                            @RequestParam(required = false) String search){
         //goi service thuc thi method  getall
-        return categoryServiceAD.getAllCategoryPagination(pageNumber,pageSize, sortBy);                                                         
+        return categoryServiceAD.getAllCategoryPagination(pageNumber,pageSize, sortBy, search);                                                         
+    }
+
+    
+    /* I _2  get value theo id*/
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
+        //yeu cau service tra  ve id
+        return categoryServiceAD.getById(id);
     }
 
      //create permission

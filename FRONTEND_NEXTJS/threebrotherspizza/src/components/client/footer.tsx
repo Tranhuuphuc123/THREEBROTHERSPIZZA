@@ -31,7 +31,7 @@ export default function Footer() {
                  <FontAwesomeIcon icon={faPhoneVolume} className="mx-2 fs-4" />
                  <div style={{ borderBottom: "2px solid white", width: "40px" }}></div>
               </div>
-              <h2 className="fw-bold mt-2 mb-0" style={{ fontSize: "2.5rem" }}>1900 1577</h2>
+              <h2 className="fw-bold mt-2 mb-0" style={{ fontSize: "2.5rem" }}>1900 6066</h2>
               <p className="text-uppercase fw-bold" style={{ letterSpacing: "2px", fontSize: "0.8rem" }}>Fast Delivery</p>
             </div>
           </Col>
