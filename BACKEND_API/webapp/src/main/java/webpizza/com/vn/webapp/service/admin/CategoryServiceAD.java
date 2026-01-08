@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import webpizza.com.vn.webapp.DTO.admin.CategoryDTO_AD.CategoryCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.CategoryDTO_AD.CategoryUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.entity.Category;
+import webpizza.com.vn.webapp.entity.Promotion;
 import webpizza.com.vn.webapp.repository.CategoryRepository;
 
 @Service
@@ -40,14 +41,31 @@ public class CategoryServiceAD {
         return new ResponseEntity(response, HttpStatus.OK);
      }
 
+
      /*I _1 - get hien thi co phan trang */
-    public ResponseEntity<Map<String, Object>> getAllCategoryPagination(int pageNumber, int pageSize, String sortBy){
+    public ResponseEntity<Map<String, Object>> getAllCategoryPagination(int pageNumber, 
+                                                                        int pageSize, 
+                                                                        String sortBy,
+                                                                        String searchTerm){
         //1. khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
         //1. yeu cau repository lay du dieu - co xu ly phan trang
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(sortBy));
         Page<Category> pageResult = categoryRepo.findAll(pageable);
+
+          /* them dieu kien cho chuc nang tim keim
+         + khi search thi khong cos phan trang khi hien thi value
+         + khong search thi hien thi phan trang binh thuong
+        */
+        if(searchTerm == null || searchTerm.isEmpty()){
+            pageResult = categoryRepo.findAll(pageable);
+        }else{
+            //co yeu cau tim kiem thi tien hanh xoa phan trang di ma hien  thi value bt
+            pageResult = categoryRepo.findBySearchContains(searchTerm.toLowerCase(), 
+                                                            searchTerm.toLowerCase(), 
+                                                            pageable);
+        }
 
         if(pageResult.hasContent()){
             //tra ve ket qua cho nguoi dung theo chuan restfull api 
@@ -72,6 +90,36 @@ public class CategoryServiceAD {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
+
+
+     /*I_2: trả về danh sách promotion theo id cần tiềm */
+    public ResponseEntity<Map<String, Object>> getById (Integer id){
+        //khoi tao bien luu ket qua tra ve
+        Map<String, Object> response = new HashMap<>();
+
+        //nho repo thuc thi tra ve ket qua id => luu trong bien Optional(chap nhan gia tri null)
+        Optional<Category> optFoundById = categoryRepo.findById(id);
+        //neu no co ton tai
+        if(optFoundById.isPresent()){
+            //nhan id vau tim kiem dc
+            Category proEntity = optFoundById.get();
+
+            //tra ve thong bao thanh cong
+            response.put("data", proEntity);
+            response.put("statuscode", 201);
+            response.put("msg", "Return id of Category success");
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            //tra ve ket qua nguoi dung
+            response.put("data", null);
+            response.put("statuscode", 404);
+            response.put("msg", "Please seen result search");
+
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 
      //create tao role

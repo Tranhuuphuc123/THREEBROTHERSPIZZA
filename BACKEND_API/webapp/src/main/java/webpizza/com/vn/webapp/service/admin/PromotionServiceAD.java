@@ -40,7 +40,7 @@ public class PromotionServiceAD {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-      /*I_2: trả về danh sách promotion theo id cần tiềm */
+    /*I_2: trả về danh sách promotion theo id cần tiềm */
     public ResponseEntity<Map<String, Object>> getById (Integer id){
         //khoi tao bien luu ket qua tra ve
         Map<String, Object> response = new HashMap<>();
@@ -116,6 +116,8 @@ public class PromotionServiceAD {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
+
+ 
 
     /**II - create tao role**/
     public ResponseEntity<Map<String, Object>> createPromotion(PromotionCreateRequestDTO_AD objCreate) {

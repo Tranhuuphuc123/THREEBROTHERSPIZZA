@@ -41,6 +41,10 @@ import { UPLOAD_URL } from "@/constants/urls";
 //import page edit profile
 import EditProfile from "@/app/client/profile/page";
 
+//import lib offcanvas của react bootstrap ẩn hiện form từ các hướng
+import OffCanvasContext from '@/contexts/OffCanvasContext'
+import CartPage from '@/app/client/cart/page'
+
 
 
 export default function Header() {
@@ -197,9 +201,6 @@ export default function Header() {
               className="ms-auto"
               style={{ fontSize: "1.1rem", cursor: "pointer" }}
             >
-              <NavLink as={Link} href="/">
-                Homepage
-              </NavLink>
               <NavLink as={Link} href="/client/about">
                 About
               </NavLink>
@@ -254,14 +255,22 @@ export default function Header() {
 
 
                 {/* --- PHẦN THÊM MỚI: CARD GIỎ HÀNG NẰM SÁT BÊN PHẢI --- */}
-                <Link href="" className="ms-lg-3 d-flex align-items-center text-decoration-none">
-                  <div className="cart-pill" style={{ marginLeft: "40px" }}>
+              <OffCanvasContext
+                name="" 
+                title="Giỏ hàng của bạn"
+                /* Thêm d-flex align-items-center để căn thẳng hàng với các mục khác */
+                buttonClassName="p-0 border-0 bg-transparent shadow-none d-flex align-items-center" 
+                icon={
+                  <div className="cart-pill" style={{ marginLeft: "40px", cursor: "pointer" }}>
                     <FontAwesomeIcon icon={faCartShopping} className="cart-icon-fa" />
-                    <span className="cart-label">Giỏ hàng</span>
+                    <span className="cart-label"> Cart </span>
                     <span className="cart-count">0</span>
                   </div>
-                </Link>
-                {/* --- HẾT PHẦN GIỎ HÀNG--- */}            
+                }
+              >
+                <CartPage />
+              </OffCanvasContext>
+              {/* --- HẾT PHẦN GIỎ HÀNG--- */}            
 
             </Nav>
           </NavbarCollapse>

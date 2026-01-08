@@ -86,6 +86,7 @@ public class JwtFilter extends OncePerRequestFilter {
             || path.startsWith("/api/admin/products/{id}")
             || path.startsWith("/api/client/users/create")
             || path.startsWith("/api/client/users/active-account")
+            || path.startsWith("/api/admin/products/client-list")
         ){
             filterChain.doFilter(request, response);
             return;

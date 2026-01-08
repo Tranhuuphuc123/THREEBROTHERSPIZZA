@@ -115,25 +115,55 @@ public class ProductServiceAD {
 
 
 
-    /***I_3: get all product theo product type *****
+    /***I_3: get all product theo product type và trang thái active đang hoạt động *****
      * --> phục vụ chức năng đổ api product có phân loại lên trang homepage, product 
-     * bên client giao diện người dùng
+     * bên client giao diện người dùng nhưng đổ valuecos lọc theo mã loại sản phẩm 
+     * để vd bán thì hiển thị các loại bánh nước thì hiển thị các loại nc.. chứ không
+     * đổ loạn xạ
      * */
-    // public ResponseEntity<Map<String, Object>> getProductsByProductType(String productType) {
-    //     Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> getProductsByProductType(String productType) {
+        Map<String, Object> response = new HashMap<>();
         
-    //     // Chỉ lấy những sản phẩm đang hoạt động (isActive = 1)
-    //     List<Product> list = productRepo.findByProductType(productType, 1);
+        // Chỉ lấy những sản phẩm đang hoạt động (isActive = 1) và theo producttype
+        List<Product> list = productRepo.findByProductTypeAndIsActive(productType, 1);
         
-    //     if(!list.isEmpty()) {
-    //         response.put("data", list);
-    //         response.put("statuscode", 200);
-    //         return new ResponseEntity<>(response, HttpStatus.OK);
-    //     } else {
-    //         response.put("msg", "No find data!");
-    //         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    //     }
-    // }
+        if(!list.isEmpty()) {
+            response.put("data", list);
+            response.put("statuscode", 200);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.put("msg", "No find data!");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+       /***I_4: get all product theo product type pattern (LIKE) và trang thái active *****
+     * --> Phục vụ chức năng lấy tất cả pizza (pizza%, ví dụ: pizza cake seafood, pizza vegetarian...)
+     * hoặc các loại sản phẩm khác có pattern tương tự(ý là cùng type là pizza mà hậu tố tên 
+     * nó khác thì đk sai không lây đc nên cần lấy miên là tiền tố tên có chữ pizza là đc phục 
+     * vụ đổ trang product  tuy có phân loại product type nhưng miễn có tiền tố tên là pizza 
+     * là đổ hết vào product khi bấm viewall bên homepage mục pizza)
+     * */
+    public ResponseEntity<Map<String, Object>> getProductsByProductTypePattern(String productTypePattern) {
+        Map<String, Object> response = new HashMap<>();
+        
+        // Thêm % vào cuối pattern để tìm tất cả sản phẩm bắt đầu bằng pattern
+        String pattern = productTypePattern.endsWith("%") ? productTypePattern : productTypePattern + "%";
+        
+        // Chỉ lấy những sản phẩm đang hoạt động (isActive = 1) và theo pattern
+        List<Product> list = productRepo.findByProductTypePatternAndIsActive(pattern, 1);
+        
+        if(!list.isEmpty()) {
+            response.put("data", list);
+            response.put("statuscode", 200);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.put("data", null);
+            response.put("statuscode", 404);
+            response.put("msg", "No find data!");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
 
 
      /*II - Post(create)*/
