@@ -1,6 +1,7 @@
 package webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,13 +16,13 @@ public class ShiftCreateRequestDTO_AD {
     @NotBlank(message = "ai cho may de trong")
     private String shiftName;
 
-    @NotNull(message = "ai cho may de trong")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
 
-    @NotNull(message = "ai cho may de trong")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
-    @NotBlank(message = "ai cho may de trong")
+    @NotNull(message = "ai cho may de trong")
     private float wageMultiplier;
 
     private float bonus;

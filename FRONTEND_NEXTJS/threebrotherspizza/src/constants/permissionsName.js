@@ -64,3 +64,15 @@ export const PRODUCT_MATERIAL_VIEW = "product_material_view"
 export const PRODUCT_MATERIAL_CREATE = "product_material_create"
 export const PRODUCT_MATERIAL_EDIT = "product_material_edit"
 export const PRODUCT_MATERIAL_DELETE = "product_material_delete"
+
+//nhom quyen cua table salary_level
+export const SALARY_LEVEL_VIEW = "salary_level_view"
+export const SALARY_LEVEL_CREATE = "salary_level_create"
+export const SALARY_LEVEL_EDIT = "salary_level_edit"
+export const SALARY_LEVEL_DELTE = "salary_level_delete"
+
+//nhom quyen cua table shifts
+export const SHIFT_VIEW = "shift_view"
+export const SHIFT_CREATE = "shift_create"
+export const SHIFT_EDIT = "shift_edit"
+export const SHIFT_DELTE = "shift_delete"
