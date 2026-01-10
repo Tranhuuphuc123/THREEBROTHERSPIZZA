@@ -31,6 +31,7 @@ const CreateModal =() => {
         register,
         handleSubmit,
         formState: { errors },
+        setError, // ## Thêm setError để set lỗi từ server vào từng field
     } = useForm<PromotionTypes>({
         // Ép kiểu defaultValues để tránh báo đỏ vì checkbox trả về boolean, interface yêu cầu number
         defaultValues: {
@@ -56,9 +57,32 @@ const CreateModal =() => {
                 closeModal() //dong modal sau create xong
             } 
         } catch (error: any) {
-            // Lấy thông báo lỗi từ phía Server trả về nếu có
-            const errorMsg = error.response?.data?.message || error.message || 'Something went wrong';
-            showToast(`${errorMsg} !`, 'warning');
+            /* Xử lý lỗi validation từ server chi tiết hơn có lỗi là báo chi tiết lên các ô input*/
+            if (error.response?.data?.violations && Array.isArray(error.response.data.violations)) {
+            // Nếu có lỗi validation chi tiết từ server
+            const violations = error.response.data.violations;
+            
+            // Set lỗi cho từng field trong form
+            violations.forEach((violation: { filename: string; message: string }) => {
+                // Map tên field từ backend (filename) sang tên field trong form
+                // Backend trả về "username", "password", "email" -> map trực tiếp
+                const fieldName = violation.filename as keyof PromotionTypes;
+                setError(fieldName, {
+                type: "server",
+                message: violation.message
+                });
+            });
+            
+            // KHÔNG hiển thị toast ở đây vì đã hiển thị lỗi chi tiết dưới từng input
+            // Chỉ hiển thị toast khi có lỗi khác (không phải validation)
+            } else if (error.response?.data?.msg) {
+            // Xử lý lỗi từ service (ví dụ: username đã tồn tại, password không đủ mạnh)
+            showToast(error.response.data.msg, 'warning');
+            } else {
+                // Lấy thông báo lỗi từ phía Server trả về nếu có
+                const errorMsg = error.response?.data?.message || error.message || 'Something went wrong';
+                showToast(`${errorMsg} !`, 'warning');
+            }
         }
     }
 
@@ -73,24 +97,34 @@ const CreateModal =() => {
                         <label className="form-label fw-bold">Promotion Name</label>
                         <input type="text" 
                                 className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                                id='name'
                                 placeholder="Promotion Name ...." 
                                 /*kỹ thuật prefix của lib react hook form thay 
                                 thế cho  onChange={(e) => setState(e.target.value)}
                                 để thu nhập value nhập từ bàn phím */
-                                {...register("name", { required: true })} />
+                                {...register("name", { required: "name not empty"})} 
+                            />
+                            {/* Chỗ Hiển thị lỗi validation từ server hoặc client ra ngay chỗ 
+                            form input đang nhập */}
+                            {errors.name && (
+                            <div className="invalid-feedback d-block">
+                                {errors.name.message}
+                            </div>
+                            )}
                     </div>
                     {/* mức giảm promotion */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Product Discount</label>
                         <input type="number" 
                                 step="0.01"
+                                id='discount'
                                 className={`form-control ${errors.discount ? 'is-invalid' : ''}`}
                                 placeholder="0.00" 
                                 /*kỹ thuật prefix của lib react hook form thay 
                                 thế cho  onChange={(e) => setState(e.target.value)}
                                 để thu nhập value nhập từ bàn phím */
                                 {...register("discount", { 
-                                        required: true, 
+                                        required: "discount not empty", 
                                         valueAsNumber: true  // Rất quan trọng để Java nhận kiểu Float
                                 })}  />
                     </div>
@@ -100,12 +134,13 @@ const CreateModal =() => {
                     {/* mô tả promotion */}
                     <div className="col-md-12 mb-3">
                         <label className="form-label fw-bold">Description</label>
-                        <textarea  className="form-control" 
+                        <textarea   className={`form-control ${errors.description ? 'is-invalid' : ''}`}
+                                    id='description'
                                     placeholder="Description..."
                                 /*kỹ thuật prefix của lib react hook form thay 
                                 thế cho  onChange={(e) => setState(e.target.value)}
                                 để thu nhập value nhập từ bàn phím */
-                                {...register("description", { required: true })} />
+                                {...register("description", { required: "description not empty" })} />
                     </div>
                 </div>
 
@@ -114,21 +149,23 @@ const CreateModal =() => {
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">StartDate</label>
                         <input type="date" 
+                                id='startDate'
                                 className={`form-control ${errors.startDate ? 'is-invalid' : ''}`}
                                 /*kỹ thuật prefix của lib react hook form thay 
                                 thế cho  onChange={(e) => setState(e.target.value)}
                                 để thu nhập value nhập từ bàn phím */
-                                {...register("startDate", { required: true })} />
+                                {...register("startDate", { required: "startDate not empty" })} />
                     </div>
                     {/* ngày kết thúc promotion hoạt động */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">EndDate</label>
                         <input type="date" 
+                               id='enđate'
                                 className={`form-control ${errors.endDate ? 'is-invalid' : ''}`}
                                 /*kỹ thuật prefix của lib react hook form thay 
                                 thế cho  onChange={(e) => setState(e.target.value)}
                                 để thu nhập value nhập từ bàn phím */
-                                {...register("endDate", { required: true })} />
+                                {...register("endDate", { required: "endDate not empty" })} />
                     </div>
                 </div>
                 

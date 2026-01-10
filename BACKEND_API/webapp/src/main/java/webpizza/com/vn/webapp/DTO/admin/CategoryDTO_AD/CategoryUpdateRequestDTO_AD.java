@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryUpdateRequestDTO_AD {
-    @NotBlank(message = "This field cannot be empty")
+    @NotBlank(message = "code cannot be empty")
     private String code;
 
-    @NotBlank(message = "This field cannot be empty")
+    @NotBlank(message = "name cannot be empty")
     private String name;
     
     private String description;

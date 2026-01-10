@@ -60,11 +60,11 @@ public class RoleHasPermissionsServiceAD {
         List<RoleHasPermissions> savedEntities = new ArrayList<>();
         if (obj.getPermissionId() != null && !obj.getPermissionId().isEmpty()) {
             Role role = roleRepo.findById(obj.getRoleId())
-                    .orElseThrow(() -> new RuntimeException("Role không tồn tại"));
+                    .orElseThrow(() -> new RuntimeException("The role does not exist."));
 
             for (Integer pId : obj.getPermissionId()) {
                 Permission permission = permissionRepo.findById(pId)
-                        .orElseThrow(() -> new RuntimeException("Permission ID " + pId + " không tồn tại"));
+                        .orElseThrow(() -> new RuntimeException("Permission ID " + pId + "does not exist"));
 
                 RoleHasPermissions newRel = new RoleHasPermissions();
                 newRel.setRole(role);
@@ -75,7 +75,7 @@ public class RoleHasPermissionsServiceAD {
         }
 
         response.put("statuscode", 200);
-        response.put("msg", "Đã cập nhật phân quyền thành công!");
+        response.put("msg", "Permission granted successfully!");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -65,7 +65,7 @@ public class SupplierServiceAD {
             //tra ve ket qua cho nguoi dung theo chuan restfull api 
             response.put("data", pageResult.getContent());
             response.put("statuscode", 201);
-            response.put("msg", "get du lieu thanh cong oh yeah da qua xa da");
+            response.put("msg", "get data successfully");
 
             response.put("currentpage", pageNumber);
             response.put("isFirst", pageResult.isFirst());
@@ -79,7 +79,7 @@ public class SupplierServiceAD {
         }else{
             response.put("data", null);
             response.put("statuscode", 404);
-            response.put("msg", "la du lieu khong co ");
+            response.put("msg", "no data");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -143,7 +143,7 @@ public class SupplierServiceAD {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                response.put("msg", "Lỗi khi lưu file: " + e.getMessage());
+                response.put("msg", "File saving failed: " + e.getMessage());
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -163,13 +163,13 @@ public class SupplierServiceAD {
 
             response.put("data", createSupEntity);
             response.put("statuscode", 200);
-            response.put("msg", "Create thành công");
+            response.put("msg", "Create supplier success");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
 
         } catch (Exception e) {
             response.put("data", null);
             response.put("statuscode", 500);
-            response.put("msg", "Lỗi database: " + e.getMessage());
+            response.put("msg", "Error database: " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -268,7 +268,7 @@ public class SupplierServiceAD {
 
                     supEntity.setImg(newFile);
                 }catch(IOException e ){
-                    System.err.println("loi xu ly file: " + e.getMessage());
+                    System.err.println("File saving failed: " + e.getMessage());
                 }
             }
 
@@ -287,13 +287,13 @@ public class SupplierServiceAD {
 
             response.put("data",supEntity );
             response.put("statuscode", 200);
-            response.put("msg", "update thanh cong");
+            response.put("msg", "update supplier success");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             response.put("data",null );
             response.put("statuscode", 404);
-            response.put("msg", "update khong thanh cong");
+            response.put("msg", "update supplier failed");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }

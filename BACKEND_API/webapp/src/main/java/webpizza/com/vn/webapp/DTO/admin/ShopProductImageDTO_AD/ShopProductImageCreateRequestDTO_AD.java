@@ -1,6 +1,5 @@
 package webpizza.com.vn.webapp.DTO.admin.ShopProductImageDTO_AD;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopProductImageCreateRequestDTO_AD {
-    @NotNull(message = "id san pham ko duoc de trong")
+    @NotNull(message = "productId cannot empty")
     private Integer productId;
 
-    @NotBlank(message = "hinh ko duoc de trong")
     private String image;
 }

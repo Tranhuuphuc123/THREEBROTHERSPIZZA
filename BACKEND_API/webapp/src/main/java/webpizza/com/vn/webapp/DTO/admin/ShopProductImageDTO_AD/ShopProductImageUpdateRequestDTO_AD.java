@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopProductImageUpdateRequestDTO_AD {
-    @NotNull(message = "id san pham ko duoc de trong")
+     @NotNull(message = "productId cannot empty")
     private Integer productId;
 
-    @NotBlank(message = "hinh ko duoc de trong")
     private String image;
 }

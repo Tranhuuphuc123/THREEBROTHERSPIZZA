@@ -10,14 +10,15 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 public class UserCreateRequestDTO_CL {
-    @NotBlank(message = "khogn dc de username trong")
-    @Length(min = 3, max = 70, message = "ten username phai co it nhat la 3 ky tu")
+    
+    @NotBlank(message = "userName cannot empty")
+    @Length(min = 3, max = 70, message = "userName must have at least 3 character")
     private String username;
 
-    @NotBlank(message = "mat khau khong dc de trong")
-    @Length(min = 6, max = 128, message = "mk it nhat la phai co 6 -128 ky tu")
+    @NotBlank(message = "password cannot empty")
+    @Length(min = 6, max = 128, message = "password must have at least 6 - 128 character")
     private String password;
 
-    @NotBlank(message = "Email khong dc de trong")
+    @NotBlank(message = "email cannot empty")
     private String email;
 }

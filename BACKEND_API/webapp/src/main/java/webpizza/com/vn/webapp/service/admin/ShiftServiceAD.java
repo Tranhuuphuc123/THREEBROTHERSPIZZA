@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftUpdateRequestDTO_AD;
@@ -49,7 +48,7 @@ public class ShiftServiceAD {
             //tra ve ket qua cho nguoi dung theo chuan restfull api 
             response.put("data", pageResult.getContent());
             response.put("statuscode", 201);
-            response.put("msg", "get du lieu thanh cong oh yeah da qua xa da");
+            response.put("msg", "get data succesfully");
 
             response.put("currentpage", pageNumber);
             response.put("isFirst", pageResult.isFirst());
@@ -63,7 +62,7 @@ public class ShiftServiceAD {
         }else{
             response.put("data", null);
             response.put("statuscode", 404);
-            response.put("msg", "la du lieu khong co ");
+            response.put("msg", "no data ");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -118,13 +117,13 @@ public class ShiftServiceAD {
 
             response.put("data", createShiftEntity);
             response.put("statuscode", 200);
-            response.put("msg", "Create thành công");
+            response.put("msg", "Create shifts success");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
 
         } catch (Exception e) {
             response.put("data", null);
             response.put("statuscode", 500);
-            response.put("msg", "Lỗi database: " + e.getMessage());
+            response.put("msg", "Error database: " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -197,13 +196,13 @@ public class ShiftServiceAD {
 
             response.put("data",shiftEntity );
             response.put("statuscode", 200);
-            response.put("msg", "update thanh cong");
+            response.put("msg", "update shifts success");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             response.put("data",null );
             response.put("statuscode", 404);
-            response.put("msg", "update khong thanh cong");
+            response.put("msg", "update shifts failed");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }

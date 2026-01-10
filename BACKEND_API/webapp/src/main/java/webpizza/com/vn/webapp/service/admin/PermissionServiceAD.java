@@ -60,7 +60,7 @@ public class PermissionServiceAD {
             //tra ket qua ve response
             response.put("data",pageResult.getContent());
             response.put("statuscode",201);
-            response.put("msg","tra ve ket qua thanh cong oh yeah");
+            response.put("msg","Return a success result");
 
             response.put("currentpage",pageNumber);
             response.put("Nextpage",pageResult.hasNext());
@@ -74,7 +74,7 @@ public class PermissionServiceAD {
         }else{
             response.put("data", null);
             response.put("statuscode", 404);
-            response.put("msg","khong tim thay du lieu huhuhu");
+            response.put("msg","No data found");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -98,7 +98,7 @@ public class PermissionServiceAD {
         //c-4 tra ve ket qua cho nguoi dung theo chuan restfullAPI
         response.put("data",createEntity);
         response.put("statuscode",200);
-        response.put("msg","create thanh cong oh yeah");
+        response.put("msg","create Permission success");
 
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
@@ -133,7 +133,7 @@ public class PermissionServiceAD {
             //goi response tra ve ket qua
             response.put("data",updatedEntity);
             response.put("statuscode",200);
-            response.put("msg","update thanh cong oh yeah");
+            response.put("msg","update Permission success");
 
             return new ResponseEntity<>(response,HttpStatus.OK);
         }else{
@@ -141,7 +141,7 @@ public class PermissionServiceAD {
             //goi response tra ve ket qua
             response.put("data",null);
             response.put("statuscode",404);
-            response.put("msg","update ko thanh cong huhuhu");
+            response.put("msg","update permission failed !");
 
             return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
         }
@@ -166,14 +166,14 @@ public class PermissionServiceAD {
             //goi response luu ket qua tra ve
             response.put("data",null);
             response.put("statuscode",200);
-            response.put("msg","xoa thanh cong oh yeah");
+            response.put("msg","delete permission success");
 
             return new ResponseEntity<>(response,HttpStatus.OK);
         }else{
             //goi response luu ket qua tra ve
             response.put("data",null);
             response.put("statuscode",404);
-            response.put("msg","xoa ko thanh cong oh no");
+            response.put("msg","delete permission failed");
 
             return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
         }

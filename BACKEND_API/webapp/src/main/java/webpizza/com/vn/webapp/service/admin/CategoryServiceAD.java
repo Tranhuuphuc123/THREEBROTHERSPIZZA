@@ -19,11 +19,15 @@ import webpizza.com.vn.webapp.DTO.admin.CategoryDTO_AD.CategoryUpdateRequestDTO_
 import webpizza.com.vn.webapp.entity.Category;
 import webpizza.com.vn.webapp.entity.Promotion;
 import webpizza.com.vn.webapp.repository.CategoryRepository;
+import webpizza.com.vn.webapp.repository.ProductRepository;
 
 @Service
 public class CategoryServiceAD {
     @Autowired
     private CategoryRepository categoryRepo;
+
+    @Autowired
+    private ProductRepository productRepo;
 
      /*I _0 - get hien thi không phan trang */
      public ResponseEntity<Map<String, Object>> getAllCategory(){
@@ -189,13 +193,29 @@ public class CategoryServiceAD {
     }
 
     //delete xoa role
+    /*####Hiểu đúng vấn đề####
+    + Bảng product có khóa ngoại tới bảng category (vd: product.category_id FK → category.id).
+    + Khi còn product đang dùng category đó, DB sẽ không cho xóa category (vi phạm FK).
+    + Giải pháp không phải là “bỏ luôn foreign key”, mà là chọn chiến lược xử lý quan hệ. 
+    ==> vì vây trong thiêt kế chức năng này Nếu category đang được dùng, không cho xóa, 
+    trả về message rõ ràng.
+    */
     public ResponseEntity<Map<String, Object>> deleteCategory(Integer id){
         //tao response luu ket qua tra ve
         Map<String,Object> response = new HashMap<>();
 
+        // 1. kiểm tra còn product nào dùng category này không
+        long productCount = productRepo.countByCategoryId(id);
+        if (productCount > 0) {
+            response.put("data", null);
+            response.put("statuscode", 400);
+            response.put("msg", "The Category cannot be deleted because it is being used by the product.");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        // 2. nếu không có product nào, cho xóa bình thường (code cũ của bạn)
         //tim theo id
         Optional<Category> optFound = categoryRepo.findById(id);
-
         //neu tim thay thi xoa
         if(optFound.isPresent()){
             //lay entity ra khoi hop qua opt

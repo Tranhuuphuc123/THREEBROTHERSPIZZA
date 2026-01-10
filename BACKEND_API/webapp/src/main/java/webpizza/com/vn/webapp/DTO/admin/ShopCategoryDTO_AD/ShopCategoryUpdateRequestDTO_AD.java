@@ -10,12 +10,12 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShopCategoryUpdateRequestDTO_AD {
-    @NotBlank(message = "category code ko duoc de trong")
-    @Length(max = 50, message = "category code ko duoc qua 100 ky tu")
+    @NotBlank(message = "category code cannot empty")
+    @Length(max = 50, message = "Category codes cannot exceed 100 characters.")
     private String categoryCode;
 
-    @NotBlank(message = "category name ko duoc de trong")
-    @Length(min = 3, max = 50, message = "category name có ít nhát 3 ký tự")
+    @NotBlank(message = "category name cannot empty")
+    @Length(min = 3, max = 50, message = "Category name must have at least 3 characters")
     private String categoryName;
 
     private String description;

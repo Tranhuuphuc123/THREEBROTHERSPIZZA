@@ -11,17 +11,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RoleCreateRequestDTO_AD{
 
-    @NotBlank(message = "khong duoc de trong")
-    @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
+    @NotBlank(message = "Name cannot empty")
+    @Size(min = 3, message = "Names must have a minimum length of 3 characters.")
     private String name;
 
-    @NotBlank(message = "Khong dc de trong")
-    @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
+    @NotBlank(message = "displayName cannot empty")
+    @Size(min = 3, message = "Names must have a minimum length of 3 characters.")
     private String displayName;
 
-    @NotBlank(message = "Khong dc de trong ")
-    @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
+    @NotBlank(message = "guardName cannot empty")
+    @Size(min = 3, message = "Names must have a minimum length of 3 characters.")
     private String guardName;
-
 
 }

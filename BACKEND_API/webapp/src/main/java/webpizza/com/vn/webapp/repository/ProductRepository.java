@@ -43,4 +43,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
         @Param("isActive") Integer isActive
     );
 
+
+    /*Spring sẽ tự tạo câu query: SELECT COUNT(*) FROM products WHERE category_id = ?
+    => nó phục vụ cho chức năng delete của category vì category là khóa ngoại trong 
+    product khi xóa category thì phải kiểm tra xem khóa ngoại này thì product có đang dùng 
+    không nếu có thì phải seelect count coi product ở categoryid đó có đg chọn không để 
+    loại trừ hay thông báo để biết mà không xóa category id đó đi khi nó đg đc product chọn
+    dùng  
+    */
+    long countByCategoryId(Integer categoryId);
+
 }

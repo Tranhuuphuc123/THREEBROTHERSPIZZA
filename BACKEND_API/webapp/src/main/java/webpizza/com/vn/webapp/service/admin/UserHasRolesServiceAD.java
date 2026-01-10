@@ -63,11 +63,11 @@ public class UserHasRolesServiceAD {
         List<UserHasRoles> savedEntities = new ArrayList<>();
         if (obj.getRoleIds() != null && !obj.getRoleIds().isEmpty()) {
             User user = userRepo.findById(obj.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+                    .orElseThrow(() -> new RuntimeException("The user does not exist."));
 
             for (Integer rId : obj.getRoleIds()) {
                 Role role = roleRepo.findById(rId)
-                        .orElseThrow(() -> new RuntimeException("RoleId " + rId + " không tồn tại"));
+                        .orElseThrow(() -> new RuntimeException("RoleId " + rId + "does not exist"));
 
                 UserHasRoles newRel = new UserHasRoles();
                 newRel.setUser(user);
@@ -78,7 +78,7 @@ public class UserHasRolesServiceAD {
         }
 
         response.put("statuscode", 200);
-        response.put("msg", "Đã cập nhật phân vai trò thành công cho user!");
+        response.put("msg", "update userhasroles success!");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

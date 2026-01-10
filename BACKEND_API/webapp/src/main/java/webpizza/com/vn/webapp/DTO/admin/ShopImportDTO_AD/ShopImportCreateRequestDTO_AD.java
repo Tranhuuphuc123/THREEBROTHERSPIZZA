@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ShopImportCreateRequestDTO_AD {
 
-    @NotNull(message = "store id ko duoc de trong")
+    @NotNull(message = "store id cannot empty")
     private Integer storeId;
 
-    @NotNull(message = "employee id ko duoc de trong")
+    @NotNull(message = "employee id cannot empty")
     private Integer employeeId;
 
     private LocalDateTime importDate;

@@ -12,6 +12,8 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,6 +52,26 @@ public class GlobalExceptionHandler {
         for(ConstraintViolation violation : e.getConstraintViolations()){
             error.getViolations().add(
                     new Violations(violation.getPropertyPath().toString(), violation.getMessage())
+            );
+        }
+        return error;
+    }
+
+    /*
+    * + MethodArgumentNotValidException: Exception này được ném khi dùng @Valid với @RequestBody hoặc @ModelAttribute
+    * + Đây chính là exception được ném khi bạn dùng @Valid @RequestBody UserCreateRequestDTO_CL trong controller
+    * + Exception này chứa thông tin về các field bị lỗi validation thông qua BindingResult
+    * + @ResponseStatus: HttpStatus.BAD_REQUEST (400) - lỗi từ phía client
+    * */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    ValidationErrorResponse onMethodArgumentNotValidException(MethodArgumentNotValidException e){
+        ValidationErrorResponse error = new ValidationErrorResponse();
+        // Lấy tất cả các lỗi validation từ các field trong DTO
+        for(FieldError fieldError : e.getBindingResult().getFieldErrors()){
+            error.getViolations().add(
+                    new Violations(fieldError.getField(), fieldError.getDefaultMessage())
             );
         }
         return error;

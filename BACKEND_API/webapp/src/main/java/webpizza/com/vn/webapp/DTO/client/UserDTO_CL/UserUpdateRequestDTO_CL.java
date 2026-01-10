@@ -21,34 +21,31 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 @Setter
 public class UserUpdateRequestDTO_CL {
 
-    @NotBlank(message = "khogn dc de name trong")
-    @Length(min = 3, max = 70, message = "ten name phai co it nhat la 3 ky tu")
+    @Length(min = 3, max = 70, message = "name must have at least 3 character")
     private String name;
 
-    @NotBlank(message = "khogn dc de username trong")
-    @Length(min = 3, max = 70, message = "ten username phai co it nhat la 3 ky tu")
+    @NotBlank(message = "userName cannot empty")
+    @Length(min = 3, max = 70, message = "username must have at least 3 character")
     private String username;
 
-    @NotBlank(message = "mat khau khong dc de trong")
-    @Length(min = 6, max = 128, message = "mk it nhat la phai co 6 -128 ky tu")
+    @NotBlank(message = "password cannot empty")
+    @Length(min = 6, max = 128, message = "password must have at least 6 - 128 character")
     private String password;
 
-    @NotNull(message = "khong dc de trong")
     private Integer gender;
 
-    @NotNull(message = "khong dc de trong ngay sinh")
+    @NotNull(message = "birthday cannot empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class) // Thêm dòng này vào
     private LocalDate birthday;
 
-    @NotBlank(message = "khong dc de trong email")
-    @Email(message = "phai dung cau truc email la <name@gmail.com>")
+    @NotBlank(message = "email cannot empty")
+    @Email(message = "The correct email structure is <name@gmail.com>")
     private String email;
 
-    @Pattern(message = "phai dung cau truc sdt; xxxx-xxx-xxx", regexp = "^\\d{4}\\d{3}\\d{3}$")
+    @Pattern(message = "The correct phone structure is xxxx-xxx-xxx", regexp = "^\\d{4}\\d{3}\\d{3}$")
     private String phone;
 
-    @NotBlank(message = "khong dc de trong dia chi nha may")
     @Length(max = 500)
     private String address;
 

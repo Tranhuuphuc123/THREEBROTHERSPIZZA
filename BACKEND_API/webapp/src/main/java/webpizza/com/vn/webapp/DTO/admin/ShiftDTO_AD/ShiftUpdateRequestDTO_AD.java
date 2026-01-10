@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShiftUpdateRequestDTO_AD {
-   @NotBlank(message = "ai cho may de trong")
+   @NotBlank(message = "shiftName cannot empty")
     private String shiftName;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -22,7 +22,7 @@ public class ShiftUpdateRequestDTO_AD {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
-    @NotNull(message = "ai cho may de trong")
+    @NotNull(message = "wageMultiplier cannot empty")
     private float wageMultiplier;
 
     private float bonus;

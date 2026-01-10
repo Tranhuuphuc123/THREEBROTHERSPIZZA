@@ -11,17 +11,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopExportCreateRequestDTO_AD {
-    @NotNull(message = "store id ko duoc de trong")
+    @NotNull(message = "store id cannot empty")
     private Integer storeId;
 
-    @NotNull(message = "employee id ko duoc de trong")
+    @NotNull(message = "employee id cannot empty")
     private Integer employeeId;
 
     private LocalDateTime exportDate;
 
     private String description;
 
-    @NotNull(message = "order id ko duoc de trong")
+    @NotNull(message = "order id cannot empty")
     private Integer orderId;
 
 

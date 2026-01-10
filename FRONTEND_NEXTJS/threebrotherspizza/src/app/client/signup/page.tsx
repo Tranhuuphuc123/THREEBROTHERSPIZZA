@@ -34,6 +34,7 @@ const Signup = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setError, // ## Thêm setError để set lỗi từ server vào từng field
   } = useForm<InputsTypes>()
 
   const onSubmit: SubmitHandler<InputsTypes> = async (data) => {
@@ -58,9 +59,32 @@ const Signup = () => {
         showToast(res.data.message || 'Create account failed!', 'danger');
       }
     } catch (error: any) {
-      // Lấy thông báo lỗi từ phía Server trả về nếu có
-      const errorMsg = error.response?.data?.message || error.message || 'Something went wrong';
-      showToast(`${errorMsg} !`, 'warning');
+      /* Xử lý lỗi validation từ server chi tiết hơn có lỗi là báo chi tiết lên các ô input*/
+      if (error.response?.data?.violations && Array.isArray(error.response.data.violations)) {
+        // Nếu có lỗi validation chi tiết từ server
+        const violations = error.response.data.violations;
+        
+        // Set lỗi cho từng field trong form
+        violations.forEach((violation: { filename: string; message: string }) => {
+          // Map tên field từ backend (filename) sang tên field trong form
+          // Backend trả về "username", "password", "email" -> map trực tiếp
+          const fieldName = violation.filename as keyof InputsTypes;
+          setError(fieldName, {
+            type: "server",
+            message: violation.message
+          });
+        });
+        
+        // KHÔNG hiển thị toast ở đây vì đã hiển thị lỗi chi tiết dưới từng input
+        // Chỉ hiển thị toast khi có lỗi khác (không phải validation)
+      } else if (error.response?.data?.msg) {
+        // Xử lý lỗi từ service (ví dụ: username đã tồn tại, password không đủ mạnh)
+        showToast(error.response.data.msg, 'warning');
+      } else {
+        // Lỗi khác
+        const errorMsg = error.response?.data?.message || error.message || 'Something went wrong';
+        showToast(`${errorMsg} !`, 'warning');
+      }
     }
   }
 
@@ -110,15 +134,22 @@ const Signup = () => {
               <div className="col-md-9">
                 <input
                   type="text"
-                  className="form-control"
+                  // bắt lỗi sai đỗ lỗi ra ngay form input này
+                  className={`form-control ${errors.username ? 'is-invalid' : ''}`}
                   id="username"
                   placeholder="Enter username"
-                  required
                   /*kỹ thuật prefix của lib react hook form thay 
                    thế cho  onChange={(e) => setState(e.target.value)}
                    để thu nhập value nhập từ bàn phím */
-                  {...register("username", { required: true })}
+                  {...register("username", { required: "Username not empty" })}
                 />
+                {/* Chỗ Hiển thị lỗi validation từ server hoặc client ra ngay chỗ 
+                form input đang nhập */}
+                {errors.username && (
+                  <div className="invalid-feedback d-block">
+                    {errors.username.message}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -141,11 +172,20 @@ const Signup = () => {
                       /*kỹ thuật prefix của lib react hook form thay 
                       thế cho  onChange={(e) => setState(e.target.value)}
                       để thu nhập value nhập từ bàn phím */
-                      register={register("password", { required: true })}/>
+                      register={register("password",  { required: "Password not empty!" })}
+                      className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                      />
+                      {/* Chỗ Hiển thị lỗi validation từ server hoặc client ra ngay chỗ 
+                      form input đang nhập */}
+                      {errors.password && (
+                        <div className="invalid-feedback d-block" style={{ marginTop: "5px" }}>
+                          {errors.password.message}
+                        </div>
+                )}
               </div>
             </div>
 
-            {/* nhập lại mật khẩu */}
+             {/* nhập lại mật khẩu */}
             <div className="row mb-3 align-items-center position-relative">
               <label
                 htmlFor="confirmpassword"
@@ -154,19 +194,26 @@ const Signup = () => {
                 Confirm Password<span className="text-danger">*</span>
               </label>
               <div className="col-md-9 position-relative">
-                {/* nut password : co icon con mat an hien password
-                => lưu ý: để chuyền value và ghi nhận value thay đổi với {...register}
-                kiểu cách thu nhập value của react hook form thay thế onchange thu nhập 
-                value bằng usestate  thông thường khi mẫu input: PasswrodInput đc tách ra 
-                page riêng thì cần truyền props từ cha page của Signup qua con là passwordInput
-                 */}
                 <PasswordInput  
-                      /*kỹ thuật prefix của lib react hook form thay 
-                      thế cho  onChange={(e) => setState(e.target.value)}
-                      để thu nhập value nhập từ bàn phím */
-                      register={register("confirm_password", { required: true })}/>
+                  register={register("confirm_password", { 
+                    required: "Confirm password cannot be left blank.",
+                    validate: (value, formValues) => {
+                      if (value !== formValues.password) {
+                        return "The verification password does not match.";
+                      }
+                    }
+                  })}
+                  className={`form-control ${errors.confirm_password ? 'is-invalid' : ''}`}
+                />
+                {/* Hiển thị lỗi validation từ server hoặc client */}
+                {errors.confirm_password && (
+                  <div className="invalid-feedback d-block" style={{ marginTop: "5px" }}>
+                    {errors.confirm_password.message}
+                  </div>
+                )}
               </div>
             </div>
+
 
             {/* nhập email */}
              <div className="row mb-3 align-items-center">
@@ -179,15 +226,27 @@ const Signup = () => {
               <div className="col-md-9">
                 <input
                   type="email"
-                  className="form-control"
+                  className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                   id="email"
                   placeholder="example@email.com"
-                  required
-                   /*kỹ thuật prefix của lib react hook form thay 
-                    thế cho  onChange={(e) => setState(e.target.value)}
-                    để thu nhập value nhập từ bàn phím */
-                    {...register("email", { required: true })}
+                  /*kỹ thuật prefix của lib react hook form thay 
+                  thế cho  onChange={(e) => setState(e.target.value)}
+                  để thu nhập value nhập từ bàn phím */
+                  {...register("email", { 
+                    required: "Email not empty",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Email is not in the correct format."
+                    }
+                  })}
                 />
+                {/* Chỗ Hiển thị lỗi validation từ server hoặc client ra ngay chỗ 
+                form input đang nhập */}
+                {errors.email && (
+                  <div className="invalid-feedback d-block">
+                    {errors.email.message}
+                  </div>
+                )}
               </div>
             </div>
 

@@ -9,7 +9,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 //import types định kiểu dữ liệu cho PasswordInput
 import { PasswordInputTypes } from "@/types/PassWordInputTypes";
 
-export default function PasswordInput({register}: any) {
+export default function PasswordInput({register, className}: any) {
   const [showPassword, setShowPassword] = useState(false);
 
   /*
@@ -41,7 +41,7 @@ export default function PasswordInput({register}: any) {
           }
           type={showPassword ? "text" : "password"}
           id="password"
-          className="form-control"
+          className={className || "form-control"}
           placeholder="Nhập mật khẩu"
           required
         />
@@ -50,7 +50,7 @@ export default function PasswordInput({register}: any) {
             <FontAwesomeIcon icon={faEyeSlash} className="me-2" />
           )}
           {!showPassword == true && (
-            <FontAwesomeIcon icon={faEye} className="me-2" />
+            <FontAwesomeIcon icon={faEyeSlash} className="me-2" />
           )}
         </span>
       </div>

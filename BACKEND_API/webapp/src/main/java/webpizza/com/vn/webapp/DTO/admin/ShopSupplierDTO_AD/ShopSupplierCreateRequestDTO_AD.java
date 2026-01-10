@@ -10,12 +10,12 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopSupplierCreateRequestDTO_AD {
-    @NotBlank(message = "Mã ko duoc de trống")
+    @NotBlank(message = "supplierCode cannot empty")
     @Length(max = 50)
     private String supplierCode;
 
-    @NotBlank(message = "tên ko supplier ko dc de trong")
-    @Length(min = 3, max = 70, message = "ten shop phai co it nhat  3 ky tu")
+    @NotBlank(message = "supplierName cannot empty")
+    @Length(min = 3, max = 70, message = " supplierName must have at least 3 characters")
     private String supplierName;
 
     private String description;

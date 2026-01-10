@@ -21,40 +21,37 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 @Getter
 @Setter
 public class UserCreateRequestDTO_AD {
-    
-    @NotBlank(message = "khogn dc de name trong")
-    @Length(min = 3, max = 70, message = "ten name phai co it nhat la 3 ky tu")
+   
+    @Length(min = 3, max = 70, message = "name must have at least 3 character")
     private String name;
 
-    @NotBlank(message = "khogn dc de username trong")
-    @Length(min = 3, max = 70, message = "ten username phai co it nhat la 3 ky tu")
+    @NotBlank(message = "username cannot empty")
+    @Length(min = 3, max = 70, message = "userName must have at least 3 character")
     private String username;
 
-    @NotBlank(message = "mat khau khong dc de trong")
-    @Length(min = 6, max = 128, message = "mk it nhat la phai co 6 - 128 ky tu")
+    @NotBlank(message = "password cannot empty")
+    @Length(min = 6, max = 128, message = "password must have at least 6 -128 character")
     private String password;
 
-    @NotNull(message = "khong dc de trong")
+    @NotNull(message = "gender cannot ")
     private Integer gender;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class) // Thêm dòng này vào
     private LocalDate birthday;
 
-    @NotBlank(message = "khong dc de trong email")
-    @Email(message = "phai dung cau truc email la <name@gmail.com>")
+    @Email(message = "You must use the correct email structure: <name@gmail.com>")
     private String email;
 
-    @Pattern(message = "phai dung cau truc sdt; xxxx-xxx-xxx", regexp = "^\\d{4}\\d{3}\\d{3}$")
+    @Pattern(message = "You must use the corect phone: xxxx-xxx-xxx", regexp = "^\\d{4}\\d{3}\\d{3}$")
     private String phone;
 
     @Length(max = 500)
     private String address;
 
-    @NotNull(message = "Mức lương không được để trống")
-    @Min(value = 1, message = "Mức lương thấp nhất là 1")
+    @NotNull(message = "SalaryLevel cannot empty")
+    @Min(value = 1, message = "The lowest salary is 1")
     private Integer levelId; //value = 1 là chấp nhận số từ 1 trở lên
 
-    @NotNull(message = "khong dc de trong")
     private Integer isActive;
 }
