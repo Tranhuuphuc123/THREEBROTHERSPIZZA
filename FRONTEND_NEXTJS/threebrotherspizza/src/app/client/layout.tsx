@@ -6,7 +6,10 @@ import Header from "@/components/client/header";
 import Footer from "@/components/client/footer";
 import BackToTop from "@/components/client/BackToTop";
 import { useEffect, useState } from "react";
-import { Image } from "react-bootstrap";
+
+/*import component chatbox messenger zalo vào*/
+import Chatbox from "@/components/client/chatbox";
+
 
 export default function RootClientLayout({
   children,
@@ -41,6 +44,10 @@ export default function RootClientLayout({
 
       {/* phan body */}
       {children}
+
+      {/* Thêm component Chatbox */}
+      <Chatbox />
+
 
       {/* phan footer */}
       <Footer />

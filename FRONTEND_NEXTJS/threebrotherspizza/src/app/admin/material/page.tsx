@@ -250,16 +250,16 @@ export default function SupplierManage () {
     //mục này mình đưa trang dashboard vào đay
     <>
       <div className="mb-3">
-        <h3>Danh sách sản phẩm</h3>
+        <h3>List Material</h3>
       </div>
 
       {/* mục giao diện chức năng tiềm kiếm trang product search */}
       <div className="card p-3 manage-employees">
         <div className="row align-items-center mb-3 mx-1">
           <div className="col-sm-12 p-0">
-            <h5 className="ml-lg-2">Bộ lộc tiềm kiếm</h5>
+            <h5 className="ml-lg-2">Search filter</h5>
             <div className="form-group">
-              <label className="me-2">Supplier Name</label>
+              <label className="me-2">Material Name</label>
               <input
                 type="text"
                 placeholder="Enter name"
@@ -272,11 +272,11 @@ export default function SupplierManage () {
         </div>
       </div>
 
-      {/* giao diện table Accounts */}
+      {/* giao diện table Material */}
       <div className="card p-3 manage-employees">
         <div className="row align-items-center mb-3 mx-1">
           <div className="col-12 col-sm-6 p-0 mb-2 mb-sm-0">
-            <h5 className="ml-lg-2">Manage Supplier</h5>
+            <h5 className="ml-lg-2">Manage Material</h5>
           </div>
           <div className="col-12 col-sm-6 p-0 text-start text-sm-end">
 
@@ -287,7 +287,7 @@ export default function SupplierManage () {
                 onClick={() => openModal("create")}
               >
                 <FontAwesomeIcon icon={faPlus} className="fa-fw" />
-                <span>Add New Supplier</span>
+                <span>Add New Material</span>
               </button>
             )}
            
@@ -365,8 +365,8 @@ export default function SupplierManage () {
         {/* giao dien xu ly phan trang */}
         <div className="pagination-container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
           <div className="pagination-info text-center text-sm-start">
-            Trang {currentPage}/{totalPage} - Tổng:
-            {totalElement} sản phẩm
+            Page {currentPage}/{totalPage} - Total Amount:
+            {totalElement} Material
           </div>
           <div className="pagination-control d-flex justify-content-center">
             <button

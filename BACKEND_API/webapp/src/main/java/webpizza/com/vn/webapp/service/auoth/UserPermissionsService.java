@@ -68,7 +68,7 @@ public class UserPermissionsService {
          }else{
                 response.put("data", null);
                 response.put("statuscode", 404);
-                response.put("msg", " không có dữ liệu");
+                response.put("msg", " No data ");
 
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
          }

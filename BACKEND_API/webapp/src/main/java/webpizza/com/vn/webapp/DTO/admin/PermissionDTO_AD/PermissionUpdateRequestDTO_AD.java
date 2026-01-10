@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PermissionUpdateRequestDTO_AD {
-    @NotBlank(message = "name ko duoc de trong")
-    @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
+    @NotBlank(message = "Name is not empty")
+    @Size(min = 3, message = "Names must have a minimum length of 3 characters" )
     private String name;
 
-    @NotBlank(message = "name ko duoc de trong")
-    @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
+    @NotBlank(message = "displayName is not empty")
+    @Size(min = 3, message = "Names must have a minimum length of 3 characters.")
     private String displayName;
 
-    @NotBlank(message = "name ko duoc de trong")
-    @Size(min = 3, message = "name co do dai toi thieu 3 ky tu")
+    @NotBlank(message = "guardName is not empty")
+    @Size(min = 3, message = "Names must have a minimum length of 3 characters.")
     private String guardName;
 }

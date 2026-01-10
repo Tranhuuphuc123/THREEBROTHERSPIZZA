@@ -36,7 +36,7 @@ public class RoleServiceAD {
         //c - trả về kết quả cho người dùng -> trả theo chuẩn restFullApi
         response.put("data", lsRoles);
         response.put("statuscode", 200);
-        response.put("msg", "get dữ liệu thành công");
+        response.put("msg", "get data successfully");
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -56,7 +56,7 @@ public class RoleServiceAD {
             //tra ket qua ve response
             response.put("data",pageResult.getContent());
             response.put("statuscode",201);
-            response.put("msg","tra ve ket qua thanh cong oh yeah");
+            response.put("msg","return data successfully");
 
             response.put("currentpage",pageNumber);
             response.put("Nextpage",pageResult.hasNext());
@@ -70,7 +70,7 @@ public class RoleServiceAD {
         }else{
             response.put("data", null);
             response.put("statuscode", 404);
-            response.put("msg","khong tim thay du lieu huhuhu");
+            response.put("msg","no data");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -94,7 +94,7 @@ public class RoleServiceAD {
         //c-4 tra ve ket qua cho nguoi dung theo chuan restfullAPI
         response.put("data",createEntity);
         response.put("statuscode",200);
-        response.put("msg","create thi create lam deo gi cang");
+        response.put("msg","create role success");
 
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
@@ -129,14 +129,14 @@ public class RoleServiceAD {
             //goi response tra ve ket qua
             response.put("data",updatedEntity);
             response.put("statuscode",200);
-            response.put("msg","update thanh cong oh yeah");
+            response.put("msg","update role success");
 
             return new ResponseEntity<>(response,HttpStatus.OK);
         }else{
             //goi response tra ve ket qua
             response.put("data",null);
             response.put("statuscode",404);
-            response.put("msg","update ko thanh cong huhuhu");
+            response.put("msg","update role failed");
 
             return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
         }
@@ -161,14 +161,14 @@ public class RoleServiceAD {
             //goi response luu ket qua tra ve
             response.put("data",null);
             response.put("statuscode",200);
-            response.put("msg","xoa thanh cong oh yeah");
+            response.put("msg","delete role success");
 
             return new ResponseEntity<>(response,HttpStatus.OK);
         }else{
             //goi response luu ket qua tra ve
             response.put("data",null);
             response.put("statuscode",404);
-            response.put("msg","xoa ko thanh cong oh no");
+            response.put("msg","delete role failed");
 
             return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
         }

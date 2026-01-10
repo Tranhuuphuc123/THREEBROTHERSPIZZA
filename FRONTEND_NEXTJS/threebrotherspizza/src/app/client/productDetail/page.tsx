@@ -34,14 +34,14 @@ const PizzaProductDetails = () => {
   // Tính giá dựa trên size
   const sizePrices = {
     small: 0,
-    medium: 80000,
-    large: 190000,
+    medium: 0.4,
+    large: 0.8,
   };
   
   const basePrices = {
     traditional: 0,
     thin: 0,
-    cheese: 50000,
+    cheese: 0.3,
   };
   
   // Lấy giá gốc từ API sản phẩm
@@ -127,7 +127,7 @@ const PizzaProductDetails = () => {
       <div className="container">
         <div className="row g-4">
           
-          {/* CỘT TRÁI: HÌNH ẢNH & REVIEW */}
+          {/******************CỘT TRÁI: HÌNH ẢNH & REVIEW *******************/}
           <div className="col-lg-7">
             {/* Box Hình Ảnh Chính & Thumbs */}
             <div className="bg-white p-4 rounded-4 shadow-sm mb-4">
@@ -217,7 +217,7 @@ const PizzaProductDetails = () => {
             </div>
           </div>
 
-          {/* CỘT PHẢI: THÔNG TIN & TÍNH TIỀN - BỎ STICKY */}
+          {/******************** CỘT PHẢI: THÔNG TIN & TÍNH TIỀN - BỎ STICKY ***************/}
           <div className="col-lg-5">
             {/* Bỏ sticky-top để scroll đồng nhất với bên trái */}
             <div className="bg-white p-4 rounded-4 shadow-sm border border-success-subtle">

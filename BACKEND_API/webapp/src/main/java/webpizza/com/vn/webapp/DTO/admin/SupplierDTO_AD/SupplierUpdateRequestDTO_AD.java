@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SupplierUpdateRequestDTO_AD {
-    @NotBlank(message = "khong dc de ma code trong")
+    @NotBlank(message = "code cannot empty")
     @Column(name = "code")
     private String code;
 
-    @NotBlank(message = "khong dc de supplierName trong")
+    @NotBlank(message = "name cannot empty")
     @Column(name = "name")
     private String name;
 

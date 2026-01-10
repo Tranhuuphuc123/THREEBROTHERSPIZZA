@@ -16,21 +16,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MaterialUpdateRequestDTOAD {
-      @NotBlank(message = "This field cannot be empty")
+    @NotBlank(message = "name cannot be empty")
     private String name;
 
     private String img;
     
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "SupplierId cannot be empty")
     private Integer supplierId;
 
-    @NotBlank(message = "This field cannot be empty")
+    @NotBlank(message = "Unit cannot be empty")
     private String unit;
 
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "Quantity cannot be empty")
     private Integer quantity;
 
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "Price cannot be empty")
     private Float price;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

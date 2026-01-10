@@ -64,7 +64,7 @@ public class ProductServiceAD {
             //tra ket qua cho nguoi dung -> tra theo chuan restfull APi sieu cap vip pro
             response.put("data", pageResult.getContent());
             response.put("statuscode", 201);
-            response.put("msg", "get du lieu thanh cong oh yeah da qua xa da");
+            response.put("msg", "Data retrieval successful");
 
             response.put("currentpage", pageNumber);
             response.put("isFirst", pageResult.isFirst());
@@ -78,7 +78,7 @@ public class ProductServiceAD {
         }else{
            response.put("data", null);
            response.put("statuscode", 404);
-           response.put("msg", " la du lieu khong co hu hu hu hu");
+           response.put("msg", "get data not found");
 
            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -243,7 +243,7 @@ public class ProductServiceAD {
 
             response.put("data", createProEntity);
             response.put("statuscode", 200);
-            response.put("msg", "Create thành công");
+            response.put("msg", "Create product success");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }catch (Exception e){
             response.put("data", null);
@@ -374,13 +374,13 @@ public class ProductServiceAD {
 
             response.put("data",proEntity );
             response.put("statuscode", 200);
-            response.put("msg", "update thanh cong");
+            response.put("msg", "update product success");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             response.put("data",null );
             response.put("statuscode", 404);
-            response.put("msg", "update khong thanh cong");
+            response.put("msg", "update product failed");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }

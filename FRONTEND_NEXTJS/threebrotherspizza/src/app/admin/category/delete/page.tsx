@@ -44,9 +44,15 @@ const DeleteModal: React.FC<DeleteCatPropsTypes> = ({
         }
 
       } catch (error: any) {
-        // Xử lý lỗi Optimistic Locking hoặc lỗi 404, 500
-        const errorMessage = error.response?.data?.message || "Wrong failed!";
-        showToast(errorMessage, "danger");
+        const data = error.response?.data;
+
+        // Ưu tiên đọc msg backend trả về (ví dụ: "Không thể xóa Category vì đang được sử dụng bởi sản phẩm.")
+        if (data?.msg) {
+          showToast(data.msg, "warning");   // hoặc "danger" tùy bạn
+        } else {
+          const errorMessage = data?.message || "Wrong failed!";
+          showToast(errorMessage, "danger");
+        }
       }
     };
 

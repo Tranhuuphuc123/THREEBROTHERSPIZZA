@@ -40,7 +40,6 @@ CREATE TABLE suppliers (
   description TEXT
 );
 
-
 select * from roles_permissions;
 CREATE TABLE categories (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

@@ -9,15 +9,15 @@ import lombok.*;
 @AllArgsConstructor
 public class ProductMaterialUpdateRequestDTOAD {
 
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "ProductId cannot be empty")
     private Integer productId;
 
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "MaterialId cannot be empty")
     private Integer materialId;
 
-    @NotBlank(message = "This field cannot be empty")
+    @NotBlank(message = "Unit cannot be empty")
     private String unit;
 
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "StandardPrice cannot be empty")
     private Float standardPrice;
 }

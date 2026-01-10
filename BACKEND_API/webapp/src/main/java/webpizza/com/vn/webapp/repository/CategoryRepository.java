@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import webpizza.com.vn.webapp.entity.Category;
-import webpizza.com.vn.webapp.entity.Supplier;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {

@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductUpdateRequestDTOAD {
-    @NotBlank(message = "This field cannot be empty")
+    
+    @NotBlank(message = "Code cannot be empty")
     private String code;
 
-    @NotBlank(message = "This field cannot be empty")
+    @NotBlank(message = "Name cannot be empty")
     private String name;
 
     private String image;
@@ -22,16 +23,16 @@ public class ProductUpdateRequestDTOAD {
 
     private String description;
 
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "Price cannot be empty")
     private Float price;
 
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "Quantity cannot be empty")
     private Integer quantity;
 
     private Integer isActive;
 
-    @NotNull(message = "This field cannot be empty")
+    @NotNull(message = "CategoryId cannot be empty")
     private Integer categoryId;
 
-     private String productType;
+    private String productType;
 }

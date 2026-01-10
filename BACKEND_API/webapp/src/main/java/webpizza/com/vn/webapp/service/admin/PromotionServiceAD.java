@@ -111,7 +111,7 @@ public class PromotionServiceAD {
         }else{
             response.put("data", null);
             response.put("statuscode", 404);
-            response.put("msg", "la du lieu khong co ");
+            response.put("msg", "no data");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -193,7 +193,7 @@ public class PromotionServiceAD {
 
             // 4. Kiểm tra logic ngày tháng sau khi update (Tránh trường hợp sửa ngày bị lệch)
             if (entityEdit.getEndDate().isBefore(entityEdit.getStartDate())) {
-                response.put("msg", "Lỗi: The end date must not be before the start date!!");
+                response.put("msg", "Error: The end date must not be before the start date!!");
                 response.put("statuscode", 400);
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }

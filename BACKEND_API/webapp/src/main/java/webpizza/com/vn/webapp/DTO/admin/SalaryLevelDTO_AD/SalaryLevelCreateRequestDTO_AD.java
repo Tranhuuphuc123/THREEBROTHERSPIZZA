@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SalaryLevelCreateRequestDTO_AD {
-    @NotBlank(message = "ai cho may de trong")
+    @NotBlank(message = "LevelName cannot empty")
     private String levelName;
 
-    @NotNull(message = "ai cho may de trong")
+    @NotNull(message = "hourlyWage cannot empty")
     private Float hourlyWage;
 
-    @NotBlank(message = "ai cho may de trong")
+    @NotBlank(message = "description cannot empty")
     private String description;
 }

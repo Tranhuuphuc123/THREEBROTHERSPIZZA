@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class UserHasRolesBatchCreateRequestDTO_AD {
-    @NotNull(message = "con cec may de trong ta odam may")
+    @NotNull(message = "userIs cannot empty")
     private Integer userId;
 
-    @NotNull(message = "con cec may de trong ta odam may")
+    @NotNull(message = "roleIds cannot empty")
     private List<Integer> roleIds;
 }

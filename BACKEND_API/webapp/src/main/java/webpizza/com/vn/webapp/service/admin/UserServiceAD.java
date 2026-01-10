@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import webpizza.com.vn.webapp.DTO.admin.UserDTO_AD.UserCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.UserDTO_AD.UserUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.entity.User;
@@ -29,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +41,11 @@ public class UserServiceAD {
 
     @Autowired
     private webpizza.com.vn.webapp.repository.UserRepository userRepo;
+
+
+    /**##THEM VALIDATION BAT LOI HIEN THI RA MAN HINH TAI FORM INPUT NHAP##**/
+    @Autowired
+    private Validator validator; // thêm dòng này
 
     /*tao bien string lay url cau hinh luu file da thiet lap ben application.properties
     * @Value: annotation dc su dung de gan gia tri cho mot bien tu cac nguon:
@@ -100,7 +108,7 @@ public class UserServiceAD {
             //tra ket qua cho nguoi dung -> tra theo chuan restfull APi sieu cap vip pro
             response.put("data", pageResult.getContent());
             response.put("statuscode", 201);
-            response.put("msg", "get du lieu thanh cong oh yeah da qua xa da");
+            response.put("msg", "get data success");
 
             response.put("currentpage", pageNumber);
             response.put("isFirst", pageResult.isFirst());
@@ -114,7 +122,7 @@ public class UserServiceAD {
         }else{
            response.put("data", null);
            response.put("statuscode", 404);
-           response.put("msg", " la du lieu khong co hu hu hu hu");
+           response.put("msg", "no data");
 
            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -141,14 +149,14 @@ public class UserServiceAD {
             //tra ve thong bao thanh cong
             response.put("data", accountEntity);
             response.put("statuscode", 201);
-            response.put("msg", "ket qua tra ve ton tai id vua tim kiem");
+            response.put("msg", "The search result returns that the ID just searched exists.");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             //tra ve ket qua nguoi dung
             response.put("data", null);
             response.put("statuscode", 404);
-            response.put("msg", "vui long xem lai khong ton tai id vua tim kiem");
+            response.put("msg", "Please check again, the ID you just searched for does not exist.");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -161,6 +169,25 @@ public class UserServiceAD {
         //a - khoi tao bien response de luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
+
+        // ### DÙNG BEAN VALIDATION ĐỌC ANNOTATION TRONG DTO --- ####
+        Set<ConstraintViolation<UserCreateRequestDTO_AD>> violationsSet = validator.validate(objCreate);
+        if (!violationsSet.isEmpty()) {
+            // Dùng lại ValidationErrorResponse + Violations mà bạn đã viết
+            ValidationErrorResponse responseError = new ValidationErrorResponse();
+            for (ConstraintViolation<UserCreateRequestDTO_AD> v : violationsSet) {
+                String fieldName = v.getPropertyPath().toString(); // ví dụ: "name", "email"
+                String message   = v.getMessage();                 // ví dụ: "khogn dc de name trong"
+                responseError.getViolations().add(new Violations(fieldName, message));
+            }
+
+            response.put("data", responseError);
+            response.put("statuscode", 400);
+            response.put("msg", "Data not valid, Please check");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+    
         String newFile = null;
 
         //thuc hien kiem tra dieu kien chap nhan ruot img rong
@@ -208,7 +235,7 @@ public class UserServiceAD {
         //b-1 xu ly service  validation exception kiem tra tinh hop le khi dien thong tin
         ValidationErrorResponse responseError = new ValidationErrorResponse();
         if(objCreate.getUsername().equalsIgnoreCase("Admin") || objCreate.getUsername().equalsIgnoreCase("quan tri vien")){
-            responseError.getViolations().add(new Violations("username", "khong duoc dung ten nay de dk tai khoan user"));
+            responseError.getViolations().add(new Violations("username", "Do not use this name to register a user account."));
         }
         //b-2 xu ly password
         /*
@@ -235,7 +262,7 @@ public class UserServiceAD {
         // tao bien kiem tra mk co du manh regex chua
         boolean isPasswordIstrong = matcher.matches();
         if(isPasswordIstrong == false){
-            responseError.getViolations().add(new Violations("password","mat khau ban tao phai co ky tu in hoa, in thuong, va it nhat mot ky tu dac biet"));
+            responseError.getViolations().add(new Violations("password","Your password must contain uppercase letters, lowercase letters, and at least one special character."));
         }
 
         //c - kiem tra neu nguoi dung khong vi pham bat ke service validation nao thi cho luu
@@ -261,7 +288,9 @@ public class UserServiceAD {
             newEntity.setEmail(objCreate.getEmail());
         
             //xu ly goi repo luu img co ruot
-            newEntity.setAvatar(newFile);
+            if(newFile != null){
+                newEntity.setAvatar(newFile);
+            }
 
             newEntity.setPhone(objCreate.getPhone());
             newEntity.setAddress(objCreate.getAddress());
@@ -279,7 +308,7 @@ public class UserServiceAD {
            User existingUser = userRepo.findByUsername(objCreate.getUsername());
            // c-3 thuc hien kiem tra ds data trong mysql co trung ten username nao khong
             if(existingUser != null){
-                response.put("msg", "Tên bạn đăng ký đã tồn tại vui lòng chọn tên khác");
+                response.put("msg", "The name you registered with already takes a name. Please choose a different name.");
                 response.put("statuscode", 400);
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }else{
@@ -288,14 +317,14 @@ public class UserServiceAD {
                 //c-4 tra ve ket qua cho nguoi dung theo chuan restfullAPI
                 response.put("data", createEntity);
                 response.put("statuscode", 200);
-                response.put("msg", " create thanh cong");
+                response.put("msg", " create user success");
 
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
             }
         }else{
             response.put("data", responseError);
             response.put("statuscode", 501);
-            response.put("msg", " du lieu chua dat yeu cau can xem lai");
+            response.put("msg", " The data does not meet the requirements and needs to be reviewed.");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_IMPLEMENTED);
         }
@@ -357,7 +386,7 @@ public class UserServiceAD {
                 entityEdit.setAvatar(newFileName);
             } catch (IOException e) {
                 // Log lỗi nhưng không làm dừng chương trình
-                System.err.println("Lỗi xử lý file: " + e.getMessage());
+                System.err.println("File saving failed: " + e.getMessage());
             }
         }
 
@@ -382,13 +411,13 @@ public class UserServiceAD {
 
         response.put("data", entityEdit);
         response.put("statuscode", 200);
-        response.put("msg", "Update thành công rồi yeah yeah");
+        response.put("msg", "Update user success");
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     } else {
         response.put("data", null);
         response.put("statuscode", 404);
-        response.put("msg", "Update không thành công - Không tìm thấy ID");
+        response.put("msg", "Update user failed - User ID not foundD");
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
@@ -428,14 +457,14 @@ public class UserServiceAD {
             //tra ve ket qua nguioi dung chuan restfull api
             response.put("data", null);
             response.put("statuscode", 200);
-            response.put("msg", "delete thanh cong oh yeah yeah");
+            response.put("msg", "delete User successfully");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             //tra ve chuan restfull api thong bao la khong ton tai id can xoa
             response.put("data", null);
             response.put("statuscode", 404);
-            response.put("msg", "tai khoan xoa khong ton tai");
+            response.put("msg", "Deleted account no longer exists");
 
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
