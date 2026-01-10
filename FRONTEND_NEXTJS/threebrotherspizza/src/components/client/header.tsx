@@ -42,7 +42,7 @@ import { UPLOAD_URL } from "@/constants/urls";
 import EditProfile from "@/app/client/profile/page";
 
 //import lib offcanvas của react bootstrap ẩn hiện form từ các hướng
-import OffCanvasContext from '@/contexts/OffCanvasContext'
+import OffCanvasCart from '@/components/client/OffCanvasCart'
 import CartPage from '@/app/client/cart/page'
 
 
@@ -255,7 +255,7 @@ export default function Header() {
 
 
                 {/* --- PHẦN THÊM MỚI: CARD GIỎ HÀNG NẰM SÁT BÊN PHẢI --- */}
-              <OffCanvasContext
+              <OffCanvasCart
                 name="" 
                 title="Giỏ hàng của bạn"
                 /* Thêm d-flex align-items-center để căn thẳng hàng với các mục khác */
@@ -269,7 +269,7 @@ export default function Header() {
                 }
               >
                 <CartPage />
-              </OffCanvasContext>
+              </OffCanvasCart>
               {/* --- HẾT PHẦN GIỎ HÀNG--- */}            
 
             </Nav>

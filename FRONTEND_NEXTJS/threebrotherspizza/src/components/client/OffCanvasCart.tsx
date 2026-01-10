@@ -23,7 +23,7 @@ interface OffCanvasExampleProps {
   icon?: React.ReactNode;
 }
 
-export default function OffCanvasContext({
+export default function OffCanvasCart({
   name,
   title,
   children,
