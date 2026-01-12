@@ -53,4 +53,35 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
     */
     long countByCategoryId(Integer categoryId);
 
+
+
+    /***********method xử lý thống kế báo cáo cho product************* */
+    // Thống kê theo trạng thái active
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.isActive = :isActive")
+    long countByIsActive(@Param("isActive") Integer isActive);
+    
+    // Thống kê theo category (join với Category để lấy tên)
+    @Query("SELECT c.name, COUNT(p) as count " +
+           "FROM Product p " +
+           "JOIN Category c ON p.categoryId = c.id " +
+           "GROUP BY c.id, c.name " +
+           "ORDER BY count DESC")
+    List<Object[]> countProductsByCategory();
+    
+    // Thống kê theo khoảng giá
+    @Query("SELECT " +
+           "CASE " +
+           "  WHEN p.price < 100000 THEN 'Under 100k' " +
+           "  WHEN p.price >= 100000 AND p.price < 200000 THEN '100k - 200k' " +
+           "  WHEN p.price >= 200000 AND p.price < 300000 THEN '200k - 300k' " +
+           "  WHEN p.price >= 300000 AND p.price < 500000 THEN '300k - 500k' " +
+           "  ELSE 'Over 500k' " +
+           "END as priceRange, " +
+           "COUNT(p) as count " +
+           "FROM Product p " +
+           "GROUP BY priceRange " +
+           "ORDER BY MIN(p.price)")
+    List<Object[]> countProductsByPriceRange();
+
 }
+

@@ -28,6 +28,10 @@ import webpizza.com.vn.webapp.DTO.admin.ProductDTO_AD.ProductUpdateRequestDTOAD;
 import webpizza.com.vn.webapp.entity.Product;
 import webpizza.com.vn.webapp.repository.ProductRepository;
 
+//import lib hỗ trợ method thống kê báo cáo
+import webpizza.com.vn.webapp.DTO.admin.ProductDTO_AD.ProductStatisticsDTO_AD;
+import java.util.ArrayList;
+
 @Service
 public class ProductServiceAD {
     
@@ -386,5 +390,52 @@ public class ProductServiceAD {
         }
     }
 
+
+    /****V - METHOD SERVICE XỬ LÝ THỐNG KÊ BÁO CÁO CHO PRODUCT MANAGE******* */
+    public ResponseEntity<Map<String, Object>> getProductStatistics() {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            ProductStatisticsDTO_AD stats = new ProductStatisticsDTO_AD();
+            
+            // 1. Thống kê theo trạng thái active
+            stats.setActiveCount(productRepo.countByIsActive(1));
+            stats.setInactiveCount(productRepo.countByIsActive(0));
+            
+            // 2. Thống kê theo category
+            List<Object[]> categoryData = productRepo.countProductsByCategory();
+            List<ProductStatisticsDTO_AD.CategoryStats> categoryStats = new ArrayList<>();
+            
+            for (Object[] row : categoryData) {
+                String categoryName = (String) row[0];
+                long count = ((Number) row[1]).longValue();
+                categoryStats.add(new ProductStatisticsDTO_AD.CategoryStats(categoryName, count));
+            }
+            stats.setCategoryStats(categoryStats);
+            
+            // 3. Thống kê theo khoảng giá
+            List<Object[]> priceData = productRepo.countProductsByPriceRange();
+            List<ProductStatisticsDTO_AD.PriceRangeStats> priceRangeStats = new ArrayList<>();
+            
+            for (Object[] row : priceData) {
+                String priceRange = (String) row[0];
+                long count = ((Number) row[1]).longValue();
+                priceRangeStats.add(new ProductStatisticsDTO_AD.PriceRangeStats(priceRange, count));
+            }
+            stats.setPriceRangeStats(priceRangeStats);
+            
+            response.put("data", stats);
+            response.put("statuscode", 200);
+            response.put("msg", "Get statistics successfully");
+            
+            return new ResponseEntity<>(response, HttpStatus.OK);
+            
+        } catch (Exception e) {
+            response.put("data", null);
+            response.put("statuscode", 500);
+            response.put("msg", "Error getting statistics: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

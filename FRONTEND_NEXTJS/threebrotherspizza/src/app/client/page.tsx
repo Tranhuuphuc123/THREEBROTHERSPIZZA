@@ -58,7 +58,7 @@ export default function HomePage() {
           id: item.id,
           name: item.name,
           description: item.shortDescription || item.description || "",
-          price: formatPrice(item.price),
+          price: item.price,
           image: item.image ? `${UPLOAD_URL}/${item.image}` : "/assets/client/img/default.png",
           tag: item.isActive === 1 ? "Hot" : undefined,
         }));
@@ -68,11 +68,6 @@ export default function HomePage() {
       console.error(`Error fetching ${productType}:`, error);
       return [];
     }
-  };
-
-  // Format giá tiền
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('vi-VN').format(price) + "đ";
   };
 
   // Gọi API khi component mount

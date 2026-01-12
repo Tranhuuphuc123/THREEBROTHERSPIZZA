@@ -23,7 +23,7 @@ interface OffCanvasExampleProps {
   icon?: React.ReactNode;
 }
 
-export default function OffCanvasContext({
+export default function OffCanvasCart({
   name,
   title,
   children,
@@ -61,7 +61,7 @@ export default function OffCanvasContext({
         <Offcanvas.Header closeButton>
           <Offcanvas.Title
             style={{ width: "100%", textAlign: "center" }}
-            className="fs-3"
+            className="fs-3 fw-bold text-primary "
           >
             {title || name}
           </Offcanvas.Title>

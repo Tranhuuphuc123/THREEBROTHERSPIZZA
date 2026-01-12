@@ -92,9 +92,9 @@ export default function Sidebar() {
         <div className="sidebar-logo">
           <Link href="#">
             <Image
-              src="/IZJP.gif"
-              width={50}
-              height={50}
+              src="/assets/admin/img/threebrotherpizzalogo.jpg"
+              width={35}
+              height={35}
               style={{ borderRadius: "50%" }}
               alt="Logo"
             />{" "}

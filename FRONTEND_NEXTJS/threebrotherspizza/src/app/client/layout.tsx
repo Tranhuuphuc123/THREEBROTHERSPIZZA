@@ -10,6 +10,9 @@ import { useEffect, useState } from "react";
 /*import component chatbox messenger zalo vào*/
 import Chatbox from "@/components/client/chatbox";
 
+//import cartContext bao bọc hết client page 
+import {CartProvider} from '@/contexts/cartContext'
+
 
 export default function RootClientLayout({
   children,
@@ -39,21 +42,24 @@ export default function RootClientLayout({
     
   return (
     <>
-      {/* phan header */}
-      <Header />
+    {/* CartProvider là tk cart chuẩn context á */}
+      <CartProvider>
+        {/* phan header */}
+        <Header />
 
-      {/* phan body */}
-      {children}
+        {/* phan body */}
+        {children}
 
-      {/* Thêm component Chatbox */}
-      <Chatbox />
+        {/* Thêm component Chatbox */}
+        <Chatbox />
 
 
-      {/* phan footer */}
-      <Footer />
+        {/* phan footer */}
+        <Footer />
 
-      {/* Icon backto top mũi tên quay về trang chủ khi mà scroll xuống cúi trang */}
-      <BackToTop />
+        {/* Icon backto top mũi tên quay về trang chủ khi mà scroll xuống cúi trang */}
+        <BackToTop />
+      </CartProvider>
     </>
   );
 }

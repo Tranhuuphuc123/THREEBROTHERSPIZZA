@@ -106,4 +106,11 @@ public class ProductControllerAD {
 
         return productServiceAD.updateProduct(id, objDTO, file);
     }
+
+
+    /**V - method xử lý thống kê báo cáo**/
+    @GetMapping("/statistics")
+    public ResponseEntity<Map<String, Object>> getStatistics() {
+        return productServiceAD.getProductStatistics();
+    }
 }

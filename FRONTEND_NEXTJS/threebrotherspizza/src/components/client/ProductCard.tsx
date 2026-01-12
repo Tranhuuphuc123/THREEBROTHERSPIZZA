@@ -10,7 +10,7 @@ interface PizzaProps {
     id: number;
     name: string;
     description: string;
-    price: string;
+    price: number;
     image: string;
     tag?: string;
   };
@@ -66,7 +66,12 @@ export function ProductCard({ data }: PizzaProps) {
             <div className="mt-auto d-flex justify-content-between align-items-end">
               <div>
                 <div className="text-muted small" style={{ fontSize: '11px' }}>Prices starting from: </div>
-                <div className="fw-bold fs-5 text-dark" style={{ color: '#212529' }}>{data.price}</div>
+                <div className="fw-bold fs-5 text-dark" style={{ color: '#212529' }}>
+                  {Number(data.price).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </div>
               </div>
 
               <Button
