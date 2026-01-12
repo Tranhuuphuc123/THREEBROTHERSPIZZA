@@ -75,4 +75,32 @@ public interface UserRepository  extends JpaRepository<User, Integer> {
                                      Pageable pageable);
 
 
+
+                                     
+   /*********PHẦN XỬ LÝ METHOD LẤY VALUE THỐNG KÊ BÁO CÁO***************** */
+   // Thống kê theo giới tính
+    @Query("SELECT COUNT(u) FROM User u WHERE u.gender = :gender")
+    long countByGender(@Param("gender") Integer gender);
+    
+    // Thống kê theo trạng thái active
+    @Query("SELECT COUNT(u) FROM User u WHERE u.isActive = :isActive")
+    long countByIsActive(@Param("isActive") Integer isActive);
+    
+    // Thống kê user đăng ký theo tháng/năm
+    @Query("SELECT FUNCTION('YEAR', u.createdAt) as year, " +
+           "FUNCTION('MONTH', u.createdAt) as month, " +
+           "COUNT(u) as count " +
+           "FROM User u " +
+           "WHERE FUNCTION('YEAR', u.createdAt) = :year " +
+           "GROUP BY FUNCTION('YEAR', u.createdAt), FUNCTION('MONTH', u.createdAt) " +
+           "ORDER BY month")
+    List<Object[]> countUsersByMonth(@Param("year") Integer year);
+    
+    // Thống kê user đăng ký theo năm
+    @Query("SELECT FUNCTION('YEAR', u.createdAt) as year, " +
+           "COUNT(u) as count " +
+           "FROM User u " +
+           "GROUP BY FUNCTION('YEAR', u.createdAt) " +
+           "ORDER BY year")
+    List<Object[]> countUsersByYear();
 }

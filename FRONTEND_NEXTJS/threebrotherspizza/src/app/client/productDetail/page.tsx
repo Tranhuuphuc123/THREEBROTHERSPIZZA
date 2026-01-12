@@ -4,26 +4,25 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import axiosClient from "@/axios/axiosAdmin";
 import { UPLOAD_URL } from "@/constants/urls";
+//improt productDetailTypes cho page productDetail
+import {ProductDetailTypes} from '@/types/ProductDetailTypes'
 
-interface ProductDetail {
-  id: number;
-  code: string;
-  name: string;
-  image: string;
-  shortDescription: string;
-  description: string;
-  price: number;
-  quantity: number;
-  isActive: number;
-  productType: string;
-}
+//import useCart từu cartContext để lôi sử dụng các method trong cartProvider
+import {useCart} from '@/contexts/cartContext'
+
+
 
 const PizzaProductDetails = () => {
   const searchParams = useSearchParams();
   const productId = searchParams.get("id");
   
-  const [product, setProduct] = useState<ProductDetail | null>(null);
+  //state ghi nhận thông tin sản phẩm
+  const [product, setProduct] = useState<ProductDetailTypes | null>(null);
+  //state ghi nhận số lượng sản phẩm
+  const [quantity, setQuantity] = useState<number>(1);
+  //state ghi nhận trạng thái đang load 
   const [loading, setLoading] = useState(true);
+  //state ghi nhận trạng thái lỗi
   const [error, setError] = useState<string | null>(null);
   
   // State cho form chọn size và đế
@@ -50,10 +49,31 @@ const PizzaProductDetails = () => {
   const basePriceExtra = basePrices[selectedBase as keyof typeof basePrices];
   const totalPrice = basePrice + sizePrice + basePriceExtra;
 
+  //khởi tạo method add đưa sản phẩm từ product detail vào giỏ hàng cart trong tk cartContext
+  const {addToCart} = useCart()
+
   // Format giá tiền
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN').format(price) + "đ";
   };
+
+  /*### Method xử lý handleAddToCart###
+   => khi chọn poduct add to cart
+   => sản phẩm sẽ lây những thông tin cần thiết đổ vào method addTocart con text
+   đẻ ghi nhận sản phẩm đã chọn mua add vào cart với các thông tin cần hiển thị
+   nhất là số lượng
+  */
+  const handleAddToCart = (product:ProductDetailTypes) => {
+    const newCartItems = {
+      id:product?.id,
+      name:product?.name,
+      image: product?.image,
+      price:product?.price,
+      quantity: quantity
+    }
+    //gọi hàm addtocart từ cartContext add các product vào
+    addToCart(newCartItems)
+  }
 
   // Gọi API lấy thông tin sản phẩm
   useEffect(() => {
@@ -294,7 +314,19 @@ const PizzaProductDetails = () => {
                 </div>
               )}
 
-              {/* 3. Ghi chú */}
+              {/* 3. nút nhập số lượng */}
+              <div className="mb-4">
+                <div className="fw-bold mb-1">Quantity: </div>
+                <input type="number" 
+                        className="form-control w-auto d-inline-block"
+                        defaultValue={quantity}
+                        min={1}
+                        max={100}
+                        onChange={(e) => setQuantity(Number(e.target.value))}
+                />
+              </div>
+
+              {/* 4. Ghi chú */}
               <div className="mb-4">
                 <label className="fw-bold small mb-2 text-uppercase text-secondary">Note more</label>
                 <textarea 
@@ -306,7 +338,7 @@ const PizzaProductDetails = () => {
                 ></textarea>
               </div>
 
-              {/* Phần Tổng kết & Nút bấm */}
+              {/*5 Phần Tổng kết giá tiền  & Nút bấm add to cart */}
               <div className="pt-3 border-top mt-4">
                 <div className="d-flex justify-content-between align-items-end mb-4">
                   <span className="fw-bold text-secondary">Total Amount:</span>
@@ -314,7 +346,10 @@ const PizzaProductDetails = () => {
                     <span className="h2 fw-bold text-danger mb-0">{formatPrice(totalPrice)}</span>
                   </div>
                 </div>
-                <button className="btn btn-success w-100 py-3 fw-bold fs-5 shadow rounded-3 text-uppercase">
+                {/* xử lý add to cart khi nhấn button add to cart với hàm method addToCart 
+                từ cartContext */}
+                <button className="btn btn-success w-100 py-3 fw-bold fs-5 shadow rounded-3 text-uppercase"
+                onClick={() =>handleAddToCart(product)}>
                   Add to cart
                 </button>
               </div>

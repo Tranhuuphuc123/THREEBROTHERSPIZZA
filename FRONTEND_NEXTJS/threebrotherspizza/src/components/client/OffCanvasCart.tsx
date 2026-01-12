@@ -61,7 +61,7 @@ export default function OffCanvasCart({
         <Offcanvas.Header closeButton>
           <Offcanvas.Title
             style={{ width: "100%", textAlign: "center" }}
-            className="fs-3"
+            className="fs-3 fw-bold text-primary "
           >
             {title || name}
           </Offcanvas.Title>

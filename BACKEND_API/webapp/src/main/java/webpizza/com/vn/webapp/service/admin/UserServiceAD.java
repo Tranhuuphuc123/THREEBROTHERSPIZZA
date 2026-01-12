@@ -35,6 +35,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// Thêm import cho lớp thống kê báo cáo
+import webpizza.com.vn.webapp.DTO.admin.UserDTO_AD.UserStatisticsDTO_AD;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 /*lop luan ly logic code*/
 @Service
 public class UserServiceAD {
@@ -470,5 +475,58 @@ public class UserServiceAD {
         }
     }
 
+
+    
+    /**** IV - Thêm method xử lý thông kê báo cáo dạng biểu đồ echarts****/
+    public ResponseEntity<Map<String, Object>> getUserStatistics() {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            UserStatisticsDTO_AD stats = new UserStatisticsDTO_AD();
+            
+            // 1. Thống kê theo giới tính
+            stats.setMaleCount(userRepo.countByGender(1));
+            stats.setFemaleCount(userRepo.countByGender(0));
+            
+            // 2. Thống kê theo trạng thái active
+            stats.setActiveCount(userRepo.countByIsActive(1));
+            stats.setInactiveCount(userRepo.countByIsActive(0));
+            
+            // 3. Thống kê theo tháng (năm hiện tại)
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            List<Object[]> monthlyData = userRepo.countUsersByMonth(currentYear);
+            List<UserStatisticsDTO_AD.MonthlyStats> monthlyStats = new ArrayList<>();
+            
+            for (Object[] row : monthlyData) {
+                int month = ((Number) row[1]).intValue();
+                long count = ((Number) row[2]).longValue();
+                monthlyStats.add(new UserStatisticsDTO_AD.MonthlyStats(month, count));
+            }
+            stats.setMonthlyStats(monthlyStats.toArray(new UserStatisticsDTO_AD.MonthlyStats[0]));
+            
+            // 4. Thống kê theo năm
+            List<Object[]> yearlyData = userRepo.countUsersByYear();
+            List<UserStatisticsDTO_AD.YearlyStats> yearlyStats = new ArrayList<>();
+            
+            for (Object[] row : yearlyData) {
+                int year = ((Number) row[0]).intValue();
+                long count = ((Number) row[1]).longValue();
+                yearlyStats.add(new UserStatisticsDTO_AD.YearlyStats(year, count));
+            }
+            stats.setYearlyStats(yearlyStats.toArray(new UserStatisticsDTO_AD.YearlyStats[0]));
+            
+            response.put("data", stats);
+            response.put("statuscode", 200);
+            response.put("msg", "Get statistics successfully");
+            
+            return new ResponseEntity<>(response, HttpStatus.OK);
+            
+        } catch (Exception e) {
+            response.put("data", null);
+            response.put("statuscode", 500);
+            response.put("msg", "Error getting statistics: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

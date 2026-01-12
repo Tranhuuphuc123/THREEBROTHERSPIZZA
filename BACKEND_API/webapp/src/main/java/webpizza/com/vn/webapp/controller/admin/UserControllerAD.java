@@ -104,4 +104,10 @@ public class UserControllerAD {
 
        return userServiceAD.updateUser(id, objDTO, file);
    }
+
+   /*****************5 - thống kê báo cáo cho user**************************** */
+   @GetMapping("/statistics")
+    public ResponseEntity<Map<String, Object>> getStatistics() {
+        return userServiceAD.getUserStatistics();
+    }
 }

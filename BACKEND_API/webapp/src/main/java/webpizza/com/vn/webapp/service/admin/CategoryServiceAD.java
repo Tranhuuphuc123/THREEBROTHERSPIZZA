@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import webpizza.com.vn.webapp.DTO.admin.CategoryDTO_AD.CategoryCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.CategoryDTO_AD.CategoryUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.entity.Category;
-import webpizza.com.vn.webapp.entity.Promotion;
 import webpizza.com.vn.webapp.repository.CategoryRepository;
 import webpizza.com.vn.webapp.repository.ProductRepository;
 
@@ -173,7 +172,7 @@ public class CategoryServiceAD {
                 entityEdit.setDescription(objUpdate.getDescription());
             }
 
-            //goi repoluu lai cap nhat
+            //goi repo luu lai cap nhat
             Category updatedEntity = categoryRepo.save(entityEdit);
 
             //goi response tra ve ket qua

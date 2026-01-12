@@ -70,11 +70,11 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
             const response = await axiosClient.put(`/users/update/${userId}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-            showToast(response.data.msg || "Cập nhật thành công!", 'success');
+            showToast(response.data.msg || "update profile success!", 'success');
             if (onReload) onReload();
             router.push('/client')
         } catch (error: any) {
-            showToast(error.response?.data?.message || 'Có lỗi khi cập nhật!', 'danger');
+            showToast(error.response?.data?.message || 'update profile failed!', 'danger');
         }
     };
 
@@ -85,14 +85,14 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
 
         // 1. Kiểm tra nghiêm ngặt id
         if (!effectiveId) {
-            console.warn("EditProfile: ID không hợp lệ hoặc chưa được truyền vào");
+            console.warn("EditProfile: Invalid ID or not entered");
             return;
         }
         const fetchAccountById = async () => {
             try {
                 // Đảm bảo truyền vào là số khi gọi API
                 const targetId = Number(effectiveId);
-                console.log("Đang fetch dữ liệu cho ID:", targetId);
+                console.log("Fetching data for ID:", targetId);
 
                 const res = await axiosClient.get(`/users/${targetId}`);
                 // 2. Kiểm tra cấu trúc data trả về từ Backend (thường là res.data hoặc res.data.data)
@@ -122,7 +122,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                         setExistingImage(`${UPLOAD_URL}/${data.avatar}`);
                     }
                 }
-            } catch (error) { console.error("Lỗi khi tải dữ liệu", error); }
+            } catch (error) { console.error("Error loading data", error); }
         };
         fetchAccountById();
     }, [id]);
@@ -168,7 +168,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                                 {/* --- CỘT PHẢI: FORM CHI TIẾT --- */}
                                 <div className="col-md-8 p-4 p-lg-5">
                                     <div className="d-flex justify-content-between align-items-center mb-4">
-                                        <h3 className="fw-bold m-0 color-text-header">Hồ Sơ Cá Nhân</h3>
+                                        <h3 className="fw-bold m-0 color-text-header">Personal Profile</h3>
                                     </div>
 
                                 
@@ -176,7 +176,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                                         <div className="col-md-6 mb-4">
                                             <label className="form-label fw-semibold small text-uppercase"> 
                                                 <FontAwesomeIcon icon={faUser}
-                                                                className="me-2 opacity-50"/> Họ và Tên</label>
+                                                                className="me-2 opacity-50"/>Full Name</label>
                                             <input type="text" 
                                                     className="form-control form-control-lg border-2 shadow-none shadow-sm-hover" 
                                                     value={name} 
@@ -185,7 +185,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                                         <div className="col-md-6 mb-4">
                                             <label className="form-label fw-semibold small text-uppercase"> 
                                                     <FontAwesomeIcon icon={faEnvelope} 
-                                                                    className="me-2 opacity-50"/> Email</label>
+                                                                    className="me-2 opacity-50"/> Email </label>
                                             <input type="email" 
                                                     className="form-control form-control-lg border-2 shadow-none shadow-sm-hover" 
                                                     value={email} 
@@ -217,18 +217,18 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                                         <div className="col-md-4 mb-4">
                                             <label className="form-label fw-semibold small text-uppercase"> 
                                                 <FontAwesomeIcon icon={faVenusMars} 
-                                                                className="me-2 opacity-50"/> Giới tính</label>
+                                                                className="me-2 opacity-50"/> Gender </label>
                                             <select className="form-select form-select-lg border-2" 
                                                     value={gender} 
                                                     onChange={(e) => setGender(Number(e.target.value))}>
-                                                <option value={1}>Nam</option>
-                                                <option value={0}>Nữ</option>
+                                                <option value={1}>Man</option>
+                                                <option value={0}>Women</option>
                                             </select>
                                         </div>
                                         <div className="col-md-4 mb-4">
                                             <label className="form-label fw-semibold small text-uppercase"> 
                                                 <FontAwesomeIcon icon={faCakeCandles} 
-                                                    className="me-2 opacity-50"/> Ngày sinh</label>
+                                                    className="me-2 opacity-50"/> Birthday </label>
                                             <input type="date" 
                                                     className="form-control form-control-lg border-2 shadow-none shadow-sm-hover custom-date-input" 
                                                     value={birthday} 
@@ -248,7 +248,7 @@ const EditProfile: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                                     <div className="mb-4">
                                         <label className="form-label fw-semibold small text-uppercase"> 
                                             <FontAwesomeIcon icon={faMapMarkerAlt} 
-                                                className="me-2 opacity-50"/> Địa chỉ cư trú</label>
+                                                className="me-2 opacity-50"/> Address </label>
                                         <textarea className="form-control border-2 shadow-none shadow-sm-hover" 
                                                     rows={2} 
                                                     value={address} 

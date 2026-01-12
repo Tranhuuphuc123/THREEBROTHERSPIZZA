@@ -28,6 +28,9 @@ import {ProductTypes} from '@/types/ProductTypes'
 //su dung lib axios call api ben client NextJs
 import axiosAdmin from "@/axios/axiosAdmin";
 
+//import userRouter thực hiện chuyển trang
+import { useRouter } from "next/navigation";
+
 //sử dụng icon của lib fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -38,6 +41,7 @@ import {
   faAngleDoubleRight,
   faAngleLeft,
   faAngleRight,
+  faChartBar //thêm icon thống kê báo cáo
 } from "@fortawesome/free-solid-svg-icons";
 
 //import Modal từ lib Modal react-boostrap
@@ -104,6 +108,9 @@ export default function ProductManage () {
    * **/
   //as ModalContextType: định kiểu dữ liệu cho modalContextType
   const { openModal, closeModal, show, modalType } = useModal();
+
+  //khởi tạo userRouter chuyển trang
+   const router = useRouter();
 
 
   /*Khai báo state để kiểm tra quyền*/
@@ -251,7 +258,7 @@ export default function ProductManage () {
     //mục này mình đưa trang dashboard vào đay
     <>
       <div className="mb-3">
-        <h3>Danh sách sản phẩm</h3>
+        <h3>List products</h3>
       </div>
 
       {/* mục giao diện chức năng tiềm kiếm trang product search */}
@@ -291,6 +298,16 @@ export default function ProductManage () {
                 <span>Add New Product</span>
               </button>
             )}
+
+            {/* THÊM BUTTON STATISTICS */}
+            <button
+              className="btn btn-info me-2 mb-2 mb-sm-0"
+              onClick={() => router.push('/admin/products/statistics')}
+              style={{ color: 'white' }}
+            >
+              <FontAwesomeIcon icon={faChartBar} className="fa-fw" />
+              <span>Statistics</span>
+            </button>
            
            {/* CHỈ HIỆN NÚT DELETE ALL NẾU CÓ QUYỀN DELETE VÀ CÓ ITEM ĐƯỢC CHỌN */}
             {canDelete && listSelectedId.length > 0 && (

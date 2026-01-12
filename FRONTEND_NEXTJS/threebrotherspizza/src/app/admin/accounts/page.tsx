@@ -28,6 +28,9 @@ import {AccountTypes, ApiResponseTypes} from '@/types/AccountTypes'
 //su dung lib axios call api ben client NextJs
 import axiosAdmin from "@/axios/axiosAdmin";
 
+//import userRouter chuyển trang
+import { useRouter } from "next/navigation";
+
 //sử dụng icon của lib fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -38,6 +41,7 @@ import {
   faAngleDoubleRight,
   faAngleLeft,
   faAngleRight,
+  faChartBar //icon thống kê báo cáo
 } from "@fortawesome/free-solid-svg-icons";
 
 //import Modal từ lib Modal react-boostrap
@@ -107,6 +111,9 @@ export default function AccountsManage () {
    * **/
   //as ModalContextType: định kiểu dữ liệu cho modalContextType
   const { openModal, closeModal, show, modalType } = useModal();
+
+  //khoi tao useRouter
+  const router = useRouter();
 
 
   /*Khai báo state để kiểm tra quyền*/
@@ -317,6 +324,16 @@ export default function AccountsManage () {
                 <span>Add New Accounts</span>
               </button>
             )}
+
+            {/* THÊM BUTTON THỐNG KÊ BÁO CÁO */}
+            <button
+              className="btn btn-info me-2 mb-2 mb-sm-0"
+              onClick={() => router.push('/admin/accounts/statistics')}
+              style={{ color: 'white' }}
+            >
+              <FontAwesomeIcon icon={faChartBar} className="fa-fw" />
+              <span>Statistics Report</span>
+            </button>
            
            {/* CHỈ HIỆN NÚT DELETE ALL NẾU CÓ QUYỀN DELETE VÀ CÓ ITEM ĐƯỢC CHỌN */}
             {canDelete && listSelectedId.length > 0 && (
@@ -394,8 +411,8 @@ export default function AccountsManage () {
         {/* giao dien xu ly phan trang */}
         <div className="pagination-container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
           <div className="pagination-info text-center text-sm-start">
-            Trang {currentPage}/{totalPage} - Tổng:
-            {totalElement} sản phẩm
+            Page {currentPage}/{totalPage} - Total:
+            {totalElement} User
           </div>
           <div className="pagination-control d-flex justify-content-center">
             <button

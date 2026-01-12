@@ -45,9 +45,15 @@ import EditProfile from "@/app/client/profile/page";
 import OffCanvasCart from '@/components/client/OffCanvasCart'
 import CartPage from '@/app/client/cart/page'
 
+//import useCart ở cartContext vào dùng: lấy các hàm đã viết trong cartContext để dùng
+import {useCart} from '@/contexts/cartContext'
+
 
 
 export default function Header() {
+  //khởi tạo các method của cartContext vào page này
+  const { totalItems } = useCart()
+  
 
   //khoi tao cac compoent cuar modal context da khai bao o class modalcontext
   const { openModal, closeModal, show, modalType } = useModal();
@@ -254,17 +260,22 @@ export default function Header() {
                 )} 
 
 
-                {/* --- PHẦN THÊM MỚI: CARD GIỎ HÀNG NẰM SÁT BÊN PHẢI --- */}
+              {/* --- PHẦN THÊM MỚI: CARD GIỎ HÀNG NẰM SÁT BÊN PHẢI --- */}
               <OffCanvasCart
                 name="" 
-                title="Giỏ hàng của bạn"
+                title="YOUR CART"
                 /* Thêm d-flex align-items-center để căn thẳng hàng với các mục khác */
                 buttonClassName="p-0 border-0 bg-transparent shadow-none d-flex align-items-center" 
                 icon={
                   <div className="cart-pill" style={{ marginLeft: "40px", cursor: "pointer" }}>
                     <FontAwesomeIcon icon={faCartShopping} className="cart-icon-fa" />
                     <span className="cart-label"> Cart </span>
-                    <span className="cart-count">0</span>
+                    <span className="cart-count">
+                      {/* hiển thị số lượng mặt hàng lên cart giỏ hàng ở header 
+                      lưu ý nó lấy từ hàm totalItem ở cartContext hiển thị 
+                      cập nhật số lượng mặt hàng lên button cart ở header */}
+                      {totalItems()}
+                    </span>
                   </div>
                 }
               >

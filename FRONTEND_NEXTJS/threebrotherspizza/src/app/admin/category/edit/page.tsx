@@ -90,7 +90,7 @@ const EditModal : React.FC<EditCatProps> = ({ id, onReload }) => {
                                 className={`form-control ${errors.code ? 'is-invalid' : ''}`}
                                 placeholder="Promotion Name ...." 
                                 // thay thế cho thu nhập value từ onCahnge theo useState thong thường
-                                {...register("name", { required: true })} />
+                                {...register("code", { required: true })} />
                     </div>
                     {/* Tên Promotion */}
                     <div className="col-md-6 mb-3">
