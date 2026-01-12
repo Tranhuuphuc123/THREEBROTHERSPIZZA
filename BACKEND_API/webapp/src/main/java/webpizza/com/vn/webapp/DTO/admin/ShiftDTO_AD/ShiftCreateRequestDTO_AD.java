@@ -16,15 +16,17 @@ public class ShiftCreateRequestDTO_AD {
     @NotBlank(message = "shiftName cannot empty")
     private String shiftName;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    // Pattern này chấp nhận cả chữ T ở giữa
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+   // Pattern này chấp nhận cả chữ T ở giữa
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
     @NotNull(message = "wageMultiplier cannot empty")
-    private float wageMultiplier;
+    private Float wageMultiplier;
 
-    private float bonus;
+    private Float bonus;
 
 }

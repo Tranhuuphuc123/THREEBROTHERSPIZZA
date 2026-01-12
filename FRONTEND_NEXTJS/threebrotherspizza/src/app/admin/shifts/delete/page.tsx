@@ -6,13 +6,13 @@ import { useToast } from "@/contexts/ToastContext";
 import { useModal } from "@/contexts/ModalContext";
 
 //import interface  types định kiểu dữ liệu cho dữ liệu cho page props del Product.
-import {DeleteSalaryLevelPropsTypes} from "@/types/SalaryLevelTypes";
+import {DeleteShiftPropsTypes} from "@/types/ShiftTypes";
 
 //import lib axios xử lý call api co mục select category và supplier id
 import axiosAdmin from "@/axios/axiosAdmin";
 
 
-const DeleteModal: React.FC<DeleteSalaryLevelPropsTypes> = ({
+const DeleteModal: React.FC<DeleteShiftPropsTypes> = ({
   id,
   onReload,
 }) => {
@@ -26,10 +26,10 @@ const DeleteModal: React.FC<DeleteSalaryLevelPropsTypes> = ({
   const handleDeleteClick = async () => {
       try {
         // 1. Gọi API xóa (đường dẫn khớp với backend bạn đã cấu hình)
-        const response = await axiosAdmin.delete(`/salary_levels/delete/${id}`);
+        const response = await axiosAdmin.delete(`/shifts/delete/${id}`);
 
         // 2. Thông báo thành công
-        showToast(response.data.msg || "Delete Salary Level success!", "success");
+        showToast(response.data.msg || "Delete Shifts Level success!", "success");
 
         // 3. ĐÓNG MODAL TRƯỚC
         closeModal();

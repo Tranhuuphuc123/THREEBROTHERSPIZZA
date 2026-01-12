@@ -72,7 +72,8 @@ export const SALARY_LEVEL_EDIT = "salary_level_edit"
 export const SALARY_LEVEL_DELTE = "salary_level_delete"
 
 //nhom quyen cua table shifts
-export const SHIFT_VIEW = "shift_view"
-export const SHIFT_CREATE = "shift_create"
-export const SHIFT_EDIT = "shift_edit"
-export const SHIFT_DELTE = "shift_delete"
+export const SHIFT_VIEW = "shitf_view"
+export const SHIFT_CREATE = "shitf_create"
+export const SHIFT_EDIT = "shitf_edit"
+export const SHIFT_DELTE = "shitf_delete"
+

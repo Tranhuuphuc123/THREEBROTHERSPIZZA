@@ -163,7 +163,7 @@ export default function Sidebar() {
           )}
 
           {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
-          {canViewSupplier && (
+          {canViewSalaryLevel && (
              <li className="sidebar-item">
               <Link href="/admin/salary_level" className="sidebar-link">
                 <FontAwesomeIcon icon={faIndustry} className="fa-fw" />
@@ -173,7 +173,7 @@ export default function Sidebar() {
           )}
 
           {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
-          {canViewSupplier && (
+          {canViewShift && (
              <li className="sidebar-item">
               <Link href="/admin/shifts" className="sidebar-link">
                 <FontAwesomeIcon icon={faIndustry} className="fa-fw" />

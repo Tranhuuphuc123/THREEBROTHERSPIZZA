@@ -3,7 +3,7 @@ export interface ShiftTypes {
     shiftName: string;
     startTime: string; // Kiểu ISO string
     endTime: string;    // Kiểu ISO string
-    wage_multiplier: number;
+    wageMultiplier: number;
     bonus: number;
 }
 
@@ -18,4 +18,10 @@ export interface ApiResponseTypes {
 /***interface cho dữ kiểu dữ liệu cho page.tsx của create product -> truyền props cho page *******/
 export interface CreateShiftPropsTypes {
    onReload?: () => void; //? truyền cũng đc mà không cũng đc
+}
+
+/**interface cho kiểu dữ liệu của page.tsx của delete product -> truyền props cho page**/
+export interface DeleteShiftPropsTypes {
+    id: number;
+    onReload?: () => void;
 }

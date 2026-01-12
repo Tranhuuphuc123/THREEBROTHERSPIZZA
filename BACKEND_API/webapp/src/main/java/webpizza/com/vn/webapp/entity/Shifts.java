@@ -36,9 +36,9 @@ public class Shifts {
     private LocalDateTime endTime;
 
     @Column(name = "wage_multiplier")
-    private float wageMultiplier;
+    private Float wageMultiplier;
 
     @Column(name = "bonus")
-    private float bonus;
+    private Float bonus;
 
 }

@@ -25,8 +25,8 @@ const CreateModal: React.FC<CreateShiftPropsTypes> = ({onReload}) => {
     const [shiftName, setShiftName] = useState<string>('');
     const [startTime, setStartTime] = useState<string>('');
     const [endTime, setEndTime] = useState<string>('');
-    const [wageMultiplier, setWageMultiplier] = useState<string>('');
-    const [bonus, setBonus] = useState<string>('');
+    const [wageMultiplier, setWageMultiplier] = useState<number>();
+    const [bonus, setBonus] = useState<number>();
 
     //khai báo state tu useToast trong ToastContext truyền vào bien state
     const {showToast} = useToast()
@@ -38,22 +38,31 @@ const CreateModal: React.FC<CreateShiftPropsTypes> = ({onReload}) => {
   //e: React.FormEvent<HTMLFormElement>: định kiểu dữ liệu ts cho event submit form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //ngăn chăn hành vi reload mặc định của form khi submi
+
+    // Hàm format xóa chữ T và thêm giây
+    const formatToBackend = (dateTimeStr: string) => {
+        if (!dateTimeStr) return null;
+        let formatted = dateTimeStr.replace('T', ' '); // Đổi T thành khoảng trắng
+        return formatted.length === 16 ? `${formatted}:00` : formatted;
+    };
     
     try {
         const dataSubmit = {
             shiftName: shiftName.trim(),
-            startTime: startTime, // Ép kiểu số ngay tại đây
-            description: description.trim(),
+            startTime: formatToBackend(startTime), //xử lý cho chọn giờ trong thời gian
+            endTime: formatToBackend(endTime),
+            wageMultiplier:Number(wageMultiplier),
+            bonus: Number(bonus)
         };
         
-        const response = await axiosAdmin.post("/salary_levels/create", dataSubmit);
+        const response = await axiosAdmin.post("/shifts/create", dataSubmit);
 
-        showToast(response.data.msg || "Tạo tài khoản thành công!", 'success');
+        showToast(response.data.msg || "Create shifts success!", 'success');
         if (onReload) onReload();
         closeModal();
         
     } catch (error: any) {
-        const errorMessage = error.response?.data?.message || 'Có lỗi khi tạo tài khoản!';
+        const errorMessage = error.response?.data?.message || 'Create shifts failed!';
         showToast(errorMessage, 'danger');
     }
 };
@@ -63,36 +72,50 @@ const CreateModal: React.FC<CreateShiftPropsTypes> = ({onReload}) => {
 
   return(
      <>
-        <h1 className="color-text-header text-center mt-4 mb-4">Add new SalaryLevel</h1>
-        <form onSubmit={handleSubmit}>
+        <h1 className="color-text-header text-center mt-4 mb-4">Add new Shifts</h1>
+        <form onSubmit={handleSubmit} noValidate>
             <div className="row">
-                {/* Level Name */}
+                {/* ShiftName */}
                 <div className="col-md-6 mb-3">
-                    <label className="form-label fw-bold">Level Name</label>
+                    <label className="form-label fw-bold">Shift Name</label>
                     <input type="text" className="form-control" 
-                                       placeholder="Enter supplier ocde" 
-                                       onChange={(e) => setLevelName(e.target.value)} required />
+                                       placeholder="Enter Shift Name" 
+                                       onChange={(e) => setShiftName(e.target.value)} required />
                 </div>
-                {/* Hourly Wadge */}
+                {/* StartTime */}
                 <div className="col-md-6 mb-3">
-                    <label className="form-label fw-bold">Hourly Wadge</label>
-                    <input type="number" className="form-control" 
-                                        placeholder="Enter Supplier Name" 
-                                        onChange={(e) => setHourlyWage(Number(e.target.value))} required />
+                    <label className="form-label fw-bold">Start Time</label>
+                    <input type="datetime-local" className="form-control" 
+                                        placeholder="Enter  StartTIme" 
+                                        onChange={(e) => setStartTime(e.target.value)} required />
                 </div>
             </div>
 
 
             <div className="row">
-                {/* Description */}
+                {/* endTime */}
                 <div className="col-md-6 mb-3">
-                    <label className="form-label fw-bold">Description</label>
-                    <textarea className="form-control" 
-                        onChange={(e) => setDescription(e.target.value)} required />
+                    <label className="form-label fw-bold">End Time</label>
+                    <input type='datetime-local' className="form-control" 
+                        onChange={(e) => setEndTime(e.target.value)} required />
+                </div>
+                {/* wageMultiplier */}
+                <div className="col-md-6 mb-3">
+                    <label className="form-label fw-bold"> WageMultiplier </label>
+                    <input type='number' className="form-control" 
+                        onChange={(e) => setWageMultiplier(Number(e.target.value))} required />
+                </div>
+            </div>
+
+              <div className="row">
+                {/* bonus */}
+                <div className="col-md-6 mb-3">
+                    <label className="form-label fw-bold">Bonus</label>
+                    <input type='number' className="form-control" 
+                        onChange={(e) => setBonus(Number(e.target.value))} required />
                 </div>
                 {/*  */}
                 <div className="col-md-6 mb-3">
-                    {/* //giu de can cau truc */}
                 </div>
             </div>
 

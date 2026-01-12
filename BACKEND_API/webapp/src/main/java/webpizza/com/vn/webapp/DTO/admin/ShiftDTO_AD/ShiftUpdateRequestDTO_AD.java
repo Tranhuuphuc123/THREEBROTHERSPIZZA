@@ -23,8 +23,8 @@ public class ShiftUpdateRequestDTO_AD {
     private LocalDateTime endTime;
 
     @NotNull(message = "wageMultiplier cannot empty")
-    private float wageMultiplier;
+    private Float wageMultiplier;
 
-    private float bonus;
+    private Float bonus;
 
 }

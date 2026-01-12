@@ -213,7 +213,7 @@ const PizzaProductDetails = () => {
             </div>
 
             {/* Box Đánh giá */}
-            <div className="bg-white p-4 rounded-4 shadow-sm">
+            {/* <div className="bg-white p-4 rounded-4 shadow-sm">
               <h5 className="fw-bold mb-4 d-flex align-items-center">
                 <i className="fa-solid fa-star text-warning me-2"></i>
                 Đánh giá từ khách hàng
@@ -234,7 +234,7 @@ const PizzaProductDetails = () => {
                 <textarea className="form-control border-0 mb-2" rows={2} placeholder="Cảm nhận của bạn về món ăn này..."></textarea>
                 <button className="btn btn-success btn-sm px-4 rounded-pill fw-bold">Gửi đánh giá</button>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/******************** CỘT PHẢI: THÔNG TIN & TÍNH TIỀN - BỎ STICKY ***************/}

@@ -45,11 +45,11 @@ import Modal from "react-bootstrap/Modal";
 import { useModal } from "@/contexts/ModalContext";
 
 //import page form create product(form create tự thiết kế bằng bootstrap)
-//import CreateModal from "@/app/admin/shifts/create/page";
+import CreateModal from "@/app/admin/shifts/create/page";
 //import page form delete product
-//import DeleteModal from "@/app/admin/shifts/delete/page";
+import DeleteModal from "@/app/admin/shifts/delete/page";
 //import form edit products
-//import UpdateModal from "@/app/admin/shifts/edit/page";
+import UpdateModal from "@/app/admin/shifts/edit/page";
 
 //make variale api url file upload img
 import { UPLOAD_URL } from "@/constants/urls";
@@ -57,14 +57,16 @@ import { UPLOAD_URL } from "@/constants/urls";
 cho username coi quyền lây đc ở username trong localstorage có khớp với 
 quyền có trong file permissionName.tsx không */
 import {SHIFT_CREATE, SHIFT_EDIT, SHIFT_DELTE} from '@/constants/permissionsName'
-// import { ShiftTypes } from "@/types/ShiftTypes";
+// import { SalaryLevelTypes } from "@/types/SalaryLevelTypes";
 
 
-export default function ShiftManage () {
+
+
+export default function SalaryLevelManage () {
   /********state cho modal add cho page product ******/
   /****b1 - khởi tạo giá trị ban đầu (States) của các component bên trong trang****/
   //state cho hiển thị cá values trong table products ra client
-  const [listShift, setListShift] = useState<ShiftTypes[]>([]);
+  const [listShifts, setListShifts] = useState<ShiftTypes[]>([]);
 
   //state trạng thái ghi nhan id của cái products value cần xóa chọn đúng cái càn xóa qua id
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -202,7 +204,7 @@ export default function ShiftManage () {
 
   /***method fetchAccounts: gọi api xử lý phân trang và search: theo ten va theo ma***/
   //ApiResponseTypes: định kiểu dữ liệu trả về từ api
-  const fetchAccounts = async () => {
+  const fetchShifts = async () => {
     const res = await axiosAdmin.get<ApiResponseTypes>('/shifts', {
       params: {
         pageNumber: currentPage,
@@ -212,10 +214,10 @@ export default function ShiftManage () {
     });
     // lap dieu kien kiem tra tranh null khi tiem kiem theo ten va theo ma
     if (res.data.data == null) {
-      setListShift([]);
+      setListShifts([]);
     } else {
       //update ds value tren csdl vao table users
-      setListShift(res.data.data); 
+      setListShifts(res.data.data); 
     }
     setTotalPage(res.data.totalPage); //lay tong so page cap nhat ngay
     setTotalElement(res.data.totalElement); //lay tong so value cap nhat ngay
@@ -224,7 +226,7 @@ export default function ShiftManage () {
 
    /*method handReload: reload lại trang sau khi create/edit/delete xong*/
   const handleReload = () => {
-    fetchAccounts();
+    fetchShifts();
   };
 
 
@@ -240,7 +242,7 @@ export default function ShiftManage () {
 
   //  useEffect: thưc thi goi api xử lý phân trang và search: theo ten va theo ma
   useEffect(() => {
-    fetchAccounts();
+    fetchShifts();
   }, [currentPage, debouncedSearchQuery]);
 
 
@@ -248,7 +250,7 @@ export default function ShiftManage () {
     //mục này mình đưa trang dashboard vào đay
     <>
       <div className="mb-3">
-        <h3>Danh sách sản phẩm</h3>
+        <h3>List Shifts</h3>
       </div>
 
       {/* mục giao diện chức năng tiềm kiếm trang product search */}
@@ -257,7 +259,7 @@ export default function ShiftManage () {
           <div className="col-sm-12 p-0">
             <h5 className="ml-lg-2">Search filter</h5>
             <div className="form-group">
-              <label className="me-2">Shift Name</label>
+              <label className="me-2">Shifts Name</label>
               <input
                 type="text"
                 placeholder="Enter salary level name"
@@ -274,7 +276,7 @@ export default function ShiftManage () {
       <div className="card p-3 manage-employees">
         <div className="row align-items-center mb-3 mx-1">
           <div className="col-12 col-sm-6 p-0 mb-2 mb-sm-0">
-            <h5 className="ml-lg-2">Manage Shift</h5>
+            <h5 className="ml-lg-2">Manage Shifts Level</h5>
           </div>
           <div className="col-12 col-sm-6 p-0 text-start text-sm-end">
 
@@ -310,14 +312,15 @@ export default function ShiftManage () {
               <tr>
                 <th></th>
                 <th>Shift Name</th>
-                <th>Start Timme</th>
+                <th>Start Time</th>
                 <th>End Time</th>
-                <th>Wage Multiplier</th>
+                <th>WageMultiplier</th>
                 <th>Bonus</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-                {listShift.map((acc) => (
+                {listShifts.map((acc) => (
                   <tr key={acc.id}>
                     <td>
                       <input type="checkbox" value={acc.id} onChange={handleDeleteAllCheckbox} />
@@ -325,7 +328,7 @@ export default function ShiftManage () {
                     <td>{acc.shiftName}</td>
                     <td>{acc.startTime}</td>
                     <td>{acc.endTime}</td>
-                    <td>{acc.wage_multiplier}</td>
+                    <td>{acc.wageMultiplier}</td>
                     <td>{acc.bonus}</td>
                     <td>
                         <div className="d-flex gap-2">
@@ -352,8 +355,8 @@ export default function ShiftManage () {
         {/* giao dien xu ly phan trang */}
         <div className="pagination-container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
           <div className="pagination-info text-center text-sm-start">
-            Trang {currentPage}/{totalPage} - Tổng:
-            {totalElement} sản phẩm
+            Page {currentPage}/{totalPage} - Amount:
+            {totalElement} Shifts
           </div>
           <div className="pagination-control d-flex justify-content-center">
             <button
@@ -406,7 +409,7 @@ export default function ShiftManage () {
       {/* Modals */}
       <Modal show={show && modalType === "create"} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Add</Modal.Title>
+          <Modal.Title>Add new SalaryLevel</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <CreateModal onReload={handleReload} />
@@ -436,7 +439,7 @@ export default function ShiftManage () {
             // ruột của form modal edit context dẫn từ trang supplier/edit/pages
             <UpdateModal id={selectedId} onReload={handleReload} />
           ) : (
-            <p>Không tìm thấy dữ liệu để xóa</p>
+            <p>No find data</p>
           )}
         </Modal.Body>
       </Modal>

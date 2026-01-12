@@ -314,6 +314,7 @@ export default function SalaryLevelManage () {
                 <th>Level Name</th>
                 <th>Hourly Wage</th>
                 <th>Description</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -350,8 +351,8 @@ export default function SalaryLevelManage () {
         {/* giao dien xu ly phan trang */}
         <div className="pagination-container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
           <div className="pagination-info text-center text-sm-start">
-            Trang {currentPage}/{totalPage} - Tổng:
-            {totalElement} sản phẩm
+            Page {currentPage}/{totalPage} - Amount:
+            {totalElement} SalaryLevel
           </div>
           <div className="pagination-control d-flex justify-content-center">
             <button
