@@ -257,7 +257,7 @@ export default function SalaryLevelManage () {
       <div className="card p-3 manage-employees">
         <div className="row align-items-center mb-3 mx-1">
           <div className="col-sm-12 p-0">
-            <h5 className="ml-lg-2">Bộ lộc tiềm kiếm</h5>
+            <h5 className="ml-lg-2">Search filter</h5>
             <div className="form-group">
               <label className="me-2">Salary Level Name</label>
               <input

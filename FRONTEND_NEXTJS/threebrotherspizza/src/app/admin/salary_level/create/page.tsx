@@ -57,8 +57,6 @@ const CreateModal: React.FC<CreateSalaryLevelPropsTypes> = ({onReload}) => {
 };
 
 
-
-
   return(
      <>
         <h1 className="color-text-header text-center mt-4 mb-4">Add new SalaryLevel</h1>

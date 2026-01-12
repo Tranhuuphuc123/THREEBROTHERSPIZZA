@@ -15,13 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.validation.Valid;
-import webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD.SalaryLevelCreateRequestDTO_AD;
-import webpizza.com.vn.webapp.DTO.admin.SalaryLevelDTO_AD.SalaryLevelUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.ShiftDTO_AD.ShiftUpdateRequestDTO_AD;
 import webpizza.com.vn.webapp.service.admin.ShiftServiceAD;

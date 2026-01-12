@@ -56,7 +56,7 @@ import { UPLOAD_URL } from "@/constants/urls";
 /* import constants permissionsName.tsx lấy list tên các quyền cần text
 cho username coi quyền lây đc ở username trong localstorage có khớp với 
 quyền có trong file permissionName.tsx không */
-import {SHIFT_VIEW, SHIFT_CREATE, SHIFT_EDIT, SHIFT_DELTE} from '@/constants/permissionsName'
+import {SHIFT_CREATE, SHIFT_EDIT, SHIFT_DELTE} from '@/constants/permissionsName'
 // import { ShiftTypes } from "@/types/ShiftTypes";
 
 
@@ -203,7 +203,7 @@ export default function ShiftManage () {
   /***method fetchAccounts: gọi api xử lý phân trang và search: theo ten va theo ma***/
   //ApiResponseTypes: định kiểu dữ liệu trả về từ api
   const fetchAccounts = async () => {
-    const res = await axiosAdmin.get<ApiResponseTypes>('/salary_level', {
+    const res = await axiosAdmin.get<ApiResponseTypes>('/shifts', {
       params: {
         pageNumber: currentPage,
         pageSize: pageSize,
@@ -255,7 +255,7 @@ export default function ShiftManage () {
       <div className="card p-3 manage-employees">
         <div className="row align-items-center mb-3 mx-1">
           <div className="col-sm-12 p-0">
-            <h5 className="ml-lg-2">Bộ lộc tiềm kiếm</h5>
+            <h5 className="ml-lg-2">Search filter</h5>
             <div className="form-group">
               <label className="me-2">Shift Name</label>
               <input
@@ -309,9 +309,11 @@ export default function ShiftManage () {
             <thead>
               <tr>
                 <th></th>
-                <th>Level Name</th>
-                <th>Hourly Wage</th>
-                <th>Description</th>
+                <th>Shift Name</th>
+                <th>Start Timme</th>
+                <th>End Time</th>
+                <th>Wage Multiplier</th>
+                <th>Bonus</th>
               </tr>
             </thead>
             <tbody>
@@ -320,9 +322,11 @@ export default function ShiftManage () {
                     <td>
                       <input type="checkbox" value={acc.id} onChange={handleDeleteAllCheckbox} />
                     </td>
-                    <td>{acc.levelName}</td>
-                    <td>{acc.hourlyWage}</td>
-                    <td>{acc.description}</td>
+                    <td>{acc.shiftName}</td>
+                    <td>{acc.startTime}</td>
+                    <td>{acc.endTime}</td>
+                    <td>{acc.wage_multiplier}</td>
+                    <td>{acc.bonus}</td>
                     <td>
                         <div className="d-flex gap-2">
                             {/* KIỂM TRA QUYỀN TRƯỚC KHI HIỂN THỊ CỘT ACTIONS */}
