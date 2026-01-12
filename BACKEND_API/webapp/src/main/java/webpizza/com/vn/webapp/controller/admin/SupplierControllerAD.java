@@ -26,7 +26,14 @@ public class SupplierControllerAD {
     @Autowired
     private SupplierServiceAD supplierServiceAD;
 
-    /* I _  get */
+    /*I_0 get value khong phân trang*/
+    @GetMapping("/all-list")
+    public ResponseEntity<Map<String, Object>> getAlls(){
+       //gọi đến service thực hiện truy vấn CRUD - cụ thể là getAll dữ liệu mà mình viết logic bên đó
+		return  supplierServiceAD.getRoles();
+    }
+
+    /* I _1  get */
     /*  
      -> @CrossOrigin(origins = "${client.url}") : cho phép localhost 8080 chấp nhận
     chay localhost 3000 khi localhost 8080 đang chay
@@ -45,7 +52,7 @@ public class SupplierControllerAD {
     }
 
     
-    /***************** 1-2: getById *******************/
+    /***************** I-2: getById *******************/
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
         //yeu cau service tra  ve id

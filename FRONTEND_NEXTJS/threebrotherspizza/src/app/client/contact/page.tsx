@@ -99,7 +99,7 @@ const ContactPage = () => {
           </div>
           <div className="col-12">
             <label className="form-label fw-semibold">Message</label>
-            <textarea className="form-control form-control-lg border-2 shadow-none" rows="4" placeholder="How can we help you?" required></textarea>
+            <textarea className="form-control form-control-lg border-2 shadow-none" rows={4} placeholder="How can we help you?" required></textarea>
           </div>
           <div className="col-12 text-center mt-4">
             <button type="submit" className="btn btn-danger btn-lg px-5 rounded-pill shadow fw-bold">SEND MESSAGE</button>

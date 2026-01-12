@@ -95,7 +95,7 @@ CREATE TABLE `materials` (
   PRIMARY KEY (`id`),
   KEY `supplier_id` (`supplier_id`),
   CONSTRAINT `materials_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,6 +104,7 @@ CREATE TABLE `materials` (
 
 LOCK TABLES `materials` WRITE;
 /*!40000 ALTER TABLE `materials` DISABLE KEYS */;
+INSERT INTO `materials` VALUES (1,'bot','20260113_002504_bot1.jpg',1,'kg',20,50,'2026-01-13','2026-01-13 00:06:44','2026-01-13 00:25:11'),(2,'sugar','20260113_000710_sugar.jpg',2,'kg',400,100,'2026-01-14','2026-01-13 00:07:10','2026-01-13 00:07:10');
 /*!40000 ALTER TABLE `materials` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -509,4 +510,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-12 23:14:38
+-- Dump completed on 2026-01-13  0:49:20

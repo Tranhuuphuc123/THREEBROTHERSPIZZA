@@ -1,105 +1,128 @@
 'use client';
 import { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
+import { EditPromotionProps } from "@/types/PromotionTypes";
 import { useToast } from '@/contexts/ToastContext';
-import { useModal } from '@/contexts/ModalContext';
+import { useModal } from "@/contexts/ModalContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import axiosAdmin from '@/axios/axiosAdmin';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import {MaterialCreateTypes} from '@/types/MaterialTypes'
+import { MaterialCreateTypes } from '@/types/MaterialTypes';
 
+import { UPLOAD_URL } from "@/constants/urls";
 
-
-const CreateModal = ({ onReload }: { onReload?: () => void }) => {
+const EditModal: React.FC<EditPromotionProps> = ({ id, onReload }) => {
     const { showToast } = useToast();
     const { closeModal } = useModal();
 
-    // 1. States để xử lý Preview ảnh (giống phần Supplier)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [existingImage, setExistingImage] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
-    const [suppliers, setSuppliers] = useState<any[]>([]); // Lưu danh sách NCC để chọn
+    const [suppliers, setSuppliers] = useState<any[]>([]);
 
-    // 2. React Hook Form
+    // 1. Khởi tạo React Hook Form
     const {
         register,
         handleSubmit,
+        setValue, // Dùng để đổ dữ liệu vào form
         formState: { errors },
     } = useForm<MaterialCreateTypes>();
 
-    // Lấy danh sách Supplier để đổ vào Select Option khi mở Modal
+    // 2. Lấy danh sách Supplier
     useEffect(() => {
-        /*=lấy khóa ngoại của supplier */
-        const fetchMaterials = async () => {
+        const fetchSuppliers = async () => {
             try {
-                //lấy khóa ngoại ủa supplier
-                const res = await axiosAdmin.get('/suppliers/all-list'); 
+                const res = await axiosAdmin.get('/suppliers/all-list');
                 setSuppliers(res.data.data);
             } catch (err) {
                 console.error("Failed to fetch suppliers");
             }
         };
-        fetchMaterials();
+        fetchSuppliers();
     }, []);
 
-    // 3. Hàm xử lý Preview ảnh
+    // 3. Đổ dữ liệu cũ vào Form khi Edit
+    useEffect(() => {
+        if (!id) return;
+        const fetchMaterialData = async () => {
+            try {
+                // Lưu ý: Endpoint này phải là lấy MATERIAL, không phải Supplier
+                const res = await axiosAdmin.get(`/materials/${id}`); 
+                const data = res.data.data || res.data;
+
+                if (data) {
+                    // Dùng setValue của React Hook Form để gán giá trị vào các input
+                    setValue("name", data.name);
+                    setValue("supplierId", data.supplierId);
+                    setValue("unit", data.unit);
+                    setValue("quantity", data.quantity);
+                    setValue("price", data.price);
+                    setValue("expireDate", data.expireDate);
+
+                    if (data.img) {
+                        setExistingImage(`${UPLOAD_URL}/${data.img}`);
+                    }
+                }
+            } catch (error) {
+                showToast("Failed to fetch material data", "warning");
+            }
+        };
+        fetchMaterialData();
+    }, [id, setValue]);
+
+    //xử lý xem trc hình ảnh
     const handleImgPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         if (selectedFile) {
             const preView = URL.createObjectURL(selectedFile);
             setImagePreview(preView);
-            setFile(selectedFile); // Lưu file để gửi đi
+            setFile(selectedFile);
         }
     };
 
-    // 4. Xử lý Submit Form
+    // 4. Xử lý Update
     const onSubmit: SubmitHandler<MaterialCreateTypes> = async (data) => {
         try {
             const formData = new FormData();
+            if (file) formData.append('file', file);
 
-            // Append File ảnh (nếu có)
-            if (file) {
-                formData.append('file', file);
-            }
-
-            // Append Object Data (Chuyển đổi các trường số cho khớp Java)
             const materialData = {
                 name: data.name.trim(),
                 supplierId: Number(data.supplierId),
                 unit: data.unit.trim(),
                 quantity: Number(data.quantity),
                 price: parseFloat(data.price.toString()),
-                expireDate: data.expireDate
+                expireDate: data.expireDate // Đã đúng CamelCase cho Java
             };
 
-            // Bọc JSON vào Blob để tránh lỗi Media Type Not Supported
             formData.append('data', JSON.stringify(materialData))
 
-            const res = await axiosAdmin.post('/materials/create', formData,{
+            // Dùng PUT hoặc POST tùy theo API Update của bạn
+            const res = await axiosAdmin.put(`/materials/update/${id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            if (res.status === 200 || res.status === 201) {
-                showToast('Create Material success!', 'success');
+            if (res.status === 200) {
+                showToast('Update Material success!', 'success');
                 if (onReload) onReload();
                 closeModal();
             }
         } catch (error: any) {
-            const errorMsg = error.response?.data?.message || error.message || 'Something went wrong';
-            showToast(`${errorMsg} !`, 'warning');
+            const errorMsg = error.response?.data?.message || 'Update failed';
+            showToast(errorMsg, 'warning');
         }
     };
 
     return (
         <>
-            <h1 className="color-text-header text-center mt-4 mb-4">Add New Material</h1>
+            <h1 className="color-text-header text-center mt-4 mb-4">Edit Material</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
-                
-                {/* Phần Avatar/Image Preview */}
+                {/* Ảnh Preview */}
                 <div className="mb-3 d-flex flex-column align-items-center">
-                    <label className="form-label fw-bold">Material Image</label>
                     <Image 
-                        src={imagePreview || '/assets/admin/img/no-avatar.png'} 
+                        src={imagePreview || existingImage || '/assets/admin/img/no-avatar.png'} 
                         alt="Preview" 
                         className="mb-2 border rounded"
                         width={150} height={150}
@@ -109,18 +132,15 @@ const CreateModal = ({ onReload }: { onReload?: () => void }) => {
                 </div>
 
                 <div className="row">
-                    {/* Tên vật liệu */}
                     <div className="col-md-12 mb-3">
                         <label className="form-label fw-bold">Material Name</label>
                         <input type="text" 
                                 className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                                placeholder="Enter material name..." 
                                 {...register("name", { required: "Name is required" })} />
                     </div>
                 </div>
 
                 <div className="row">
-                    {/* Supplier ID - Chọn từ danh sách */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Supplier</label>
                         <select className={`form-select ${errors.supplierId ? 'is-invalid' : ''}`}
@@ -132,30 +152,26 @@ const CreateModal = ({ onReload }: { onReload?: () => void }) => {
                         </select>
                     </div>
 
-                    {/* Đơn vị tính */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Unit</label>
-                        <input type="text" className="form-control" placeholder="Kg, Box, Pcs..." 
+                        <input type="text" className="form-control" 
                                 {...register("unit", { required: true })} />
                     </div>
                 </div>
 
                 <div className="row">
-                    {/* Số lượng */}
                     <div className="col-md-4 mb-3">
                         <label className="form-label fw-bold">Quantity</label>
                         <input type="number" className="form-control" 
-                                {...register("quantity", { required: true, min: 0 })} />
+                                {...register("quantity", { required: true })} />
                     </div>
 
-                    {/* Giá tiền */}
                     <div className="col-md-4 mb-3">
                         <label className="form-label fw-bold">Price</label>
                         <input type="number" step="0.01" className="form-control" 
                                 {...register("price", { required: true })} />
                     </div>
 
-                    {/* Hạn sử dụng */}
                     <div className="col-md-4 mb-3">
                         <label className="form-label fw-bold">Expire Date</label>
                         <input type="date" className="form-control" 
@@ -165,11 +181,11 @@ const CreateModal = ({ onReload }: { onReload?: () => void }) => {
 
                 <button type="submit" className="btn btn-primary w-100 mt-3">
                     <FontAwesomeIcon icon={faSave} className="me-2" />
-                    Save Material
+                    Update Material
                 </button>
             </form>
         </>
     );
-}
+};
 
-export default CreateModal;
+export default EditModal;

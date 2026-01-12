@@ -23,7 +23,7 @@ public class SalaryLevelServiceAD {
     @Autowired
     private SalaryLevelRepository salaryLevelRepo;
 
-    /*I _ - get hien thi co phan trang */
+    /*I _1 - get hien thi co phan trang */
     public ResponseEntity<Map<String, Object>> getAllSalaryLevelPagination(int pageNumber, int pageSize, String sortBy, String searchTerm){
         //1. khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
