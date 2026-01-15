@@ -18,7 +18,8 @@ import {USER_VIEW, USERS_ROLES,
         MATERIAL_VIEW, 
         PRODUCT_MATERIAL_VIEW,
         SALARY_LEVEL_VIEW,
-        SHIFT_VIEW
+        SHIFT_VIEW,
+        FEEDBACK_VIEW
       } 
     from '@/constants/permissionsName'
 import { faWheatAlt } from "@fortawesome/free-solid-svg-icons/faWheatAlt";
@@ -50,6 +51,7 @@ export default function Sidebar() {
   const canViewSupplier = strPermission.includes(SUPPLIER_VIEW);
   const canViewSalaryLevel = strPermission.includes(SALARY_LEVEL_VIEW);
   const canViewShift = strPermission.includes(SHIFT_VIEW);
+  const canViewFeedback = strPermission.includes(FEEDBACK_VIEW);
   const canViewPromotion = strPermission.includes(PROMOTIONS_VIEW);
   const canViewMaterial = strPermission.includes(MATERIAL_VIEW);
   const canViewCategory = strPermission.includes(CATEGORY_VIEW);
@@ -178,6 +180,16 @@ export default function Sidebar() {
               <Link href="/admin/shifts" className="sidebar-link">
                 <FontAwesomeIcon icon={faIndustry} className="fa-fw" />
                 Shifts
+              </Link>
+            </li>
+          )}
+
+          {/* KIỂM TRA XEM MỤC AUTHORIZATIONS CÓ QUYỀN XEM KHÔNG THÌ ẨN NÓ */}
+          {canViewFeedback && (
+             <li className="sidebar-item">
+              <Link href="/admin/feedbacks" className="sidebar-link">
+                <FontAwesomeIcon icon={faIndustry} className="fa-fw" />
+                Review
               </Link>
             </li>
           )}

@@ -1,6 +1,6 @@
 package webpizza.com.vn.webapp.DTO.admin.ShopProductImageDTO_AD;
 
-import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

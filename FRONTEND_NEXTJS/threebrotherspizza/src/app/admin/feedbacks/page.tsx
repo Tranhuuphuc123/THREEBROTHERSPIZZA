@@ -19,11 +19,10 @@
 
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import React from "react";
 
 //import interface types định kiểu dữ liệu 
-import {SupplierTypes, ApiResponseTypes} from '@/types/SupplierTypes'
+import {FeedbackTypes, ApiResponseTypes} from '@/types/FeedbackTypes'
 
 //su dung lib axios call api ben client NextJs
 import axiosAdmin from "@/axios/axiosAdmin";
@@ -46,27 +45,27 @@ import Modal from "react-bootstrap/Modal";
 import { useModal } from "@/contexts/ModalContext";
 
 //import page form create product(form create tự thiết kế bằng bootstrap)
-import CreateModal from "@/app/admin/suppliers/create/page";
+import CreateModal from "@/app/admin/feedbacks/create/page";
 //import page form delete product
-import DeleteModal from "@/app/admin/suppliers/delete/page";
+import DeleteModal from "@/app/admin/feedbacks/delete/page";
 //import form edit products
-import UpdateModal from "@/app/admin/suppliers/edit/page";
+import UpdateModal from "@/app/admin/feedbacks/edit/page";
 
 //make variale api url file upload img
 import { UPLOAD_URL } from "@/constants/urls";
 /* import constants permissionsName.tsx lấy list tên các quyền cần text
 cho username coi quyền lây đc ở username trong localstorage có khớp với 
 quyền có trong file permissionName.tsx không */
-import {SUPPLIER_CREATE, SUPPLIER_EDIT, SUPPLIER_DELTE} from '@/constants/permissionsName'
+import {FEEDBACK_CREATE, FEEDBACK_EDIT, FEEDBACK_DELTE} from '@/constants/permissionsName'
 
 
 
 
-export default function SupplierManage () {
+export default function feedbackManage () {
   /********state cho modal add cho page product ******/
   /****b1 - khởi tạo giá trị ban đầu (States) của các component bên trong trang****/
   //state cho hiển thị cá values trong table products ra client
-  const [listSupplier, setListSupplier] = useState<SupplierTypes[]>([]);
+  const [listFeedback, setListFeedback] = useState<FeedbackTypes[]>([]);
 
   //state trạng thái ghi nhan id của cái products value cần xóa chọn đúng cái càn xóa qua id
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -128,9 +127,9 @@ export default function SupplierManage () {
   const strPermission = typeof window !== 'undefined' ? localStorage.getItem('permissions') || "" : "";
 
   // Kiểm tra quyền cụ thể cho từng hành động của các button add,, edit và del khong có thì ẩn button luôn
-  const canCreate = strPermission.includes(SUPPLIER_CREATE);
-  const canUpdate = strPermission.includes(SUPPLIER_EDIT);
-  const canDelete = strPermission.includes(SUPPLIER_DELTE);
+  const canCreate = strPermission.includes(FEEDBACK_CREATE);
+  const canUpdate = strPermission.includes(FEEDBACK_EDIT);
+  const canDelete = strPermission.includes(FEEDBACK_DELTE);
 
 
   /************************************Các method tự viết*******************************/
@@ -205,7 +204,7 @@ export default function SupplierManage () {
   /***method fetchAccounts: gọi api xử lý phân trang và search: theo ten va theo ma***/
   //ApiResponseTypes: định kiểu dữ liệu trả về từ api
   const fetchAccounts = async () => {
-    const res = await axiosAdmin.get<ApiResponseTypes>('/suppliers', {
+    const res = await axiosAdmin.get<ApiResponseTypes>('/feedbacks', {
       params: {
         pageNumber: currentPage,
         pageSize: pageSize,
@@ -214,10 +213,10 @@ export default function SupplierManage () {
     });
     // lap dieu kien kiem tra tranh null khi tiem kiem theo ten va theo ma
     if (res.data.data == null) {
-      setListSupplier([]);
+      setListFeedback([]);
     } else {
       //update ds value tren csdl vao table users
-      setListSupplier(res.data.data); 
+      setListFeedback(res.data.data); 
     }
     setTotalPage(res.data.totalPage); //lay tong so page cap nhat ngay
     setTotalElement(res.data.totalElement); //lay tong so value cap nhat ngay
@@ -250,19 +249,19 @@ export default function SupplierManage () {
     //mục này mình đưa trang dashboard vào đay
     <>
       <div className="mb-3">
-        <h3>List Supplier</h3>
+        <h3>List Review</h3>
       </div>
 
       {/* mục giao diện chức năng tiềm kiếm trang product search */}
       <div className="card p-3 manage-employees">
         <div className="row align-items-center mb-3 mx-1">
           <div className="col-sm-12 p-0">
-            <h5 className="ml-lg-2">Search Filter</h5>
+            <h5 className="ml-lg-2">Search filter</h5>
             <div className="form-group">
-              <label className="me-2">Supplier Name</label>
+              <label className="me-2">ProductID</label>
               <input
                 type="text"
-                placeholder="Enter name"
+                placeholder="Enter productID"
                 className="form-control w-100 w-md-50"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -276,7 +275,7 @@ export default function SupplierManage () {
       <div className="card p-3 manage-employees">
         <div className="row align-items-center mb-3 mx-1">
           <div className="col-12 col-sm-6 p-0 mb-2 mb-sm-0">
-            <h5 className="ml-lg-2">Manage Supplier</h5>
+            <h5 className="ml-lg-2">Manage Review</h5>
           </div>
           <div className="col-12 col-sm-6 p-0 text-start text-sm-end">
 
@@ -287,7 +286,7 @@ export default function SupplierManage () {
                 onClick={() => openModal("create")}
               >
                 <FontAwesomeIcon icon={faPlus} className="fa-fw" />
-                <span>Add New Supplier</span>
+                <span>Add</span>
               </button>
             )}
            
@@ -311,33 +310,24 @@ export default function SupplierManage () {
             <thead>
               <tr>
                 <th></th>
-                <th>Avatar</th>
-                <th>code</th>
-                <th>name</th>
-                <th>phone</th>
-                <th>address</th>
-                <th>Description</th>
-                <th>Actions</th>
+                <th>ProductID</th>
+                <th>UserID</th>
+                <th>Rating</th>
+                <th>Message</th>
+                <th>IsActive</th>
               </tr>
             </thead>
             <tbody>
-                {listSupplier.map((acc) => (
+                {listFeedback.map((acc) => (
                   <tr key={acc.id}>
                     <td>
                       <input type="checkbox" value={acc.id} onChange={handleDeleteAllCheckbox} />
                     </td>
-                    <td>
-                      <Image 
-                        src={`${UPLOAD_URL}/${acc.img}`} 
-                        alt="img" width={50} height={50} 
-                        className="rounded-circle"
-                      />
-                    </td>
-                    <td>{acc.code}</td>
-                    <td>{acc.name}</td>
-                    <td>{acc.phone}</td>
-                    <td>{acc.address}</td>
-                    <td>{acc.description}</td>
+                    <td>{acc.productId}</td>
+                    <td>{acc.userId}</td>
+                    <td>{acc.rating}</td>
+                    <td>{acc.message}</td>
+                    <td>{acc.isActive}</td>
                     <td>
                         <div className="d-flex gap-2">
                             {/* KIỂM TRA QUYỀN TRƯỚC KHI HIỂN THỊ CỘT ACTIONS */}
@@ -363,8 +353,8 @@ export default function SupplierManage () {
         {/* giao dien xu ly phan trang */}
         <div className="pagination-container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
           <div className="pagination-info text-center text-sm-start">
-            Trang {currentPage}/{totalPage} - Tổng:
-            {totalElement} sản phẩm
+            Page {currentPage}/{totalPage} - Amount:
+            {totalElement} Review
           </div>
           <div className="pagination-control d-flex justify-content-center">
             <button
@@ -417,7 +407,7 @@ export default function SupplierManage () {
       {/* Modals */}
       <Modal show={show && modalType === "create"} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Add new Supplier</Modal.Title>
+          <Modal.Title>Add new Review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <CreateModal onReload={handleReload} />
@@ -440,14 +430,14 @@ export default function SupplierManage () {
 
       <Modal show={show && modalType === "edit"} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Account - edit value {selectedId}</Modal.Title>
+          <Modal.Title>Edit - edit value {selectedId}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedId !== null ? (
             // ruột của form modal edit context dẫn từ trang supplier/edit/pages
             <UpdateModal id={selectedId} onReload={handleReload} />
           ) : (
-            <p>Không tìm thấy dữ liệu để xóa</p>
+            <p>No find data</p>
           )}
         </Modal.Body>
       </Modal>

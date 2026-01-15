@@ -24,6 +24,7 @@ select * from promotions;
 select * from salary_levels;
 select * from shifts;
 select * from suppliers;
+select * from feedbacks;
 
 -- show value: name và type trong table chỉ định cụ thể
 -- show create table products;

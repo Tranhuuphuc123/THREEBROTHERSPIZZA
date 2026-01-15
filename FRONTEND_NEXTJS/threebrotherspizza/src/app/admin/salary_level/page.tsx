@@ -250,7 +250,7 @@ export default function SalaryLevelManage () {
     //mục này mình đưa trang dashboard vào đay
     <>
       <div className="mb-3">
-        <h3>Danh sách sản phẩm</h3>
+        <h3>List Salary Level</h3>
       </div>
 
       {/* mục giao diện chức năng tiềm kiếm trang product search */}

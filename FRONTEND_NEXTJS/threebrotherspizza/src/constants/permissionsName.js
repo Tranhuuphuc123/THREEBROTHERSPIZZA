@@ -77,3 +77,8 @@ export const SHIFT_CREATE = "shitf_create"
 export const SHIFT_EDIT = "shitf_edit"
 export const SHIFT_DELTE = "shitf_delete"
 
+//nhom quyen cua table feedbacks
+export const FEEDBACK_VIEW = "shitf_view"
+export const FEEDBACK_CREATE = "shitf_create"
+export const FEEDBACK_EDIT = "shitf_edit"
+export const FEEDBACK_DELTE = "shitf_delete"
