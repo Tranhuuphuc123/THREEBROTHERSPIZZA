@@ -38,7 +38,11 @@ export default function Footer() {
 
           {/* CỘT 2: INTRODUCTION (GIỚI THIỆU) */}
           <Col lg={3} md={6}>
-            <h5 className="fw-bold text-uppercase mb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.2)", pb: 2 }}>Introduction</h5>
+            <h5 className="fw-bold text-uppercase mb-4" 
+                    style={{ borderBottom: "1px solid rgba(255,255,255,0.2)", 
+                              paddingBottom: "8px" }}>
+                                Introduction
+            </h5>
             <ul className="list-unstyled d-flex flex-column gap-2">
               <li><Link href="#" className="text-white text-decoration-none opacity-75">Restaurant System</Link></li>
               <li><Link href="#" className="text-white text-decoration-none opacity-75">Brand Story</Link></li>
@@ -56,7 +60,7 @@ export default function Footer() {
 
           {/* CỘT 3: CONTACT (LIÊN HỆ) */}
           <Col lg={3} md={6}>
-            <h5 className="fw-bold text-uppercase mb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.2)", pb: 2 }}>Contact Us</h5>
+            <h5 className="fw-bold text-uppercase mb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.2)", paddingBottom: "8px" }}>Contact Us</h5>
             <ul className="list-unstyled d-flex flex-column gap-2">
               <li><Link href="#" className="text-white text-decoration-none opacity-75">Shopping Guide</Link></li>
               <li><Link href="#" className="text-white text-decoration-none opacity-75">Delivery Policy</Link></li>
@@ -71,7 +75,7 @@ export default function Footer() {
 
           {/* CỘT 4: SOCIAL MEDIA (LIÊN KẾT VỚI CHÚNG TÔI) */}
           <Col lg={3} md={6}>
-            <h5 className="fw-bold text-uppercase mb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.2)", pb: 2 }}>Connect With Us</h5>
+            <h5 className="fw-bold text-uppercase mb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.2)", paddingBottom: "8px" }}>Connect With Us</h5>
             <div className="d-flex gap-3 mb-4">
               <a href="#" className="social-icon"><FontAwesomeIcon icon={faFacebookF} /></a>
               <a href="#" className="social-icon"><FontAwesomeIcon icon={faInstagram} /></a>

@@ -1,8 +1,10 @@
 package webpizza.com.vn.webapp.controller.client;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +22,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.validation.Valid;
 import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserCreateRequestDTO_CL;
+import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserInformationByOrderResponseDTO_CL;
 import webpizza.com.vn.webapp.DTO.client.UserDTO_CL.UserUpdateRequestDTO_CL;
+import webpizza.com.vn.webapp.JWT.JwtTokenProvider;
+import webpizza.com.vn.webapp.entity.User;
 import webpizza.com.vn.webapp.service.client.UserServiceCL;
 
 
@@ -30,6 +36,9 @@ public class UserControllerCL {
     //tiem phu thuoc autowired UserService vao
     @Autowired
     private UserServiceCL userServiceCL;
+
+    @Autowired 
+    private JwtTokenProvider jwtTokenProvider;
 
     /*************1-1: getall có phân trang**********************/
     /*  
@@ -55,6 +64,42 @@ public class UserControllerCL {
     public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id){
         //yeu cau service tra  ve id
         return userServiceCL.getById(id);
+    }
+
+    /*1-3 lấy thông tin user từ token khi login: phục vụ chức năng đổ thông tin 
+    user vào order page khi login mới đc đặt hàng */
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String bearerToken){
+        //nếu như token nhân về không đúng chuẩn có jwt có: Bearer <token> thi khong xử lý
+        if(bearerToken == null || !bearerToken.startsWith("Bearer ")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                 .body("Invalid Authorization header");
+        }
+
+        //lấy token thì bỏ chữ Bearer đi: cắt 7 ký tự đầu tính từ chữ Bearer + dấu cách
+        String token = bearerToken.substring(7);
+
+        //trích xuất username từ token giải mã ra
+        String username = jwtTokenProvider.extractUsername(token);
+        //trả về username
+        Optional<User> optUser =  userServiceCL.getFindByUsername(username);
+        if(optUser.isEmpty()){
+            //tìm không tháy user từ username key trong token trên localstorage
+             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                 .body("User not found");
+        }
+
+        //trả về thong tin user ở lơp dto thui và gán vào user ở entity
+        User user = optUser.get();
+        UserInformationByOrderResponseDTO_CL userDTO = new UserInformationByOrderResponseDTO_CL();
+
+        userDTO.setName(user.getName());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setPhone(user.getPhone());
+        userDTO.setEmail(user.getEmail());
+    
+        return ResponseEntity.ok(userDTO);
+       
     }
 
 

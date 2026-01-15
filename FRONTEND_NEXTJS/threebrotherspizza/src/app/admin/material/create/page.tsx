@@ -30,7 +30,7 @@ const CreateModal = ({ onReload }: { onReload?: () => void }) => {
     // Lấy danh sách Supplier để đổ vào Select Option khi mở Modal
     useEffect(() => {
         /*=lấy khóa ngoại của supplier */
-        const fetchSuppliers = async () => {
+        const fetchMaterials = async () => {
             try {
                 //lấy khóa ngoại ủa supplier
                 const res = await axiosAdmin.get('/suppliers/all-list'); 
@@ -39,7 +39,7 @@ const CreateModal = ({ onReload }: { onReload?: () => void }) => {
                 console.error("Failed to fetch suppliers");
             }
         };
-        fetchSuppliers();
+        fetchMaterials();
     }, []);
 
     // 3. Hàm xử lý Preview ảnh
@@ -65,19 +65,19 @@ const CreateModal = ({ onReload }: { onReload?: () => void }) => {
             // Append Object Data (Chuyển đổi các trường số cho khớp Java)
             const materialData = {
                 name: data.name.trim(),
-                supplier_id: Number(data.supplier_id),
+                supplierId: Number(data.supplierId),
                 unit: data.unit.trim(),
                 quantity: Number(data.quantity),
                 price: parseFloat(data.price.toString()),
-                expire_date: data.expire_date
+                expireDate: data.expireDate
             };
 
             // Bọc JSON vào Blob để tránh lỗi Media Type Not Supported
-            formData.append('data', new Blob([JSON.stringify(materialData)], {
-                type: 'application/json'
-            }));
+            formData.append('data', JSON.stringify(materialData))
 
-            const res = await axiosAdmin.post('/materials/create', formData);
+            const res = await axiosAdmin.post('/materials/create', formData,{
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
 
             if (res.status === 200 || res.status === 201) {
                 showToast('Create Material success!', 'success');
@@ -123,8 +123,8 @@ const CreateModal = ({ onReload }: { onReload?: () => void }) => {
                     {/* Supplier ID - Chọn từ danh sách */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Supplier</label>
-                        <select className={`form-select ${errors.supplier_id ? 'is-invalid' : ''}`}
-                                {...register("supplier_id", { required: true })}>
+                        <select className={`form-select ${errors.supplierId ? 'is-invalid' : ''}`}
+                                {...register("supplierId", { required: true })}>
                             <option value="">-- Select Supplier --</option>
                             {suppliers.map(s => (
                                 <option key={s.id} value={s.id}>{s.name}</option>
@@ -159,7 +159,7 @@ const CreateModal = ({ onReload }: { onReload?: () => void }) => {
                     <div className="col-md-4 mb-3">
                         <label className="form-label fw-bold">Expire Date</label>
                         <input type="date" className="form-control" 
-                                {...register("expire_date", { required: true })} />
+                                {...register("expireDate", { required: true })} />
                     </div>
                 </div>
 

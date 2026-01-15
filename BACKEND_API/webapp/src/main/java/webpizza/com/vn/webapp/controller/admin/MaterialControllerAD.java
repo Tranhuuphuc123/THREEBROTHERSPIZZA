@@ -45,9 +45,10 @@ public class MaterialControllerAD {
     @GetMapping
     public ResponseEntity<Map<String, Object>> index(@RequestParam(defaultValue = "1") Integer pageNumber,
                                                      @RequestParam(defaultValue = "3") Integer pageSize,
-                                                     @RequestParam(defaultValue = "id") String sortBy){
+                                                     @RequestParam(defaultValue = "id") String sortBy,
+                                                     @RequestParam(required = false) String search){
         // goi service thuc hien truy van hien thi tat ca thong tin cua table user co phan trang
-        return materialServiceAD.getAllMaterialPagination(pageNumber, pageSize, sortBy);
+        return materialServiceAD.getAllMaterialPagination(pageNumber, pageSize, sortBy, search);
     }
 
     

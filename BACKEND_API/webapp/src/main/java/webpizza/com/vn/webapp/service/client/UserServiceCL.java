@@ -140,6 +140,15 @@ public class UserServiceCL {
     }
 
 
+    /*I_3 get theo tên không phân trang - mục đích tạo method xử lý 
+    trả về thông tin user theo tên từ token khi giải mã token ở localstoreage
+    khi login thành công */
+    public Optional<User> getFindByUsername(String username){
+        Optional<User> optUser = userRepo.findByUsernameToken(username);
+        return optUser;
+    }
+
+
 
     /*II - 1 Post(create) - trong phần này có xử lý create có xác nhận qua gmail*/
     //MultipartFile: la mot interface trong spring, dc su dung de xu ly cac tep files -> dc upload thog qua giao thuc HTTP request

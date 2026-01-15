@@ -18,6 +18,13 @@ public interface UserRepository  extends JpaRepository<User, Integer> {
     // Tìm user theo username
     User findByUsername(String userName);
 
+    /*tìm user theo username dưới dạng optional -> phục vụ chức năng I_3 trong userserviceCl 
+    cho chức năng đổ thông tin user từ token vào order page á khi login thành công thì có 
+    thông tin user ở token rồi lấy đổ vào trang payment á*/
+    //Thêm @Query để Spring không tự phân tích tên hàm "findByUsernameToken" nữa
+    @Query("SELECT u FROM User u WHERE u.username = :username")
+    Optional<User> findByUsernameToken(@Param("username") String username);
+
     /*viết function tiềm kiếm Load roles cùng lúc với user giúp tránh:
      + Chuẩn JPA
      + Dùng tốt cho JWT + Security

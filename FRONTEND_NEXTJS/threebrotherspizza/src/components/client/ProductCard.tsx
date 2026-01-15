@@ -84,7 +84,7 @@ export function ProductCard({ data }: PizzaProps) {
                   window.location.href = `/client/productDetail?id=${data.id}`;
                 }}
               >
-               Buy Now <i className="bi bi-arrow-right-short fs-5 ms-1"></i>
+               See details <i className="bi bi-arrow-right-short fs-5 ms-1"></i>
               </Button>
             </div>
           </Card.Body>

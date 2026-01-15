@@ -46,11 +46,11 @@ import Modal from "react-bootstrap/Modal";
 import { useModal } from "@/contexts/ModalContext";
 
 //import page form create product(form create tự thiết kế bằng bootstrap)
-//import CreateModal from "@/app/admin/suppliers/create/page";
+import CreateModal from "@/app/admin/material/create/page";
 //import page form delete product
-//import DeleteModal from "@/app/admin/suppliers/delete/page";
+import DeleteModal from "@/app/admin/material/delete/page";
 //import form edit products
-//import UpdateModal from "@/app/admin/suppliers/edit/page";
+import UpdateModal from "@/app/admin/material/edit/page";
 
 //make variale api url file upload img
 import { UPLOAD_URL } from "@/constants/urls";
@@ -335,11 +335,11 @@ export default function SupplierManage () {
                       />
                     </td>
                     <td>{acc.name}</td>
-                    <td>{acc.supplier_id}</td>
+                    <td>{acc.supplierId}</td>
                     <td>{acc.unit}</td>
                     <td>{acc.quantity}</td>
                     <td>{acc.price}</td>
-                    <td>{acc.expire_date}</td>
+                    <td>{acc.expireDate}</td>
                     <td>
                         <div className="d-flex gap-2">
                             {/* KIỂM TRA QUYỀN TRƯỚC KHI HIỂN THỊ CỘT ACTIONS */}
@@ -417,15 +417,15 @@ export default function SupplierManage () {
       </div>
 
       {/* Modals */}
-      {/* <Modal show={show && modalType === "create"} onHide={closeModal}>
+      <Modal show={show && modalType === "create"} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add new Supplier</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <CreateModal onReload={handleReload} />
         </Modal.Body>
-      </Modal> */}
-{/* 
+      </Modal>
+
       <Modal show={show && modalType === "delete"} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete {selectedId}</Modal.Title>
@@ -437,9 +437,9 @@ export default function SupplierManage () {
             <p>No find data</p>
           )}
         </Modal.Body>
-      </Modal> */}
+      </Modal>
 
-{/* 
+
       <Modal show={show && modalType === "edit"} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Account - edit value {selectedId}</Modal.Title>
@@ -449,10 +449,10 @@ export default function SupplierManage () {
             // ruột của form modal edit context dẫn từ trang supplier/edit/pages
             <UpdateModal id={selectedId} onReload={handleReload} />
           ) : (
-            <p>Không tìm thấy dữ liệu để xóa</p>
+            <p>No Data</p>
           )}
         </Modal.Body>
-      </Modal> */}
+      </Modal>
     </>
   );
 };

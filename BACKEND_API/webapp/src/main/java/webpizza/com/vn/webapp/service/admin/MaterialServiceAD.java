@@ -61,7 +61,10 @@ public class MaterialServiceAD {
 
     
     /*I_1 -  GET ->lay va do du lieu co phan trang*/
-    public ResponseEntity<Map<String, Object>> getAllMaterialPagination(int pageNumber, int pageSize, String sortby){
+    public ResponseEntity<Map<String, Object>> getAllMaterialPagination(int pageNumber, 
+                                                                        int pageSize, 
+                                                                        String sortby,
+                                                                        String searchTerm){
         //a - khoi tao bien respone luu tru ket qua tra ve
         Map<String, Object> response = new HashMap<>();
 
@@ -75,6 +78,18 @@ public class MaterialServiceAD {
         * */
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, Sort.by(sortby));
         Page<Material> pageResult = materialRepo.findAll(pageable);
+
+        
+        /* them dieu kien cho chuc nang tim keim
+        + khi search thi khong cos phan trang khi hien thi value
+        + khong search thi hien thi phan trang binh thuong
+        */
+        if(searchTerm == null || searchTerm.isEmpty()){
+            pageResult = materialRepo.findAll(pageable);
+        }else{
+            //co yeu cau tim kiem thi tien hanh xoa phan trang di ma hien  thi value bt
+            pageResult = materialRepo.findBySearchContains(searchTerm.toLowerCase(), pageable);
+        }
         
         if(pageResult.hasContent()){
             //tra ket qua cho nguoi dung -> tra theo chuan restfull APi sieu cap vip pro

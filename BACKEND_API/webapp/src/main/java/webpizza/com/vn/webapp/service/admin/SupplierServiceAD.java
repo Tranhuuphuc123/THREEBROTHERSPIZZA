@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,7 +37,24 @@ public class SupplierServiceAD {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    /*I _ - get hien thi co phan trang */
+    /*I_0 trả về danh sách suppliers không phân trang*/
+    public ResponseEntity<Map<String, Object>> getRoles() {
+        //khởi tạo biến lưu trữ kết quả trả về
+        Map<String, Object> response = new HashMap();
+
+        //b - Yêu câu repository lấy dữ liệu -> gọi đén Repository.mehthod trong crudRepository
+        List<Supplier> lsSupplier = (List<Supplier>) supplierRepo.findAll();
+
+        //c - trả về kết quả cho người dùng -> trả theo chuẩn restFullApi
+        response.put("data", lsSupplier);
+        response.put("statuscode", 200);
+        response.put("msg", "get data successfully");
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+
+    /*I _1 - get hien thi co phan trang */
     public ResponseEntity<Map<String, Object>> getAllSupplierPagination(int pageNumber, 
                                                                         int pageSize, 
                                                                         String sortBy,
@@ -49,17 +67,17 @@ public class SupplierServiceAD {
         Page<Supplier> pageResult = supplierRepo.findAll(pageable);
 
         /* them dieu kien cho chuc nang tim keim
-         + khi search thi khong cos phan trang khi hien thi value
-         + khong search thi hien thi phan trang binh thuong
+        + khi search thi khong cos phan trang khi hien thi value
+        + khong search thi hien thi phan trang binh thuong
         */
-       if(searchTerm == null || searchTerm.isEmpty()){
-        pageResult = supplierRepo.findAll(pageable);
-       }else{
-         //co yeu cau tim kiem thi tien hanh xoa phan trang di ma hien  thi value bt
-         pageResult = supplierRepo.findBySearchContains(searchTerm.toLowerCase(), 
-                                                        searchTerm.toLowerCase(), 
-                                                        pageable);
-       }
+        if(searchTerm == null || searchTerm.isEmpty()){
+            pageResult = supplierRepo.findAll(pageable);
+        }else{
+            //co yeu cau tim kiem thi tien hanh xoa phan trang di ma hien  thi value bt
+            pageResult = supplierRepo.findBySearchContains(searchTerm.toLowerCase(), 
+                                                            searchTerm.toLowerCase(), 
+                                                            pageable);
+        }
 
         if(pageResult.hasContent()){
             //tra ve ket qua cho nguoi dung theo chuan restfull api 

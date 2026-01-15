@@ -11,6 +11,7 @@
  */
 
 "use client";
+import React from "react";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
@@ -70,7 +71,12 @@ export default function OffCanvasCart({
           className="m-0"
           style={{ backgroundColor: "#dee2e6", opacity: 0.8 }}
         />
-        <Offcanvas.Body>{children}</Offcanvas.Body>
+        <Offcanvas.Body>
+          {/* Kiểm tra nếu children là React Element thì truyền thêm prop closeOffcanvas */}
+          {React.isValidElement(children) 
+            ? React.cloneElement(children as React.ReactElement<any>, { closeOffcanvas: handleClose })
+            : children}
+        </Offcanvas.Body>
       </Offcanvas>
     </>
   );
