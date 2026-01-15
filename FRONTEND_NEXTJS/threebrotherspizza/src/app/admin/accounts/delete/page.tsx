@@ -6,7 +6,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { useModal } from "@/contexts/ModalContext";
 
 //import interface  types định kiểu dữ liệu cho dữ liệu cho page props del Product.
-import {DeleteAccountPropsTypes} from "@/types/AccountTypes";
+import { DeleteAccountPropsTypes } from "@/types/AccountTypes";
 
 //import lib axios xử lý call api co mục select category và supplier id
 import axiosAdmin from "@/axios/axiosAdmin";
@@ -17,38 +17,38 @@ const DeleteModal: React.FC<DeleteAccountPropsTypes> = ({
   onReload,
 }) => {
   //khai báo state tu useToast trong ToastContext truyền vào bien state
-  const { showToast } = useToast() 
+  const { showToast } = useToast()
 
   //state trang thai dung voi useModal cua ModalContext:
   const { closeModal } = useModal()
 
   /** mehod xử lý xóa **/
   const handleDeleteClick = async () => {
-      try {
-        // 1. Gọi API xóa (đường dẫn khớp với backend bạn đã cấu hình)
-        const response = await axiosAdmin.delete(`/users/delete/${id}`);
+    try {
+      // 1. Gọi API xóa (đường dẫn khớp với backend bạn đã cấu hình)
+      const response = await axiosAdmin.delete(`/users/delete/${id}`);
 
-        // 2. Thông báo thành công
-        showToast(response.data.msg || "Xóa tài khoản thành công!", "success");
+      // 2. Thông báo thành công
+      showToast(response.data.msg || "Delete account successfully!", "success");
 
-        // 3. ĐÓNG MODAL TRƯỚC
-        closeModal();
+      // 3. ĐÓNG MODAL TRƯỚC
+      closeModal();
 
-        // 4. KÍCH HOẠT REFRESH Ở TRANG CHA
-       // Quan trọng: Gọi onReload để trang cha fetchAccounts() lại
-        if (onReload) {
-          // Thêm timeout 300ms để chắc chắn DB đã cập nhật xong trước khi fetch lại
-          setTimeout(() => {
-            onReload(); 
-          }, 300);
-        }
-
-      } catch (error: any) {
-        // Xử lý lỗi Optimistic Locking hoặc lỗi 404, 500
-        const errorMessage = error.response?.data?.message || "Có lỗi xảy ra khi xóa!";
-        showToast(errorMessage, "danger");
+      // 4. KÍCH HOẠT REFRESH Ở TRANG CHA
+      // Quan trọng: Gọi onReload để trang cha fetchAccounts() lại
+      if (onReload) {
+        // Thêm timeout 300ms để chắc chắn DB đã cập nhật xong trước khi fetch lại
+        setTimeout(() => {
+          onReload();
+        }, 300);
       }
-    };
+
+    } catch (error: any) {
+      // Xử lý lỗi Optimistic Locking hoặc lỗi 404, 500
+      const errorMessage = error.response?.data?.message || "Có lỗi xảy ra khi xóa!";
+      showToast(errorMessage, "danger");
+    }
+  };
 
   /**trả lại giao diện cho form delete**/
   return (

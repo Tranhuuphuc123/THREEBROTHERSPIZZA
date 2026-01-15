@@ -17,7 +17,7 @@ import {
 } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCartShopping} from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
 //import lib modal va cac lib lien quan xu ly modal context cho form login
 import Modal from "react-bootstrap/Modal";
@@ -33,10 +33,10 @@ import Login from "@/app/client/login/page";
 import { useToast } from '@/contexts/ToastContext';
 
 // Import hàm getRoleFromToken từ lib call api auth axiosAuth để lấy role từ user đăng nhập
-import { getPayloadInfoFromToken } from "@/axios/axiosAuth"; 
+import { getPayloadInfoFromToken } from "@/axios/axiosAuth";
 
 // Import URL server ảnh của bạn
-import { UPLOAD_URL } from "@/constants/urls"; 
+import { UPLOAD_URL } from "@/constants/urls";
 
 //import page edit profile
 import EditProfile from "@/app/client/profile/page";
@@ -46,31 +46,34 @@ import OffCanvasCart from '@/components/client/OffCanvasCart'
 import CartPage from '@/app/client/cart/page'
 
 //import useCart ở cartContext vào dùng: lấy các hàm đã viết trong cartContext để dùng
-import {useCart} from '@/contexts/cartContext'
+import { useCart } from '@/contexts/cartContext'
 
 
 
 export default function Header() {
   //khởi tạo các method của cartContext vào page này
   const { totalItems } = useCart()
-  
+  // Thêm state để quản lý offcanvas
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
+
+
 
   //khoi tao cac compoent cuar modal context da khai bao o class modalcontext
   const { openModal, closeModal, show, modalType } = useModal();
   // Khai báo state để lưu trạng thái đăng nhập
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-   // Thêm state lưu role của user khi login thàng công(role, username chưa trong payload của token)
+  // Thêm state lưu role của user khi login thàng công(role, username chưa trong payload của token)
   const [userRole, setUserRole] = useState<string | null>(null);
   // State lưu avatar ảnh của user account
-  const [avatar, setAvatar] = useState<string | null>(null); 
+  const [avatar, setAvatar] = useState<string | null>(null);
   // Thêm State lưu id của user từ localstorage
   const [userId, setUserId] = useState<string | null>(null);
 
   //pathname: Lấy đường dẫn hiện tại để biết "người dùng có chuyển trang không?", nếu có → đóng modal.
-   const pathName = usePathname(); 
+  const pathName = usePathname();
 
-   // Khai báo showToast từ ToastContext
-  const {showToast} = useToast()
+  // Khai báo showToast từ ToastContext
+  const { showToast } = useToast()
 
 
   /**** Hàm xử lý đăng xuất (Nên có) *****/
@@ -97,15 +100,15 @@ export default function Header() {
       (tức là code đang chạy trên trình duyệt của người dùng), thì hãy thực thi 
       đoạn code bên dưới". */
     if (typeof window !== 'undefined') {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user_avatar"); // <--- Thêm dòng này
-        localStorage.removeItem("permissions");
-        localStorage.removeItem("user_id"); // <--- THÊM DÒNG NÀY: Xóa ID khi logout
+      localStorage.removeItem("token");
+      localStorage.removeItem("user_avatar"); // <--- Thêm dòng này
+      localStorage.removeItem("permissions");
+      localStorage.removeItem("user_id"); // <--- THÊM DÒNG NÀY: Xóa ID khi logout
 
-        showToast("Đã đăng xuất", 'info');
-        // Ép trình duyệt load lại trang chủ từ Server để xóa sạch State cũ
-        window.location.href = "/";
-        setIsLoggedIn(false);
+      showToast("Đã đăng xuất", 'info');
+      // Ép trình duyệt load lại trang chủ từ Server để xóa sạch State cũ
+      window.location.href = "/";
+      setIsLoggedIn(false);
     }
   };
 
@@ -137,7 +140,7 @@ export default function Header() {
          cái gì*/
       setIsLoggedIn(!!token);
 
-     // Lấy thông tin tổng hợp từ token
+      // Lấy thông tin tổng hợp từ token
       const roles = getPayloadInfoFromToken();
       //kiểm tra token còn hạn không và lấy roles từ localstorage
       if (roles && token) {
@@ -171,8 +174,8 @@ export default function Header() {
   }, []);
 
   /***Hàm kiểm tra role là admin/Employee:cashier**/
-  const canAccessAdmin = userRole?.includes("admin") || userRole?.includes("cashier") 
-                                                     || userRole?.includes("manager");
+  const canAccessAdmin = userRole?.includes("admin") || userRole?.includes("cashier")
+    || userRole?.includes("manager");
 
   /* useEffect để đóng modal khi chuyển trang */
   useEffect(() => {
@@ -182,6 +185,11 @@ export default function Header() {
     }
     // KHÔNG bỏ 'show' vào đây, chỉ bỏ 'pathName'
   }, [pathName]);
+
+  useEffect(() => {
+    console.log("showOffcanvas state:", showOffcanvas);
+  }, [showOffcanvas]);
+
 
   return (
     <>
@@ -194,10 +202,10 @@ export default function Header() {
       >
         <Container>
           <NavbarBrand as={Link} href="/" className="fw-bold text-warning">
-            <Image src= "/assets/admin/img/threebrotherpizzalogo.jpg" 
-                  width={20} 
-                  height={20} 
-                  className="mx-1 mb-1"/>
+            <Image src="/assets/admin/img/threebrotherpizzalogo.jpg"
+              width={20}
+              height={20}
+              className="mx-1 mb-1" />
             THREEBROTHER'S PIZZA
           </NavbarBrand>
           <NavbarToggle aria-controls="navbarNav" />
@@ -218,7 +226,7 @@ export default function Header() {
               </NavLink>
 
 
-            {/* KHỐI XỬ LÝ SIGN IN / USER DROPDOWN */}
+              {/* KHỐI XỬ LÝ SIGN IN / USER DROPDOWN */}
               {/* xu ly handle event click button dangnhap -> modal context form login 
                => dùng toán tử 3 ngôi kiểm tra state {!isLoggedIn ? (<button đăng nhập>): (<form giao diện accounts>)
                <=> nghĩa là kiểm tra token chưa cho là false thì !false = true thỏa đk thì hiện nút đăng nhập
@@ -226,46 +234,47 @@ export default function Header() {
                */}
               {!isLoggedIn ? (
                 <NavLink as={Link} href="#">
-                    <span onClick={() => openModal("loginForm")}>Sign In</span>
+                  <span onClick={() => openModal("loginForm")}>Sign In</span>
                 </NavLink>
-              ) : (  
-                    <Dropdown
-                      align="end"
-                      className="border rounded text-white p-1"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <DropdownToggle as="div">
-                        <Image
-                          alt="avatar"
-                          // Ghép URL server với tên file ảnh lấy từ state
-                          src={avatar ? `${UPLOAD_URL}/${avatar}` : "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png"}
-                          roundedCircle
-                          width="30px"
-                          height="30px"
-                          style={{ objectFit: 'cover', border: '1px solid #ffc107' }} // Thêm style cho đẹp
-                        />
-                      </DropdownToggle>
-                      <DropdownMenu>
-                        <DropdownItem  href="/client/profile">Profile</DropdownItem>
+              ) : (
+                <Dropdown
+                  align="end"
+                  className="border rounded text-white p-1"
+                  style={{ cursor: "pointer" }}
+                >
+                  <DropdownToggle as="div">
+                    <Image
+                      alt="avatar"
+                      // Ghép URL server với tên file ảnh lấy từ state
+                      src={avatar ? `${UPLOAD_URL}/${avatar}` : "https://i2.wp.com/vdostavka.ru/wp-content/uploads/2019/05/no-avatar.png"}
+                      roundedCircle
+                      width="30px"
+                      height="30px"
+                      style={{ objectFit: 'cover', border: '1px solid #ffc107' }} // Thêm style cho đẹp
+                    />
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem href="/client/profile">Profile</DropdownItem>
+                    <DropdownItem href="/client/orderInformation">Order information</DropdownItem>
 
-                        {/* Nên gọi hàm handleLogout khi người dùng bấm Logout */}
-                        <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+                    {/* Nên gọi hàm handleLogout khi người dùng bấm Logout */}
+                    <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
 
-                       {/* ĐIỀU KIỆN QUAN TRỌNG: Chỉ hiện Admin Panel nếu không phải là cashier hay admin */}
-                        {canAccessAdmin && (
-                          <DropdownItem href="/admin">Admin Panel</DropdownItem>
-                        )}
-                      </DropdownMenu>
-                    </Dropdown>
-                )} 
+                    {/* ĐIỀU KIỆN QUAN TRỌNG: Chỉ hiện Admin Panel nếu không phải là cashier hay admin */}
+                    {canAccessAdmin && (
+                      <DropdownItem href="/admin">Admin Panel</DropdownItem>
+                    )}
+                  </DropdownMenu>
+                </Dropdown>
+              )}
 
 
               {/* --- PHẦN THÊM MỚI: CARD GIỎ HÀNG NẰM SÁT BÊN PHẢI --- */}
               <OffCanvasCart
-                name="" 
-                title="YOUR CART"
+                name=""
+                title="Shopping Cart"
                 /* Thêm d-flex align-items-center để căn thẳng hàng với các mục khác */
-                buttonClassName="p-0 border-0 bg-transparent shadow-none d-flex align-items-center" 
+                buttonClassName="p-0 border-0 bg-transparent shadow-none d-flex align-items-center"
                 icon={
                   <div className="cart-pill" style={{ marginLeft: "40px", cursor: "pointer" }}>
                     <FontAwesomeIcon icon={faCartShopping} className="cart-icon-fa" />
@@ -281,7 +290,7 @@ export default function Header() {
               >
                 <CartPage />
               </OffCanvasCart>
-              {/* --- HẾT PHẦN GIỎ HÀNG--- */}            
+              {/* --- HẾT PHẦN GIỎ HÀNG--- */}
 
             </Nav>
           </NavbarCollapse>
@@ -298,6 +307,6 @@ export default function Header() {
         </Modal.Body>
       </Modal>
     </>
-    
+
   );
 }

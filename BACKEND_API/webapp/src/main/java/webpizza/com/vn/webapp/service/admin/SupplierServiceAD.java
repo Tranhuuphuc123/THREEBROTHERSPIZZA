@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import webpizza.com.vn.webapp.DTO.admin.SupplierDTO_AD.SupplierCreateRequestDTO_AD;
 import webpizza.com.vn.webapp.DTO.admin.SupplierDTO_AD.SupplierUpdateRequestDTO_AD;
-import webpizza.com.vn.webapp.entity.Role;
 import webpizza.com.vn.webapp.entity.Supplier;
 import webpizza.com.vn.webapp.repository.SupplierRepository;
 

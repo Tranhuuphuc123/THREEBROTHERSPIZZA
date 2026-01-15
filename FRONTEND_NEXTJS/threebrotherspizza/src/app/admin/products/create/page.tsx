@@ -4,22 +4,22 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 //import interface types định kiểu dữ liệu cho dữ liệu cho page props createProduct.
-import {CreateProductPropsTypes} from "@/types/ProductTypes";
+import { CreateProductPropsTypes } from "@/types/ProductTypes";
 
 //import useToast trong ToastContext(viết riêng chuẩn context ấy) để sử dụng cho trang create products
 import { useToast } from '@/contexts/ToastContext';
 //khai bao import ModalContext mau context chung vao: luu ý import cai useModal hook ở qt3 
-import {useModal} from "@/contexts/ModalContext"
+import { useModal } from "@/contexts/ModalContext"
 
 //import lib fontAwesome cho NextJs
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faSave} from '@fortawesome/free-solid-svg-icons'
+import { faSave } from '@fortawesome/free-solid-svg-icons'
 
 //import lib axios xử lý call api co mục select category và supplier id
 import axiosAdmin from '@/axios/axiosAdmin';
 
 //React.FC<CreateProductPropsTypes>: đinh kiểu dữ liệu ts cho props truyền vào component createProduct
-const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
+const CreateModal: React.FC<CreateProductPropsTypes> = ({ onReload }) => {
 
     //khai bao bien trang thai state - state dùng cho input nhập liệu từ client
     const [listCategory, setListCategory] = useState<any[]>([]); // danh sách loại sản phẩm
@@ -37,22 +37,22 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
 
     /***method: xử lý sự kiện khi choosefile img thì ảnh hiện lên để có thể xem trc đc ảnh vừa chọn**/
     const [imagePreview, setImagePreview] = useState<string | null>(null); // state lưu img xem trước khi create sản phẩm
-    const[file, setFile] = useState<File | null>(null); // state lưu file img khi create sản phẩm
+    const [file, setFile] = useState<File | null>(null); // state lưu file img khi create sản phẩm
 
     //khai báo state tu useToast trong ToastContext truyền vào bien state
-    const {showToast} = useToast()
+    const { showToast } = useToast()
     //state trang thai dung voi useModal cua ModalContext:
-    const {closeModal} = useModal()
+    const { closeModal } = useModal()
 
     /**method: xử lý xem trc img trc khi create **/
     const handleImgPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
         //đọc nd tập tin cần hiển thị
         const file = e.target.files?.[0]
-        if(file){
+        if (file) {
             //tạo Url láy địa chứa img xem trước
             const preView = URL.createObjectURL(file)
             //update url vào setImaePreview để cập nhặt
-            setImagePreview(preView) 
+            setImagePreview(preView)
 
             //lưu file ghi nhận img vào create sản phẩm
             setFile(file)
@@ -63,7 +63,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
     //e: React.FormEvent<HTMLFormElement>: định kiểu dữ liệu ts cho event submit form
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); //ngăn chăn hành vi reload mặc định của form khi submit
-        
+
         try {
             const formData = new FormData();
             // 'file' này khớp với @RequestParam("file") bên Spring Boot
@@ -86,7 +86,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
 
             // Kiểm tra validate cơ bản trước khi gọi API
             if (!categoryId) {
-                showToast("Vui lòng chọn loại sản phẩm", 'warning');
+                showToast("Please select a category", 'warning');
                 return;
             }
 
@@ -97,12 +97,12 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            showToast(response.data.msg || "Tạo sản phẩm thành công!", 'success');
+            showToast(response.data.msg || "Create product successfully!", 'success');
             if (onReload) onReload();
             closeModal();
-            
+
         } catch (error: any) {
-            const errorMessage = error.response?.data?.message || 'Có lỗi khi tạo sản phẩm!';
+            const errorMessage = error.response?.data?.message || 'create product failed!';
             showToast(errorMessage, 'danger');
         }
     };
@@ -122,16 +122,16 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
         fetchCategory();
     }, []);
 
-    return(
+    return (
         <>
             <h1 className="color-text-header text-center mt-4 mb-4">Add new Product</h1>
             <form onSubmit={handleSubmit}>
                 {/* 1. Phần Ảnh sản phẩm */}
                 <div className="mb-3 d-flex flex-column align-items-center">
                     <label className="form-label fw-bold">Image of Product</label>
-                    <Image 
-                        src={imagePreview || '/assets/admin/img/no-avatar.png'} 
-                        alt="Preview" 
+                    <Image
+                        src={imagePreview || '/assets/admin/img/no-avatar.png'}
+                        alt="Preview"
                         className="mb-2 border rounded"
                         width={150} height={150}
                         style={{ objectFit: 'cover' }}
@@ -143,13 +143,13 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                     {/* Mã sản phẩm */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Product Code</label>
-                        <input type="text" className="form-control" placeholder="Product Code..." 
+                        <input type="text" className="form-control" placeholder="Product Code..."
                             onChange={(e) => setCode(e.target.value)} required />
                     </div>
                     {/* Tên sản phẩm */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Product Name</label>
-                        <input type="text" className="form-control" placeholder="Enter Product name" 
+                        <input type="text" className="form-control" placeholder="Enter Product name"
                             onChange={(e) => setName(e.target.value)} required />
                     </div>
                 </div>
@@ -174,10 +174,10 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                     {/* Loại sản phẩm (Category) */}
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Category Product</label>
-                        <select 
-                            className="form-select" 
-                            value={categoryId ?? ''} 
-                            onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : null)} 
+                        <select
+                            className="form-select"
+                            value={categoryId ?? ''}
+                            onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : null)}
                             required
                         >
                             <option value="">-- Choose category of product --</option>
@@ -191,8 +191,8 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
                 {/* THÊM TRƯỜNG PRODUCT TYPE Ở ĐÂY */}
                 <div className="mb-3">
                     <label className="form-label fw-bold">Product Type</label>
-                    <select 
-                        className="form-select" 
+                    <select
+                        className="form-select"
                         value={productType}
                         onChange={(e) => setProductType(e.target.value)}
                         required
@@ -211,13 +211,13 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
 
                 <div className="mb-3">
                     <label className="form-label fw-bold">Short Description</label>
-                    <input type="text" className="form-control" 
+                    <input type="text" className="form-control"
                         onChange={(e) => setShortDescription(e.target.value)} />
                 </div>
 
                 <div className="mb-3">
                     <label className="form-label fw-bold">Mô tả chi tiết</label>
-                    <textarea className="form-control" rows={3} 
+                    <textarea className="form-control" rows={3}
                         onChange={(e) => setDescription(e.target.value)} />
                 </div>
 
@@ -234,7 +234,7 @@ const CreateModal: React.FC<CreateProductPropsTypes> = ({onReload}) => {
 
                 <button type="submit" className="btn btn-primary w-100 mt-3">
                     <FontAwesomeIcon icon={faSave} className="me-2" />
-                   Save Product
+                    Save Product
                 </button>
             </form>
         </>

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import {
   Image,
   Dropdown,
@@ -9,25 +9,25 @@ import {
 } from "react-bootstrap";
 
 // Import useRouter chuyển hướng trang 
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 
 // Import các hằng số và hàm tiện ích vể url dãn ảnh upload và axioAuth láy avatar và role
 import { UPLOAD_URL } from "@/constants/urls";
 import { getPayloadInfoFromToken } from "@/axios/axiosAuth";
 
 
-export default function Nav({onToggleSidebar,}: {
+export default function Nav({ onToggleSidebar, }: {
   onToggleSidebar: () => void;
 }) {
 
   // Khởi tạo router để chuyển hướng trang
-  const router = useRouter(); 
+  const router = useRouter();
 
   // State lưu thông tin hiển thị
   const [avatar, setAvatar] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
 
-    /* Hàm xử lý đăng xuất (Nên có)*/
+  /* Hàm xử lý đăng xuất (Nên có)*/
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_avatar"); // <--- Thêm dòng này
@@ -38,30 +38,30 @@ export default function Nav({onToggleSidebar,}: {
 
   /* Kiểm tra trạng thái token khi load component*/
   useEffect(() => {
-      if (typeof window !== 'undefined') {
-        const token = localStorage.getItem("token");
-        const savedAvatar = localStorage.getItem("user_avatar");
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem("token");
+      const savedAvatar = localStorage.getItem("user_avatar");
 
-        // 1. Kiểm tra bảo mật: Nếu không có token, đẩy về trang chủ ngay
-        if (!token) {
-          router.push("/");
-          return;
-        }
-
-        // 2. Lấy Role từ token để hiển thị (nếu cần)
-        const userRole = getPayloadInfoFromToken();
-        setRole(userRole);
-
-        // 3. Lấy Avatar từ localStorage
-        setAvatar(savedAvatar);
+      // 1. Kiểm tra bảo mật: Nếu không có token, đẩy về trang chủ ngay
+      if (!token) {
+        router.push("/");
+        return;
       }
-    }, [router]);
+
+      // 2. Lấy Role từ token để hiển thị (nếu cần)
+      const userRole = getPayloadInfoFromToken();
+      setRole(userRole);
+
+      // 3. Lấy Avatar từ localStorage
+      setAvatar(savedAvatar);
+    }
+  }, [router]);
 
   return (
     <>
       {/* Dùng d-flex và justify-content-between để đẩy account sang phải */}
       <div className="d-flex justify-content-between  w-100 px-3 py-2">
-        
+
         {/* 1. Bên Trái: Nút Toggle Sidebar */}
         <button
           className="btn border-1"
@@ -74,8 +74,8 @@ export default function Nav({onToggleSidebar,}: {
         {/* 2. Bên Phải: Phần Account (Dropdown) */}
         <Dropdown align="end">
           {/* Bỏ 'as="div"' để giữ lại icon mũi tên mặc định của Bootstrap */}
-          <DropdownToggle 
-            variant="none" 
+          <DropdownToggle
+            variant="none"
             className="d-flex align-items-center text-black border-1 p-1"
             id="dropdown-basic"
           >
@@ -94,7 +94,7 @@ export default function Nav({onToggleSidebar,}: {
           </DropdownToggle>
 
           <DropdownMenu>
-            <DropdownItem href="#">Profile</DropdownItem>
+            {/* <DropdownItem href="#">Profile</DropdownItem> */}
             <DropdownItem onClick={handleLogout} className="text-danger">
               Logout
             </DropdownItem>

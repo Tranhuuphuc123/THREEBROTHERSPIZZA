@@ -18,7 +18,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { useRouter } from "next/navigation";
 
 //import axios call api auth login phân quyền 
-import {login} from "@/axios/axiosAuth"
+import { login } from "@/axios/axiosAuth"
 
 
 
@@ -27,7 +27,7 @@ export default function Login() {
   //khoi tao cac component cua modal context da khai bao o class modalcontext
   const { openModal, closeModal, show, modalType } = useModal();
   //khai báo state tu useToast trong ToastContext truyền vào bien state
-  const {showToast} = useToast()
+  const { showToast } = useToast()
   const router = useRouter(); // Khởi tạo router
 
   /*state trang thai ghi nhận usernaem và password*/
@@ -42,32 +42,31 @@ export default function Login() {
   /****method xử lý sự kiện onSubmit khi nhấn button login****/
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     //ngăn chặn hành vi mặc định của form(tải lại trang)
-    e.preventDefault(); 
-    setIsLoading(true); 
-    try{
+    e.preventDefault();
+    setIsLoading(true);
+    try {
       /*1. gọi api login từ axiosAuth.ts*/
       const token = await login(username, password)
 
       //goi showToast vao de su dung hien thi TOast trong useEffect
-      showToast("Login thành công", 'success')
-      
+      showToast("Login successfully", 'success')
+
       //closemodal khi submit nó đóng form login
       closeModal()
 
       /* 2. Chuyển hướng người dùng (Ví dụ về trang chủ hoặc admin)*/
       /* Tùy vào logic của bạn, có thể dùng router.push("/") 
       -> Làm mới dữ liệu để Interceptor nhận token mới nhất cho các request sau*/
-      router.refresh(); 
+      router.refresh();
 
-    }catch(error: any){
-      const errorMessage = error.response?.data?.message || 'Có lỗi khi Login!';
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Login failed!';
       showToast(errorMessage, 'danger');
     }
   }
 
 
-
-  return (  
+  return (
     <>
       <div className="container d-flex justify-content-center align-items-center min-vh-100 mb-1">
         <div
@@ -121,9 +120,9 @@ export default function Login() {
                => lưu ý: để chuyền value và ghi nhận value thay đổi với onChange mà 
                PasswrodInput lại tách ra page riêng thì cần truyền props từ cha page 
                của login qua con là passwordInput */}
-              <PasswordInput  
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}/>
+              <PasswordInput
+                value={password}
+                onChange={(e) => setPassword(e.target.value)} />
             </div>
 
             <div className="d-flex justify-content-between align-items-center mb-3">

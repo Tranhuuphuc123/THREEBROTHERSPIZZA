@@ -1,8 +1,10 @@
 import React from 'react';
 
 const ContactPage = () => {
-  // Đường dẫn nhúng có Marker chính xác cho The Pizza Company Sense City Cần Thơ
-  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.847156943015!2d105.78280367586567!3d10.029454172553733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a062a269227f4d%3A0xc665191f6920970a!2sThe%20Pizza%20Company%20Sense%20City!5e0!3m2!1svi!2s!4v1709123456789!5m2!1svi!2s";
+  // Link embed với Place ID để hiển thị marker chính xác
+  // Place ID của The Pizza Company Mậu Thân: ChIJ... (cần lấy từ Google Maps)
+  // Hoặc dùng link embed trực tiếp từ Google Maps
+  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.8474!2d105.77346!3d10.03436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a062a269227f4d%3A0xc665191f6920970a!2sThe%20Pizza%20Company%20M%E1%BA%ADu%20Th%C3%A2n!5e0!3m2!1svi!2s!4v1709123456789!5m2!1svi!2s";
 
   return (
     <div className="container my-5 py-5">
@@ -26,7 +28,7 @@ const ContactPage = () => {
               <div>
                 <h5 className="mb-1 fw-bold">Address</h5>
                 <p className="text-muted mb-0">
-                  Floor 2, Sense City Mall, No. 01 Hoa Binh Avenue, Tan An Ward, Ninh Kieu District, Can Tho City.
+                  17 Đ. Mậu Thân, An Hòa, Ninh Kiều, Cần Thơ
                 </p>
               </div>
             </div>
@@ -67,15 +69,15 @@ const ContactPage = () => {
         {/* Right Side: Google Maps with Marker */}
         <div className="col-lg-8">
           <div className="card border-0 shadow-sm overflow-hidden h-100" style={{ minHeight: '450px' }}>
-            <iframe 
-              src={mapEmbedUrl} 
-              width="100%" 
-              height="100%" 
-              style={{ border: 0, minHeight: '450px' }} 
-              loading="lazy" 
-              referrerPolicy="no-referrer-when-downgrade"
-              title="The Pizza Company Sense City Location"
-            ></iframe>
+            {/* Dùng link embed trực tiếp từ Google Maps để đảm bảo có marker */}
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3709.094209569203!2d105.7696481284727!3d10.03278537086897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a08929bac2e6dd%3A0x35f12d612072a471!2sThe%20Pizza%20Company%20M%E1%BA%ADu%20Th%C3%A2n!5e1!3m2!1svi!2s!4v1768319059038!5m2!1svi!2s" 
+                  width="600" 
+                  height="450" 
+                  style={{border: 0}}
+                  allowFullScreen={true}
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade">
+            </iframe>
           </div>
         </div>
       </div>

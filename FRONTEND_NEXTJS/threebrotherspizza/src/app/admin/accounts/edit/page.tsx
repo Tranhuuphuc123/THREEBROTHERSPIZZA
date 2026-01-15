@@ -69,12 +69,12 @@ const EditModal: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            showToast(response.data.msg || "Cập nhật thành công!", 'success');
+            showToast(response.data.msg || "Update account successfully!", 'success');
             if (onReload) onReload();
             closeModal();
 
         } catch (error: any) {
-            const errorMessage = error.response?.data?.message || 'Có lỗi khi cập nhật!';
+            const errorMessage = error.response?.data?.message || 'Update account failed!';
             showToast(errorMessage, 'danger');
         }
     };
@@ -110,11 +110,11 @@ const EditModal: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                     // Trong useEffect fetchAccountById
                     if (data.birthday) {
                         // Cắt lấy 10 ký tự đầu: "YYYY-MM-DD"
-                        setBirthday(data.birthday.substring(0, 10)); 
+                        setBirthday(data.birthday.substring(0, 10));
                     } else {
                         setBirthday("");
                     }
-                    
+
                     setEmail(data.email ?? "");
                     setPhone(data.phone ?? "");
                     setAddress(data.address ?? ""); // Đổi false thành ""
@@ -139,23 +139,23 @@ const EditModal: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                 <div className="mb-3 d-flex flex-column align-items-center">
                     <label className="form-label fw-bold">Ảnh đại diện</label>
                     {imagePreview ? (
-                        <Image src={imagePreview} 
-                                alt="Preview" 
-                                className="rounded-circle mb-2 border" 
-                                width={150} height={150} 
-                                style={{ objectFit: 'cover' }} />
+                        <Image src={imagePreview}
+                            alt="Preview"
+                            className="rounded-circle mb-2 border"
+                            width={150} height={150}
+                            style={{ objectFit: 'cover' }} />
                     ) : existingImage ? (
-                        <Image src={existingImage} 
-                                alt="Current" 
-                                className="rounded-circle mb-2 border" 
-                                width={150} height={150} 
-                                style={{ objectFit: 'cover' }} />
+                        <Image src={existingImage}
+                            alt="Current"
+                            className="rounded-circle mb-2 border"
+                            width={150} height={150}
+                            style={{ objectFit: 'cover' }} />
                     ) : (
-                        <Image src={'/assets/admin/img/no-avatar.png'} 
-                                alt="No Avatar" 
-                                className="rounded-circle mb-2 border" 
-                                width={150} height={150} 
-                                style={{ objectFit: 'cover' }} />
+                        <Image src={'/assets/admin/img/no-avatar.png'}
+                            alt="No Avatar"
+                            className="rounded-circle mb-2 border"
+                            width={150} height={150}
+                            style={{ objectFit: 'cover' }} />
                     )}
                     <input className="form-control" type="file" onChange={handleImgPreview} />
                 </div>
@@ -163,10 +163,10 @@ const EditModal: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                 <div className="row">
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Họ và Tên</label>
-                        <input type="text" 
-                                className="form-control" 
-                                value={name} 
-                                onChange={(e) => setName(e.target.value)} />
+                        <input type="text"
+                            className="form-control"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div className="col-md-6 mb-3">
                         <label className="form-label fw-bold">Email</label>
@@ -195,10 +195,10 @@ const EditModal: React.FC<EditAccountPropsTypes> = ({ id, onReload }) => {
                     </div>
                     <div className="col-md-4 mb-3">
                         <label className="form-label fw-bold">Ngày sinh</label>
-                        <input type="date" 
-                                className="form-control" 
-                                value={birthday} 
-                                onChange={(e) => setBirthday(e.target.value)} />
+                        <input type="date"
+                            className="form-control"
+                            value={birthday}
+                            onChange={(e) => setBirthday(e.target.value)} />
                     </div>
                     <div className="col-md-4 mb-3">
                         <label className="form-label fw-bold">Điện thoại</label>
