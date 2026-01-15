@@ -25,7 +25,6 @@ select * from product_material;
 select * from salary_levels;
 select * from shifts;
 select * from suppliers;
-select * from feedbacks;
 
 -- nhóm truy vấn của order
 select * from payment_types;

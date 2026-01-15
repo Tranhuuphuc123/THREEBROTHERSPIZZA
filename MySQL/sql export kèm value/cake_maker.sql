@@ -26,9 +26,9 @@ DROP TABLE IF EXISTS `categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -44,6 +44,38 @@ INSERT INTO `categories` VALUES (1,'cat001','Pan Crust','This is the signature c
 UNLOCK TABLES;
 
 --
+-- Table structure for table `customer`
+--
+
+DROP TABLE IF EXISTS `customer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customer` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `birthday` datetime(6) DEFAULT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime(6) DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` bit(1) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer`
+--
+
+LOCK TABLES `customer` WRITE;
+/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `feedbacks`
 --
 
@@ -54,9 +86,9 @@ CREATE TABLE `feedbacks` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product_id` int unsigned NOT NULL,
   `user_id` int unsigned NOT NULL,
-  `rating` int DEFAULT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci,
-  `is_active` tinyint(1) DEFAULT NULL,
+  `rating` varbinary(255) DEFAULT NULL,
+  `message` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` varbinary(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   KEY `user_id` (`user_id`),
@@ -83,10 +115,10 @@ DROP TABLE IF EXISTS `materials`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `materials` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `img` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `supplier_id` int unsigned NOT NULL,
-  `unit` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `unit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `quantity` int DEFAULT NULL,
   `price` float DEFAULT NULL,
   `expire_date` date DEFAULT NULL,
@@ -109,6 +141,115 @@ INSERT INTO `materials` VALUES (1,'bot','20260113_002504_bot1.jpg',1,'kg',20,50,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `order_details`
+--
+
+DROP TABLE IF EXISTS `order_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_details` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int unsigned DEFAULT NULL,
+  `product_id` int unsigned DEFAULT NULL,
+  `promotion_id` int unsigned DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `order_detail_status` int DEFAULT NULL,
+  `subtotal` float DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `unit_price` float DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_order_details_order` (`order_id`),
+  KEY `fk_order_details_product` (`product_id`),
+  KEY `fk_order_details_promotion` (`promotion_id`),
+  CONSTRAINT `fk_order_details_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_order_details_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_order_details_promotion` FOREIGN KEY (`promotion_id`) REFERENCES `promotions` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_details`
+--
+
+LOCK TABLES `order_details` WRITE;
+/*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
+INSERT INTO `order_details` VALUES (4,4,25,1,1,0,7.56,'2026-01-16 00:14:00','2026-01-16 00:14:00',7.56),(5,5,7,1,1,0,5.56,'2026-01-16 00:21:43','2026-01-16 00:21:43',5.56),(6,7,20,1,1,0,1.16,'2026-01-16 00:27:18','2026-01-16 00:27:18',1.16),(7,8,25,1,1,0,7.56,'2026-01-16 01:08:52','2026-01-16 01:08:52',7.56),(8,9,14,1,4,0,25.44,'2026-01-16 01:17:53','2026-01-16 01:17:53',6.36),(9,10,25,1,2,0,15.12,'2026-01-16 01:43:50','2026-01-16 01:43:50',7.56);
+/*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `cashier_id` int unsigned DEFAULT NULL,
+  `customer_id` int unsigned DEFAULT NULL,
+  `payment_type_id` int unsigned DEFAULT NULL,
+  `ship_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ship_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `order_date` date DEFAULT NULL,
+  `shipped_date` date DEFAULT NULL,
+  `paid_date` date DEFAULT NULL,
+  `status` int DEFAULT NULL,
+  `ship_method` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_orders_cashier` (`cashier_id`),
+  KEY `fk_orders_payment_type` (`payment_type_id`),
+  KEY `fk_orders_customer` (`customer_id`),
+  CONSTRAINT `fk_orders_cashier` FOREIGN KEY (`cashier_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_orders_customer` FOREIGN KEY (`customer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_orders_payment_type` FOREIGN KEY (`payment_type_id`) REFERENCES `payment_types` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (4,3,3,3,NULL,'can tho','2026-01-15',NULL,NULL,1,'1','dien thoai trc khi giao hang\nsdt: 0962428167','2026-01-16 00:14:00','2026-01-16 00:14:00'),(5,3,3,3,NULL,'ving long','2026-01-15',NULL,NULL,1,'1','nho dt trc khi giao','2026-01-16 00:21:43','2026-01-16 00:21:43'),(6,3,3,1,NULL,'Hau Giang','2026-01-15',NULL,NULL,1,'1','nho dt trc khi giao hang toi noi','2026-01-16 00:25:35','2026-01-16 00:25:35'),(7,3,3,3,NULL,'Hau Giang','2026-01-15',NULL,NULL,1,'1','giao do uong','2026-01-16 00:27:18','2026-01-16 00:27:18'),(8,3,3,1,NULL,'Hau Giang','2026-01-15',NULL,NULL,1,'1','giao hang goi dt','2026-01-16 01:08:52','2026-01-16 01:08:52'),(9,3,3,3,NULL,'can tho','2026-01-15',NULL,NULL,1,'1','giao hanh nhanh','2026-01-16 01:17:53','2026-01-16 01:17:53'),(10,3,3,3,NULL,'sai gon','2026-01-15',NULL,NULL,1,'1','dien thoai trc giao hang','2026-01-16 01:43:50','2026-01-16 01:43:50');
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment_types`
+--
+
+DROP TABLE IF EXISTS `payment_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payment_types` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment_types`
+--
+
+LOCK TABLES `payment_types` WRITE;
+/*!40000 ALTER TABLE `payment_types` DISABLE KEYS */;
+INSERT INTO `payment_types` VALUES (1,'pay001','Transfer','Credit card transfer method',NULL,'2026-01-14 00:00:00','2026-01-14 00:00:00'),(2,'pay002','Paypal','Payment method: PayPal',NULL,'2026-01-14 00:00:00','2026-01-14 00:00:00'),(3,'pay003','Cash','Receive the goods directly and then transfer the money.',NULL,'2026-01-14 00:00:00','2026-01-14 00:00:00');
+/*!40000 ALTER TABLE `payment_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `permissions`
 --
 
@@ -117,12 +258,12 @@ DROP TABLE IF EXISTS `permissions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `guard_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `display_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `module_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `module_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -203,18 +344,18 @@ DROP TABLE IF EXISTS `products`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` text COLLATE utf8mb4_unicode_ci,
-  `short_description` text COLLATE utf8mb4_unicode_ci,
-  `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` float DEFAULT NULL,
   `quantity` int DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT NULL,
+  `is_active` int DEFAULT NULL,
   `category_id` int unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `product_type` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
@@ -227,7 +368,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (7,'p001','Pizza Cheese','20260107_210904_cheese.jpg','Pizza with only cheese','Pizza is just cheese, cheese, and more cheese.',5.56,15,1,2,'2026-01-07 21:09:05','2026-01-07 21:09:05','pizza vegetarian'),(8,'p002','Pizza Vegetable','20260107_211211_vegetable.jpg','Pizza for vegetarians','Onions, bell peppers, mushrooms, cucumbers, and tomatoes',5.56,5,1,1,'2026-01-07 21:12:12','2026-01-07 21:12:12','pizza vegetarian'),(9,'p003','Pizza Pepperoni','20260107_211345_pepperoni.jpg','Pizza Cake Traditional','Italian-style sausages and tomato sauce',5.56,7,1,2,'2026-01-07 21:13:46','2026-01-07 21:13:46','pizza cake traditional'),(10,'p004','Pizza Chicken','20260107_211519_pizza_truyenthong_ganuong.png','Pizza cake traditional','Chicken and pineapple',5.56,7,1,2,'2026-01-07 21:15:20','2026-01-07 21:15:20','pizza cake traditional'),(11,'p005','Pizza Ham','20260107_211716_pizza_truyenthong_thitnguoi.png','Pizza Cake Traditional','Ham and Mushroom',5.56,10,1,2,'2026-01-07 21:17:17','2026-01-07 21:17:17','pizza cake traditional'),(12,'p006','Pizza Hawaii','20260107_211838_pizza_truyenthong_hawaii.png','Pizza Cake Traditional','Ham, Bacon, and Pineapple',5.56,5,1,2,'2026-01-07 21:18:38','2026-01-07 21:18:38','pizza cake traditional'),(13,'p007','Pizza Pesto','20260107_212257_pesto.png','Pizza Cake Seafood','Shrimp, Crab, Ham, and Thousand Island Sauce',6.36,20,1,1,'2026-01-07 21:22:58','2026-01-07 21:22:58','pizza cake seafood'),(14,'p008','Pizza Shrimp','20260107_212420_pizza_seafood_shrimp.png','Pizza Cake Seafood','Shrimp, crab, squid, clams, and Marinara sauce.',6.36,20,1,1,'2026-01-07 21:24:21','2026-01-07 21:24:21','pizza cake seafood'),(15,'p009','Pizza Black Pepper Shrimp','20260107_212623_pizza_seafood_pesto.png','Pizza Cake Seafood','Shrimp, crab, squid, clams, and black pepper',6.36,15,1,2,'2026-01-07 21:26:24','2026-01-07 21:26:24','pizza cake seafood'),(16,'p010','Spicy Clam Spaghetti','20260107_213203_mihaisan.png','Spicy Clam Spaghetti','Spicy Clam Spaghetti with a hint of natural sweetness.',5.56,5,1,3,'2026-01-07 21:32:03','2026-01-07 21:32:03','noodle'),(17,'p011','Clam Basil Spaghetti','20260107_213302_mingheuhap.png','Clam Basil Spaghetti','Basil spaghetti with the natural sweetness of clams.',5.56,5,1,3,'2026-01-07 21:33:02','2026-01-07 21:33:02','noodle'),(18,'p012','Pesto Spaghetti','20260107_213504_miy.png','Pesto Spaghetti','Spaghetti, shrimp, and squid blended with green Pesto sauce.',5.56,5,1,3,'2026-01-07 21:35:04','2026-01-07 21:35:04','noodle'),(19,'p013','7Up','20260107_213628_7up.png','7 UP','Carbonated soft drinks',1.16,20,1,3,'2026-01-07 21:36:28','2026-01-07 21:36:28','drinking water'),(20,'p014','Mirinda','20260107_213715_mirinda.png','MIRINDA','Carbonated soft drinks',1.16,20,1,3,'2026-01-07 21:37:16','2026-01-07 21:37:16','drinking water'),(21,'p015','Beer 333','20260107_213839_333.png','Beer 333','Alcoholic beverages',1.96,15,1,3,'2026-01-07 21:38:39','2026-01-07 21:38:39','drinking water'),(22,'p016','Beer Heineken','20260107_213917_heineken.png','Beer Heineken','Alcoholic beverages',1.96,15,1,3,'2026-01-07 21:39:17','2026-01-07 21:39:17','drinking water'),(23,'p017','Aquafina','20260107_214007_aquafina.png','Aquafina','Natural spring water',1.16,20,1,3,'2026-01-07 21:40:08','2026-01-07 21:40:08','drinking water'),(24,'p024','Pizza with 4 types of cheese','20260108_140359_combo_4phomai.png','Pizza Special','Four famous types of cheese combined with Vietnamese Coconut, served with Coconut Nectar.',7.56,5,1,2,'2026-01-08 14:03:59','2026-01-08 14:03:59','pizza combo'),(25,'p025','Pizza special Cheese','20260108_140509_combo_cheese.png','Pizza Special','Shrimp, four famous types of cheese combined with Vietnamese Coconut, served with Coconut Nectar.',7.56,5,1,1,'2026-01-08 14:05:09','2026-01-08 14:05:09','pizza combo'),(26,'p026','Pizza Special Pesto','20260108_140657_combo_haisanpesto.png','Pizza Special','Shrimp, crab sticks, squid, and fresh broccoli on a Green Pesto sauce base.',7.56,5,1,1,'2026-01-08 14:06:58','2026-01-08 14:06:58','pizza combo'),(27,'p027','Pizza Special Green Pesto','20260108_140806_combo_haipesstoxanh.png','Pizza  Special','Shrimp, crab sticks, squid with full toppings, and fresh broccoli on a Green Pesto sauce base.',7.56,4,1,1,'2026-01-08 14:08:07','2026-01-08 14:08:07','pizza combo'),(28,'p028','Pizza Pesto Black pepper','20260108_142758_pizza_seafood.png','Pizza Cake Seafood','Shrimp, crab, squid, clams, and Marinara sauce.',5.56,10,1,2,'2026-01-08 14:27:59','2026-01-08 14:27:59','pizza cake seafood');
+INSERT INTO `products` VALUES (7,'p001','Pizza Cheese','20260107_210904_cheese.jpg','Pizza with only cheese','Pizza is just cheese, cheese, and more cheese.',5.56,15,1,2,'2026-01-07 21:09:05','2026-01-07 21:09:05','pizza vegetarian'),(8,'p002','Pizza Vegetable','20260107_211211_vegetable.jpg','Pizza for vegetarians','Onions, bell peppers, mushrooms, cucumbers, and tomatoes',5.56,5,1,1,'2026-01-07 21:12:12','2026-01-07 21:12:12','pizza vegetarian'),(9,'p003','Pizza Pepperoni','20260107_211345_pepperoni.jpg','Pizza Cake Traditional','Italian-style sausages and tomato sauce',5.56,7,1,2,'2026-01-07 21:13:46','2026-01-07 21:13:46','pizza cake traditional'),(10,'p004','Pizza Chicken','20260107_211519_pizza_truyenthong_ganuong.png','Pizza cake traditional','Chicken and pineapple',5.56,3,1,2,'2026-01-07 21:15:20','2026-01-16 00:44:02','pizza cake traditional'),(11,'p005','Pizza Ham','20260107_211716_pizza_truyenthong_thitnguoi.png','Pizza Cake Traditional','Ham and Mushroom',5.56,10,1,2,'2026-01-07 21:17:17','2026-01-07 21:17:17','pizza cake traditional'),(12,'p006','Pizza Hawaii','20260107_211838_pizza_truyenthong_hawaii.png','Pizza Cake Traditional','Ham, Bacon, and Pineapple',5.56,5,1,2,'2026-01-07 21:18:38','2026-01-07 21:18:38','pizza cake traditional'),(13,'p007','Pizza Pesto','20260107_212257_pesto.png','Pizza Cake Seafood','Shrimp, Crab, Ham, and Thousand Island Sauce',6.36,20,1,1,'2026-01-07 21:22:58','2026-01-07 21:22:58','pizza cake seafood'),(14,'p008','Pizza Shrimp','20260107_212420_pizza_seafood_shrimp.png','Pizza Cake Seafood','Shrimp, crab, squid, clams, and Marinara sauce.',6.36,20,1,1,'2026-01-07 21:24:21','2026-01-07 21:24:21','pizza cake seafood'),(15,'p009','Pizza Black Pepper Shrimp','20260107_212623_pizza_seafood_pesto.png','Pizza Cake Seafood','Shrimp, crab, squid, clams, and black pepper',6.36,15,1,2,'2026-01-07 21:26:24','2026-01-07 21:26:24','pizza cake seafood'),(16,'p010','Spicy Clam Spaghetti','20260107_213203_mihaisan.png','Spicy Clam Spaghetti','Spicy Clam Spaghetti with a hint of natural sweetness.',5.56,5,1,3,'2026-01-07 21:32:03','2026-01-07 21:32:03','noodle'),(17,'p011','Clam Basil Spaghetti','20260107_213302_mingheuhap.png','Clam Basil Spaghetti','Basil spaghetti with the natural sweetness of clams.',5.56,5,1,3,'2026-01-07 21:33:02','2026-01-07 21:33:02','noodle'),(18,'p012','Pesto Spaghetti','20260107_213504_miy.png','Pesto Spaghetti','Spaghetti, shrimp, and squid blended with green Pesto sauce.',5.56,5,1,3,'2026-01-07 21:35:04','2026-01-07 21:35:04','noodle'),(19,'p013','7Up','20260107_213628_7up.png','7 UP','Carbonated soft drinks',1.16,20,1,3,'2026-01-07 21:36:28','2026-01-07 21:36:28','drinking water'),(20,'p014','Mirinda','20260107_213715_mirinda.png','MIRINDA','Carbonated soft drinks',1.16,20,1,3,'2026-01-07 21:37:16','2026-01-07 21:37:16','drinking water'),(21,'p015','Beer 333','20260114_205832_333.png','Beer 333','Alcoholic beverages',1.96,15,1,3,'2026-01-07 21:38:39','2026-01-14 20:58:32','drinking water'),(22,'p016','Beer Heineken','20260107_213917_heineken.png','Beer Heineken','Alcoholic beverages',1.96,15,1,3,'2026-01-07 21:39:17','2026-01-07 21:39:17','drinking water'),(23,'p017','Aquafina','20260107_214007_aquafina.png','Aquafina','Natural spring water',1.16,20,1,3,'2026-01-07 21:40:08','2026-01-07 21:40:08','drinking water'),(24,'p024','Pizza with 4 types of cheese','20260108_140359_combo_4phomai.png','Pizza Special','Four famous types of cheese combined with Vietnamese Coconut, served with Coconut Nectar.',7.56,5,1,2,'2026-01-08 14:03:59','2026-01-08 14:03:59','pizza combo'),(25,'p025','Pizza special Cheese','20260108_140509_combo_cheese.png','Pizza Special','Shrimp, four famous types of cheese combined with Vietnamese Coconut, served with Coconut Nectar.',7.56,5,1,1,'2026-01-08 14:05:09','2026-01-08 14:05:09','pizza combo'),(26,'p026','Pizza Special Pesto','20260108_140657_combo_haisanpesto.png','Pizza Special','Shrimp, crab sticks, squid, and fresh broccoli on a Green Pesto sauce base.',7.56,5,1,1,'2026-01-08 14:06:58','2026-01-08 14:06:58','pizza combo'),(27,'p027','Pizza Special Green Pesto','20260108_140806_combo_haipesstoxanh.png','Pizza  Special','Shrimp, crab sticks, squid with full toppings, and fresh broccoli on a Green Pesto sauce base.',7.56,4,1,1,'2026-01-08 14:08:07','2026-01-08 14:08:07','pizza combo'),(28,'p028','Pizza Pesto Black pepper','20260108_142758_pizza_seafood.png','Pizza Cake Seafood','Shrimp, crab, squid, clams, and Marinara sauce.',5.56,10,1,2,'2026-01-08 14:27:59','2026-01-08 14:27:59','pizza cake seafood');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -240,10 +381,10 @@ DROP TABLE IF EXISTS `promotions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `promotions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `discount` float DEFAULT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `is_active` tinyint(1) DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` int DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
@@ -270,9 +411,9 @@ DROP TABLE IF EXISTS `roles`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `guard_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `display_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -353,7 +494,7 @@ DROP TABLE IF EXISTS `shifts`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shifts` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `shift_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `start_time` datetime DEFAULT NULL,
   `end_time` datetime DEFAULT NULL,
   `wage_multiplier` float NOT NULL,
@@ -381,12 +522,12 @@ DROP TABLE IF EXISTS `suppliers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `suppliers` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `img` text COLLATE utf8mb4_unicode_ci,
-  `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -442,20 +583,20 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `username` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gender` tinyint(1) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` int DEFAULT NULL,
   `birthday` date DEFAULT NULL,
-  `email` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `avatar` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `salary_level_id` int unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT NULL,
-  `active_code` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` int DEFAULT NULL,
+  `active_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `salary_level_id` (`salary_level_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`salary_level_id`) REFERENCES `salary_levels` (`id`)
@@ -468,7 +609,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,'Trần Hữu Phúc','Huuphuc','$2a$10$stBX2kv6gOca9kp1.hGB/.47U6g/WuSrUCCe/6wpIRz/OGFswdmsa',1,'1996-09-22','huuphuc@gmail.com','20251218_102424_ngoc.jpg','0962428167','Cần Thơ',3,'2025-12-18 09:30:15','2025-12-25 13:22:14',1,NULL),(3,'Triệu Như Ngọc','NgocCute','$2a$10$SjW0pJHDqapMTHDrWzgwVO8U.AHjsBTuBJVgTIDa.LqJt/8p9pMby',0,'1996-02-09','ngoc@gmail.com','20251218_162349_images.jpg','0710941756','Ninh Kieu  - Can Tho',1,'2025-12-18 16:23:50','2025-12-27 10:05:50',1,NULL),(14,NULL,'Phuong','$2a$10$eGilmp.U5dQ9ERMaKI4gR.Ujpfr/ZEjeWBqEquZrTuZPwe2azvIuW',1,NULL,NULL,NULL,NULL,NULL,1,'2025-12-30 22:23:48','2025-12-30 22:23:48',1,NULL),(20,NULL,'Hao','$2a$10$3ZxW6qlmv.RmAHNPhL4ru.L5aY4Z1cA6kysvjj5HwqmWRFV946m7K',1,NULL,'coursemanager14@gmail.com',NULL,NULL,NULL,1,'2026-01-05 13:29:55','2026-01-05 13:33:00',1,NULL),(24,NULL,'Hong','$2a$10$ObatnC41gyF11uypyM.QfePBwI8Q6gw2btIwd/uF./h1wpOgWS40q',1,NULL,'coursemanager14@gmail.com',NULL,NULL,NULL,1,'2026-01-06 01:00:42','2026-01-06 01:06:24',1,NULL),(25,NULL,'Tuan','$2a$10$.1Mb.y6h6O3Ia.Ov9VMZ7.VAZKcD.Q//5JPrkezj3a8hkBhb9DSy.',1,NULL,'coursemanager14@gmail.com',NULL,NULL,NULL,1,'2026-01-06 01:10:37','2026-01-06 01:10:51',1,NULL),(26,'Nguyễn thị Ngọc Hương','NgocHuong','$2a$10$7F8BCO53jUAuMCGer1s5CewusYrVZn248Q2rwVZ3mmuLznG8rtdRa',0,NULL,'coursemanager14@gmail.com','20260106_011552_arin-oh-my-girl-khien-fan-mat-mat-voi-vong-eo-trang-nhu-dau-hu-4f1-5764935.jpg','0936052117','cần thơ',1,'2026-01-06 01:14:45','2026-01-06 01:15:53',1,NULL),(27,NULL,'Long','$2a$10$G1TfYG/eV7foDShTWFNDr.Prnj5uPWBhA1WebPM6jrTuLI8qQHGEm',1,NULL,'coursemanager14@gmail.com',NULL,NULL,NULL,1,'2026-01-06 01:23:42','2026-01-06 01:24:38',1,NULL),(28,NULL,'MinhLoan','$2a$10$Q0AclLU//utxgl6/m5qCfeXM63gJz2zhJy2lYyW50WNK8x2jWyfKG',1,NULL,'minhloan@ctu.edu.vn',NULL,NULL,NULL,1,'2026-01-08 19:08:20','2026-01-08 19:08:20',0,'81909d6f-aa6e-418e-830d-94d14ececa04'),(29,'Tran Huu Thinh','HuuThinh','$2a$10$OlRKvim2oe0URK4hGcF7meI1fDLgKHlfliMEDJu.g1Ok5XF86nXVW',1,'2008-06-20','coursemanager14@gmail.com','20260108_191347_images.jpg','0939052119','can tho',1,'2026-01-08 19:11:39','2026-01-08 19:13:47',1,NULL),(31,'HuuLoc','HuuLoc','$2a$10$ayQPA7kg4MG6dCz8eBxipuOW7hDvKRw4QUjcNYEOE1g8aRPFgJ1Be',1,'1998-02-18','cantho@gmail.com','20260112_221753_arin-oh-my-girl-khien-fan-mat-mat-voi-vong-eo-trang-nhu-dau-hu-4f1-5764935.jpg','0962458789','can tho',2,'2026-01-12 22:17:54','2026-01-12 22:17:54',1,NULL);
+INSERT INTO `users` VALUES (2,'Trần Hữu Phúc','Huuphuc','$2a$10$stBX2kv6gOca9kp1.hGB/.47U6g/WuSrUCCe/6wpIRz/OGFswdmsa',1,'1996-09-22','huuphuc@gmail.com','20251218_102424_ngoc.jpg','0962428167','Cần Thơ',3,'2025-12-18 09:30:15','2025-12-25 13:22:14',1,NULL),(3,'Triệu Như Ngọc','NgocCute','$2a$10$SjW0pJHDqapMTHDrWzgwVO8U.AHjsBTuBJVgTIDa.LqJt/8p9pMby',0,'1996-02-09','ngoc@gmail.com','20251218_162349_images.jpg','0710941756','Ninh Kieu  - Can Tho',1,'2025-12-18 16:23:50','2025-12-27 10:05:50',1,NULL),(14,NULL,'Phuong','$2a$10$eGilmp.U5dQ9ERMaKI4gR.Ujpfr/ZEjeWBqEquZrTuZPwe2azvIuW',1,NULL,NULL,NULL,NULL,NULL,1,'2025-12-30 22:23:48','2025-12-30 22:23:48',1,NULL),(20,NULL,'Hao','$2a$10$3ZxW6qlmv.RmAHNPhL4ru.L5aY4Z1cA6kysvjj5HwqmWRFV946m7K',1,NULL,'coursemanager14@gmail.com',NULL,NULL,NULL,1,'2026-01-05 13:29:55','2026-01-05 13:33:00',1,NULL),(24,NULL,'Hong','$2a$10$ObatnC41gyF11uypyM.QfePBwI8Q6gw2btIwd/uF./h1wpOgWS40q',1,NULL,'coursemanager14@gmail.com',NULL,NULL,NULL,1,'2026-01-06 01:00:42','2026-01-06 01:06:24',1,NULL),(25,NULL,'Tuan','$2a$10$.1Mb.y6h6O3Ia.Ov9VMZ7.VAZKcD.Q//5JPrkezj3a8hkBhb9DSy.',1,NULL,'coursemanager14@gmail.com',NULL,NULL,NULL,1,'2026-01-06 01:10:37','2026-01-06 01:10:51',1,NULL),(26,'Nguyễn thị Ngọc Hương','NgocHuong','$2a$10$7F8BCO53jUAuMCGer1s5CewusYrVZn248Q2rwVZ3mmuLznG8rtdRa',0,NULL,'coursemanager14@gmail.com','20260106_011552_arin-oh-my-girl-khien-fan-mat-mat-voi-vong-eo-trang-nhu-dau-hu-4f1-5764935.jpg','0936052117','cần thơ',1,'2026-01-06 01:14:45','2026-01-06 01:15:53',1,NULL),(27,NULL,'Long','$2a$10$G1TfYG/eV7foDShTWFNDr.Prnj5uPWBhA1WebPM6jrTuLI8qQHGEm',1,NULL,'coursemanager14@gmail.com',NULL,NULL,NULL,1,'2026-01-06 01:23:42','2026-01-06 01:24:38',1,NULL),(28,NULL,'MinhLoan','$2a$10$Q0AclLU//utxgl6/m5qCfeXM63gJz2zhJy2lYyW50WNK8x2jWyfKG',1,NULL,'minhloan@ctu.edu.vn',NULL,NULL,NULL,1,'2026-01-08 19:08:20','2026-01-08 19:08:20',0,'81909d6f-aa6e-418e-830d-94d14ececa04'),(29,'Tran Huu Thinh','HuuThinh','$2a$10$OlRKvim2oe0URK4hGcF7meI1fDLgKHlfliMEDJu.g1Ok5XF86nXVW',1,'2008-06-20','coursemanager14@gmail.com','20260108_191347_images.jpg','0939052119','can tho',1,'2026-01-08 19:11:39','2026-01-08 19:13:47',1,NULL),(31,'HuuLoc','HuuLoc','$2a$10$ayQPA7kg4MG6dCz8eBxipuOW7hDvKRw4QUjcNYEOE1g8aRPFgJ1Be',1,'1998-02-18','huuloc@gmail.com','20260112_221753_arin-oh-my-girl-khien-fan-mat-mat-voi-vong-eo-trang-nhu-dau-hu-4f1-5764935.jpg','0962458789','can tho',2,'2026-01-12 22:17:54','2026-01-14 21:01:21',1,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -510,4 +651,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-13  0:49:20
+-- Dump completed on 2026-01-16  1:49:10
